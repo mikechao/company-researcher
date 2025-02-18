@@ -16,11 +16,6 @@ export default defineLazyEventHandler(async () => {
     model: 'claude-3-5-sonnet-latest',
   })
 
-  const prompt = ChatPromptTemplate.fromMessages([
-    ['system', 'Give a short introduction of yourself to the user'],
-    ['human', 'Tell me a joke about {topic}'],
-  ])
-
   const generateQueries = async (
     state: typeof OverallState.State,
     config: RunnableConfig<typeof ConfigurableAnnotation.State>,
@@ -69,7 +64,9 @@ export default defineLazyEventHandler(async () => {
   return defineEventHandler(async (webEvent) => {
     const body = await readBody(webEvent)
     consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(body)}` })
-    const result = await prompt.pipe(model).invoke({ topic: 'cats' })
-    return result.content
+
+    const result = await graph.invoke({ company: 'Apple' })
+
+    return result.searchQueries
   })
 })
