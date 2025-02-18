@@ -1,11 +1,12 @@
 import type { RunnableConfig } from '@langchain/core/runnables'
-import type { ConfigurableAnnotation } from '../state/configuration'
-import type { OverallState } from '../state/state'
 import { ChatAnthropic } from '@langchain/anthropic'
 import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts'
+import { END, START, StateGraph } from '@langchain/langgraph'
 import { consola } from 'consola'
 import { z } from 'zod'
 import { QUERY_WRITER_PROMPT } from '../prompts/prompts'
+import { ConfigurableAnnotation } from '../state/configuration'
+import { InputState, OutputState, OverallState } from '../state/state'
 
 export default defineLazyEventHandler(async () => {
   const runtimeConfig = useRuntimeConfig()
@@ -40,14 +41,30 @@ export default defineLazyEventHandler(async () => {
       })
 
     const results = await structuredModel.invoke([
-      {"role": "system", "content": queryInstructions},
+      { role: 'system', content: queryInstructions },
       {
-        "role": "user",
-        "content": "Please generate a list of search queries related to the schema that you want to populate.",
-      }
+        role: 'user',
+        content: 'Please generate a list of search queries related to the schema that you want to populate.',
+      },
     ])
-    return {searchQueries: results.queries}
+    return { searchQueries: results.queries }
   }
+
+  // const builder = new StateGraph({
+  //   input: InputState,
+  //   output: OutputState,
+  //   stateSchema: OverallState,
+  // }, ConfigurableAnnotation)
+
+  const builder = new StateGraph({
+    input: InputState,
+    stateSchema: OverallState,
+  }, ConfigurableAnnotation)
+    .addNode('generateQueries', generateQueries)
+    .addEdge(START, 'generateQueries')
+    .addEdge('generateQueries', END)
+
+  const graph = builder.compile()
 
   return defineEventHandler(async (webEvent) => {
     const body = await readBody(webEvent)
