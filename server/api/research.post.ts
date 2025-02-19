@@ -110,6 +110,7 @@ export default defineLazyEventHandler(async () => {
   const gatherNotesExtractSchema = async (
     state: typeof OverallState.State,
   ) => {
+    const before = performance.now()
     const notes = formatAllNotes(state.completedNotes)
     const prompt = await PromptTemplate.fromTemplate(EXTRACTION_PROMPT)
       .format({
@@ -121,6 +122,7 @@ export default defineLazyEventHandler(async () => {
       { role: 'system', content: prompt },
       { role: 'user', content: 'Produce a structured output from these notes.' },
     ])
+    consola.debug({ tag: 'gatherNotesExtractSchema', message: `Took ${performance.now() - before} ms to extract schema from notes.` })
     return { info: result }
   }
 
