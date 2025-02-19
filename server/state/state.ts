@@ -41,9 +41,9 @@ export const OverallState = Annotation.Root({
   /**
    * The json schema defines the information the agent is tasked with filling out.
    */
-  extractionSchema: Annotation<Record<string, any>>({
-    reducer: (_state: Record<string, any>, update: Record<string, any>) => update,
-    default: () => defaultExtractionSchema,
+  extractionSchema: Annotation<string>({
+    reducer: (_state: string, update: string) => update,
+    default: () => JSON.stringify(defaultExtractionSchema, null, 2),
   }),
   /**
    * Any notes from the user to start the research process.
@@ -109,9 +109,9 @@ export const InputState = Annotation.Root({
   /**
    * The json schema defines the information the agent is tasked with filling out.
    */
-  extractionSchema: Annotation<Record<string, any>>({
-    reducer: (_state: Record<string, any>, update: Record<string, any>) => update,
-    default: () => defaultExtractionSchema,
+  extractionSchema: Annotation<string>({
+    reducer: (_state: string, update: string) => update,
+    default: () => JSON.stringify(defaultExtractionSchema, null, 2),
   }),
   /**
    * Any notes from the user to start the research process.
