@@ -1,7 +1,6 @@
 import type { RunnableConfig } from '@langchain/core/runnables'
-import type { Annotation, StateType } from '@langchain/langgraph'
 import { ChatAnthropic } from '@langchain/anthropic'
-import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts'
+import { PromptTemplate } from '@langchain/core/prompts'
 import { END, START, StateGraph } from '@langchain/langgraph'
 import { consola } from 'consola'
 import { z } from 'zod'
