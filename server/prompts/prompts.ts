@@ -49,3 +49,15 @@ Please provide detailed research notes that:
 5. Note when important information appears to be missing or unclear
 
 Remember: Don't try to format the output to match the schema - just take clear notes that capture all relevant information.`
+
+export const EXTRACTION_PROMPT = `Your task is to take notes gathered from web research and extract them into the following schema.
+
+<schema>
+{info}
+</schema>
+
+Here are all the notes from research:
+
+<web_research_notes>
+{notes}
+</web_research_notes>`

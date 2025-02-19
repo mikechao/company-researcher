@@ -6,10 +6,11 @@ import { END, START, StateGraph } from '@langchain/langgraph'
 import { tavily } from '@tavily/core'
 import { consola } from 'consola'
 import { z } from 'zod'
-import { INFO_PROMPT, QUERY_WRITER_PROMPT } from '../prompts/prompts'
+import { EXTRACTION_PROMPT, INFO_PROMPT, QUERY_WRITER_PROMPT } from '../prompts/prompts'
 import { ConfigurableAnnotation, getConfig } from '../state/configuration'
 import { InputState, OutputState, OverallState } from '../state/state'
 import { deduplicateSources } from '../utils/deduplicateSources'
+import { formatAllNotes } from '../utils/formatNotes'
 import { formatSource } from '../utils/formatSources'
 
 export default defineLazyEventHandler(async () => {
@@ -106,6 +107,23 @@ export default defineLazyEventHandler(async () => {
     return stateUpdate
   }
 
+  const gatherNotesExtractSchema = async (
+    state: typeof OverallState.State,
+  ) => {
+    const notes = formatAllNotes(state.completedNotes)
+    const prompt = await PromptTemplate.fromTemplate(EXTRACTION_PROMPT)
+      .format({
+        info: JSON.stringify(state.extractionSchema, null, 2),
+        notes,
+      })
+    const structuredModel = model.withStructuredOutput(state.extractionSchema)
+    const result = await structuredModel.invoke([
+      { role: 'system', content: prompt },
+      { role: 'user', content: 'Produce a structured output from these notes.' },
+    ])
+    return { info: result }
+  }
+
   // const builder = new StateGraph({
   //   input: InputState,
   //   output: OutputState,
@@ -118,9 +136,11 @@ export default defineLazyEventHandler(async () => {
   }, ConfigurableAnnotation)
     .addNode('generateQueries', generateQueries)
     .addNode('researchCompany', researchCompany)
+    .addNode('gatherNotesExtractSchema', gatherNotesExtractSchema)
     .addEdge(START, 'generateQueries')
     .addEdge('generateQueries', 'researchCompany')
-    .addEdge('researchCompany', END)
+    .addEdge('researchCompany', 'gatherNotesExtractSchema')
+    .addEdge('gatherNotesExtractSchema', END)
 
   const graph = builder.compile()
 
@@ -133,6 +153,6 @@ export default defineLazyEventHandler(async () => {
       { configurable: getConfig({ maxSearchQueries: 3 }) },
     )
 
-    return result.completedNotes
+    return result.info
   })
 })
