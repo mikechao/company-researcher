@@ -60,6 +60,7 @@ export default defineLazyEventHandler(async () => {
     state: typeof OverallState.State,
     config: RunnableConfig<typeof ConfigurableAnnotation.State>,
   ) => {
+    const before = performance.now()
     const maxSearchResults = config.configurable?.maxSearchResults
 
     const searchTasks: Promise<TavilySearchResponse>[] = []
@@ -76,9 +77,10 @@ export default defineLazyEventHandler(async () => {
       )
     }
     const searchResults = await Promise.all(searchTasks)
+    consola.debug({ tag: 'researchCompany', message: `Took ${performance.now() - before} ms to execute ${searchTasks.length} queries.` })
     const deduplicatedSearchResults = deduplicateSources(searchResults)
     const sourceStr = formatSource(deduplicatedSearchResults)
-
+    const beforeModel = performance.now()
     const prompt = await PromptTemplate.fromTemplate(INFO_PROMPT)
       .format({
         company: state.company,
@@ -94,6 +96,7 @@ export default defineLazyEventHandler(async () => {
       { role: 'system', content: prompt },
       { role: 'user', content: 'Please provide detailed research notes.' },
     ])
+    consola.debug({ tag: 'researchCompany', message: `Took ${performance.now() - beforeModel} ms to generate notes.` })
     const stateUpdate = {
       completedNotes: result.notes,
       ...(config.configurable?.includeSearchResults && {
