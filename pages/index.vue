@@ -4,12 +4,13 @@
       <div class="flex items-center">
         <label for="company-name" class="mr-2">Company Name</label>
         <UInput
-        v-model="companyName"
-        label="Company Name"
-        placeholder="Enter company name"
-        color="primary"
-        variant="outline"
-        id="company-name"
+          v-model="companyName"
+          label="Company Name"
+          placeholder="Enter company name"
+          color="primary"
+          variant="outline"
+          id="company-name"
+          :disabled="true"
         />
       </div>
       <UButton
@@ -24,5 +25,5 @@
 </template>
 
 <script setup lang="ts">
-const companyName = ref('')
+const companyName = ref('Apple')
 </script>
