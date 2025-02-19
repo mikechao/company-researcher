@@ -36,9 +36,9 @@ export const defaultExtractionSchema: Record<string, any> = {
  *
  * Channel "extractionSchema" already exists with a different type
  */
-const sharedExtractionSchema = Annotation<string>({
-  reducer: (_state: string, update: string) => update,
-  default: () => JSON.stringify(defaultExtractionSchema, null, 2),
+const sharedExtractionSchema = Annotation<Record<string, any>>({
+  reducer: (_state: Record<string, any>, update: Record<string, any>) => update,
+  default: () => defaultExtractionSchema,
 })
 
 const sharedSearchResult = Annotation<Record<string, any>[]>({
