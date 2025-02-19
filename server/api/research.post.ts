@@ -6,7 +6,7 @@ import { END, START, StateGraph } from '@langchain/langgraph'
 import { tavily } from '@tavily/core'
 import { consola } from 'consola'
 import { z } from 'zod'
-import { EXTRACTION_PROMPT, INFO_PROMPT, QUERY_WRITER_PROMPT } from '../prompts/prompts'
+import { EXTRACTION_PROMPT, INFO_PROMPT, QUERY_WRITER_PROMPT, REFLECTION_PROMPT } from '../prompts/prompts'
 import { ConfigurableAnnotation, getConfig } from '../state/configuration'
 import { InputState, OutputState, OverallState } from '../state/state'
 import { deduplicateSources } from '../utils/deduplicateSources'
@@ -126,6 +126,37 @@ export default defineLazyEventHandler(async () => {
     return { info: result }
   }
 
+  const reflection = async (
+    state: typeof OverallState.State,
+  ) => {
+    const reflectionSchema = z.object({
+      isSatisfactory: z.boolean().describe('True if all required fields are well populated, False otherwise'),
+      missingFields: z.array(z.string()).describe('List of field names that are missing or incomplete'),
+      searchQueries: z.array(z.string()).describe('If isSatisfactory is False, provide 1-3 targeted search queries to find the missing information'),
+      reasoning: z.string().describe('Brief explanation of the assessment'),
+    })
+    const structuredModel = model.withStructuredOutput(reflectionSchema)
+    const prompt = await PromptTemplate.fromTemplate(REFLECTION_PROMPT)
+      .format({
+        schema: JSON.stringify(state.extractionSchema, null, 2),
+        info: JSON.stringify(state.info, null, 2),
+      })
+    const result = await structuredModel.invoke([
+      { role: 'system', content: prompt },
+      { role: 'user', content: 'Produce a structured reflection output.' },
+    ])
+    if (result.isSatisfactory) {
+      return { isSatisfactory: result.isSatisfactory }
+    }
+    else {
+      return {
+        isSatisfactory: result.isSatisfactory,
+        searchQueries: result.searchQueries,
+        reflectionStepsTaken: state.reflectionStepsTaken + 1,
+      }
+    }
+  }
+
   // const builder = new StateGraph({
   //   input: InputState,
   //   output: OutputState,
@@ -139,9 +170,11 @@ export default defineLazyEventHandler(async () => {
     .addNode('generateQueries', generateQueries)
     .addNode('researchCompany', researchCompany)
     .addNode('gatherNotesExtractSchema', gatherNotesExtractSchema)
+    .addNode('reflection', reflection)
     .addEdge(START, 'generateQueries')
     .addEdge('generateQueries', 'researchCompany')
     .addEdge('researchCompany', 'gatherNotesExtractSchema')
+    .addEdge('gatherNotesExtractSchema', 'reflection')
     .addEdge('gatherNotesExtractSchema', END)
 
   const graph = builder.compile()

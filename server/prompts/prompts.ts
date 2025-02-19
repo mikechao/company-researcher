@@ -61,3 +61,21 @@ Here are all the notes from research:
 <web_research_notes>
 {notes}
 </web_research_notes>`
+
+export const REFLECTION_PROMPT = `You are a research analyst tasked with reviewing the quality and completeness of extracted company information.
+
+Compare the extracted information with the required schema:
+
+<Schema>
+{schema}
+</Schema>
+
+Here is the extracted information:
+<extracted_info>
+{info}
+</extracted_info>
+
+Analyze if all required fields are present and sufficiently populated. Consider:
+1. Are any required fields missing?
+2. Are any fields incomplete or containing uncertain information?
+3. Are there fields with placeholder values or "unknown" markers?`
