@@ -1,5 +1,15 @@
 import { Annotation } from '@langchain/langgraph'
 
+export function getConfig(partial: Partial<typeof ConfigurableAnnotation.State>) {
+  return {
+    maxSearchQueries: 3,
+    maxSearchResults: 3,
+    maxReflectionSteps: 0,
+    includeSearchResults: false,
+    ...partial,
+  }
+}
+
 export const ConfigurableAnnotation = Annotation.Root({
   /**
    * Max search queries per company

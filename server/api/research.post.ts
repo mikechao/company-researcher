@@ -1,11 +1,12 @@
 import type { RunnableConfig } from '@langchain/core/runnables'
+import type { Annotation, StateType } from '@langchain/langgraph'
 import { ChatAnthropic } from '@langchain/anthropic'
 import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts'
 import { END, START, StateGraph } from '@langchain/langgraph'
 import { consola } from 'consola'
 import { z } from 'zod'
 import { QUERY_WRITER_PROMPT } from '../prompts/prompts'
-import { ConfigurableAnnotation } from '../state/configuration'
+import { ConfigurableAnnotation, getConfig } from '../state/configuration'
 import { InputState, OutputState, OverallState } from '../state/state'
 
 export default defineLazyEventHandler(async () => {
@@ -42,6 +43,7 @@ export default defineLazyEventHandler(async () => {
         content: 'Please generate a list of search queries related to the schema that you want to populate.',
       },
     ])
+
     return { searchQueries: results.queries }
   }
 
@@ -65,7 +67,10 @@ export default defineLazyEventHandler(async () => {
     const body = await readBody(webEvent)
     consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(body)}` })
 
-    const result = await graph.invoke({ company: 'Apple' })
+    const result = await graph.invoke(
+      { company: 'Apple' },
+      { configurable: getConfig({ maxSearchQueries: 4 }) },
+    )
 
     return result.searchQueries
   })
