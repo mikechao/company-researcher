@@ -7,6 +7,7 @@ import { END, START, StateGraph } from '@langchain/langgraph'
 import { tavily } from '@tavily/core'
 import { consola } from 'consola'
 import { LocalFileCache } from 'langchain/cache/file_system'
+import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import { EVENT_NAMES } from '~/types/constants'
 import { EXTRACTION_PROMPT, INFO_PROMPT, QUERY_WRITER_PROMPT, REFLECTION_PROMPT } from '../prompts/prompts'
@@ -180,7 +181,7 @@ export default defineLazyEventHandler(async () => {
   ) => {
     if (state.isSatisfactory) {
       consola.debug({ tag: 'routeFromReflection', message: 'reflection is satisfactory, going to END' })
-      dispatchCustomEvent(EVENT_NAMES.END, { time: `${performance.now()}` })
+      dispatchCustomEvent(EVENT_NAMES.END, { info: state.info })
       return END
     }
     const maxReflectionSteps = (config.configurable?.maxReflectionSteps ?? 0)
@@ -190,7 +191,7 @@ export default defineLazyEventHandler(async () => {
       dispatchCustomEvent(EVENT_NAMES.REROUTE, { reroute: 'researchCompany' })
       return 'researchCompany'
     }
-    dispatchCustomEvent(EVENT_NAMES.END, { time: `${performance.now()}` })
+    dispatchCustomEvent(EVENT_NAMES.END, { info: state.info })
     return END
   }
 
@@ -221,12 +222,39 @@ export default defineLazyEventHandler(async () => {
   return defineEventHandler(async (webEvent) => {
     const body = await readBody(webEvent)
     consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(body)}` })
-
-    const result = await graph.invoke(
-      { company: 'Apple' },
-      { configurable: getConfig({ maxSearchQueries: 3 }) },
-    )
-
-    return result.info
+    const sessionId = uuidv4()
+    const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries: 3 }) } }
+    const input = { company: 'Apple' }
+    const eventStream = graph.streamEvents(input, config)
+    for await (const event of eventStream) {
+      if (event.event === EVENT_NAMES.GENERATE_QUERIES) {
+        consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(event)}` })
+      }
+      if (event.event === EVENT_NAMES.BEFORE_EXECUTE_QUERIES) {
+        consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(event)}` })
+      }
+      if (event.event === EVENT_NAMES.AFTER_EXECUTE_QUERIES) {
+        consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(event)}` })
+      }
+      if (event.event === EVENT_NAMES.GENERATE_NOTES) {
+        consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(event)}` })
+      }
+      if (event.event === EVENT_NAMES.BEFORE_NOTES_TO_SCHEMA) {
+        consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(event)}` })
+      }
+      if (event.event === EVENT_NAMES.AFTER_NOTES_TO_SCHEMA) {
+        consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(event)}` })
+      }
+      if (event.event === EVENT_NAMES.BEFORE_REFLECTION) {
+        consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(event)}` })
+      }
+      if (event.event === EVENT_NAMES.AFTER_REFLECTION) {
+        consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(event)}` })
+      }
+      if (event.event === EVENT_NAMES.END) {
+        consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(event)}` })
+        return event.data
+      }
+    }
   })
 })
