@@ -1,7 +1,9 @@
 import type { RunnableConfig } from '@langchain/core/runnables'
+import type { TavilySearchResponse } from '@tavily/core'
 import { ChatAnthropic } from '@langchain/anthropic'
 import { PromptTemplate } from '@langchain/core/prompts'
 import { END, START, StateGraph } from '@langchain/langgraph'
+import { tavily } from '@tavily/core'
 import { consola } from 'consola'
 import { z } from 'zod'
 import { QUERY_WRITER_PROMPT } from '../prompts/prompts'
@@ -14,6 +16,10 @@ export default defineLazyEventHandler(async () => {
   const model = new ChatAnthropic({
     anthropicApiKey: runtimeConfig.anthropicAPIKey,
     model: 'claude-3-5-sonnet-latest',
+  })
+
+  const tavilyClient = tavily({
+    apiKey: runtimeConfig.tavilyAPIKey,
   })
 
   const generateQueries = async (
@@ -46,6 +52,28 @@ export default defineLazyEventHandler(async () => {
     const after = performance.now()
     consola.debug({ tag: 'generateQueries', message: `Took ${after - before} ms to generate ${results.queries.length} queries` })
     return { searchQueries: results.queries }
+  }
+
+  const researchCompany = async (
+    state: typeof OverallState.State,
+    config: RunnableConfig<typeof ConfigurableAnnotation.State>,
+  ) => {
+    const maxSearchResults = config.configurable?.maxSearchResults
+
+    const searchTasks: Promise<TavilySearchResponse>[] = []
+    for (const query of state.searchQueries) {
+      searchTasks.push(
+        tavilyClient.search(
+          query,
+          {
+            maxResults: maxSearchResults,
+            includeRawContent: true,
+            topic: 'general',
+          },
+        ),
+      )
+    }
+    const searchResults = await Promise.all(searchTasks)
   }
 
   // const builder = new StateGraph({
