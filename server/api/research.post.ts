@@ -20,6 +20,7 @@ export default defineLazyEventHandler(async () => {
     state: typeof OverallState.State,
     config: RunnableConfig<typeof ConfigurableAnnotation.State>,
   ) => {
+    const before = performance.now()
     const maxSearchQueries = config.configurable?.maxSearchQueries
 
     const querySchema = z.object({
@@ -42,7 +43,8 @@ export default defineLazyEventHandler(async () => {
         content: 'Please generate a list of search queries related to the schema that you want to populate.',
       },
     ])
-
+    const after = performance.now()
+    consola.debug({ tag: 'generateQueries', message: `Took ${after - before} ms to generate ${results.queries.length} queries` })
     return { searchQueries: results.queries }
   }
 
