@@ -222,6 +222,7 @@ export default defineLazyEventHandler(async () => {
   return defineEventHandler(async (webEvent) => {
     const body = await readBody(webEvent)
     consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(body)}` })
+    return "hello"
     const sessionId = uuidv4()
     const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries: 3 }) } }
     const input = { company: 'Apple' }
