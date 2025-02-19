@@ -86,12 +86,16 @@ export default defineLazyEventHandler(async () => {
         content: sourceStr,
         user_notes: state.userNotes,
       })
-    const result = await model.invoke([
+    const outputSchema = z.object({
+      notes: z.array(z.string()).describe('List of research notes.'),
+    })
+    const modelWithOutput = model.withStructuredOutput(outputSchema)
+    const result = await modelWithOutput.invoke([
       { role: 'system', content: prompt },
       { role: 'user', content: 'Please provide detailed research notes.' },
     ])
     const stateUpdate = {
-      completedNotes: result.content,
+      completedNotes: result.notes,
       ...(config.configurable?.includeSearchResults && {
         searchResult: deduplicatedSearchResults,
       }),
@@ -123,9 +127,9 @@ export default defineLazyEventHandler(async () => {
 
     const result = await graph.invoke(
       { company: 'Apple' },
-      { configurable: getConfig({ maxSearchQueries: 4 }) },
+      { configurable: getConfig({ maxSearchQueries: 3 }) },
     )
 
-    return result.searchQueries
+    return result.completedNotes
   })
 })
