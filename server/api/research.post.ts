@@ -164,10 +164,13 @@ export default defineLazyEventHandler(async () => {
     config: RunnableConfig<typeof ConfigurableAnnotation.State>,
   ) => {
     if (state.isSatisfactory) {
+      consola.debug({ tag: 'routeFromReflection', message: 'reflection is satisfactory, going to END' })
       return END
     }
     const maxReflectionSteps = (config.configurable?.maxReflectionSteps ?? 0)
     if (state.reflectionStepsTaken <= maxReflectionSteps) {
+      consola.debug({ tag: 'routeFromReflection', message: `reflection is not satisfactory and reflection steps taken ${state.reflectionStepsTaken} 
+        is less than or equal to configured max reflection steps of ${maxReflectionSteps}, going to researchCompany` })
       return 'researchCompany'
     }
     return END
