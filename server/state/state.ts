@@ -30,9 +30,23 @@ export const defaultExtractionSchema: Record<string, any> = {
   required: ['company_name'],
 }
 
+/**
+ * Have OverallState and InputState share extraction schema
+ * so we do not get the error
+ *
+ * Channel "extractionSchema" already exists with a different type
+ */
 const sharedExtractionSchema = Annotation<string>({
   reducer: (_state: string, update: string) => update,
   default: () => JSON.stringify(defaultExtractionSchema, null, 2),
+})
+
+const sharedSearchResult = Annotation<Record<string, any>[]>({
+  reducer: (state: Record<string, any>[], update: Record<string, any>[]) => {
+    state.push(...update)
+    return state
+  },
+  default: () => [],
 })
 
 /**
@@ -64,13 +78,7 @@ export const OverallState = Annotation.Root({
   /**
    * List of search results
    */
-  searchResult: Annotation<Record<string, any>[]>({
-    reducer: (state: Record<string, any>[], update: Record<string, any>[]) => {
-      state.push(...update)
-      return state
-    },
-    default: () => [],
-  }),
+  searchResult: sharedSearchResult,
   /**
    * Notes from completed research related to the schema
    */
@@ -122,13 +130,7 @@ export const OutputState = Annotation.Root({
   /**
    * List of search results
    */
-  // searchResult: Annotation<Record<string, any>[]>({
-  //   reducer: (state: Record<string, any>[], update: Record<string, any>[]) => {
-  //     state.push(...update)
-  //     return state
-  //   },
-  //   default: () => [],
-  // }),
+  searchResult: sharedSearchResult,
   /**
    * A dictionary containing the extracted and processed information
    * based on the user's query and the graph's execution.
