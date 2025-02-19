@@ -159,6 +159,20 @@ export default defineLazyEventHandler(async () => {
     }
   }
 
+  const routeFromReflection = async (
+    state: typeof OverallState.State,
+    config: RunnableConfig<typeof ConfigurableAnnotation.State>,
+  ) => {
+    if (state.isSatisfactory) {
+      return END
+    }
+    const maxReflectionSteps = (config.configurable?.maxReflectionSteps ?? 0)
+    if (state.reflectionStepsTaken <= maxReflectionSteps) {
+      return 'researchCompany'
+    }
+    return END
+  }
+
   // const builder = new StateGraph({
   //   input: InputState,
   //   output: OutputState,
@@ -177,7 +191,7 @@ export default defineLazyEventHandler(async () => {
     .addEdge('generateQueries', 'researchCompany')
     .addEdge('researchCompany', 'gatherNotesExtractSchema')
     .addEdge('gatherNotesExtractSchema', 'reflection')
-    .addEdge('gatherNotesExtractSchema', END)
+    .addConditionalEdges('reflection', routeFromReflection)
 
   const graph = builder.compile()
 
