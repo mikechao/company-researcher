@@ -30,6 +30,11 @@ export const defaultExtractionSchema: Record<string, any> = {
   required: ['company_name'],
 }
 
+const sharedExtractionSchema = Annotation<string>({
+  reducer: (_state: string, update: string) => update,
+  default: () => JSON.stringify(defaultExtractionSchema, null, 2),
+})
+
 /**
  * Input state defines the interface between the graph and the user (external API).
  */
@@ -41,10 +46,7 @@ export const OverallState = Annotation.Root({
   /**
    * The json schema defines the information the agent is tasked with filling out.
    */
-  extractionSchema: Annotation<string>({
-    reducer: (_state: string, update: string) => update,
-    default: () => JSON.stringify(defaultExtractionSchema, null, 2),
-  }),
+  extractionSchema: sharedExtractionSchema,
   /**
    * Any notes from the user to start the research process.
    */
@@ -109,10 +111,7 @@ export const InputState = Annotation.Root({
   /**
    * The json schema defines the information the agent is tasked with filling out.
    */
-  extractionSchema: Annotation<string>({
-    reducer: (_state: string, update: string) => update,
-    default: () => JSON.stringify(defaultExtractionSchema, null, 2),
-  }),
+  extractionSchema: sharedExtractionSchema,
   /**
    * Any notes from the user to start the research process.
    */
@@ -123,13 +122,13 @@ export const OutputState = Annotation.Root({
   /**
    * List of search results
    */
-  searchResult: Annotation<Record<string, any>[]>({
-    reducer: (state: Record<string, any>[], update: Record<string, any>[]) => {
-      state.push(...update)
-      return state
-    },
-    default: () => [],
-  }),
+  // searchResult: Annotation<Record<string, any>[]>({
+  //   reducer: (state: Record<string, any>[], update: Record<string, any>[]) => {
+  //     state.push(...update)
+  //     return state
+  //   },
+  //   default: () => [],
+  // }),
   /**
    * A dictionary containing the extracted and processed information
    * based on the user's query and the graph's execution.
