@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   runtimeConfig: {
+    dev: process.env.NODE_ENV !== 'production',
     anthropicAPIKey: process.env.NUXT_ANTHROPIC_API_KEY,
     tavilyAPIKey: process.env.NUXT_TAVILY_API_KEY,
   },

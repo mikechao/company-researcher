@@ -5,6 +5,7 @@ import { PromptTemplate } from '@langchain/core/prompts'
 import { END, START, StateGraph } from '@langchain/langgraph'
 import { tavily } from '@tavily/core'
 import { consola } from 'consola'
+import { LocalFileCache } from 'langchain/cache/file_system'
 import { z } from 'zod'
 import { EXTRACTION_PROMPT, INFO_PROMPT, QUERY_WRITER_PROMPT, REFLECTION_PROMPT } from '../prompts/prompts'
 import { ConfigurableAnnotation, getConfig } from '../state/configuration'
@@ -16,9 +17,13 @@ import { formatSource } from '../utils/formatSources'
 export default defineLazyEventHandler(async () => {
   const runtimeConfig = useRuntimeConfig()
 
+  const cache = runtimeConfig.dev
+    ? await LocalFileCache.create('langchain-cache-travel')
+    : undefined
   const model = new ChatAnthropic({
     anthropicApiKey: runtimeConfig.anthropicAPIKey,
     model: 'claude-3-5-sonnet-latest',
+    cache,
   })
 
   const tavilyClient = tavily({
