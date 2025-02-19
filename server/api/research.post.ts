@@ -129,6 +129,7 @@ export default defineLazyEventHandler(async () => {
   const reflection = async (
     state: typeof OverallState.State,
   ) => {
+    const before = performance.now()
     const reflectionSchema = z.object({
       isSatisfactory: z.boolean().describe('True if all required fields are well populated, False otherwise'),
       missingFields: z.array(z.string()).describe('List of field names that are missing or incomplete'),
@@ -145,6 +146,7 @@ export default defineLazyEventHandler(async () => {
       { role: 'system', content: prompt },
       { role: 'user', content: 'Produce a structured reflection output.' },
     ])
+    consola.debug({ tag: 'reflection', message: `Took ${performance.now() - before} ms to reflect on the extracted information.` })
     if (result.isSatisfactory) {
       return { isSatisfactory: result.isSatisfactory }
     }
