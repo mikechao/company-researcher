@@ -9,7 +9,7 @@ import { LocalFileCache } from 'langchain/cache/file_system'
 import { z } from 'zod'
 import { EXTRACTION_PROMPT, INFO_PROMPT, QUERY_WRITER_PROMPT, REFLECTION_PROMPT } from '../prompts/prompts'
 import { ConfigurableAnnotation, getConfig } from '../state/configuration'
-import { InputState, OutputState, OverallState } from '../state/state'
+import { InputState, OverallState } from '../state/state'
 import { deduplicateSources } from '../utils/deduplicateSources'
 import { formatAllNotes } from '../utils/formatNotes'
 import { formatSource } from '../utils/formatSources'
@@ -181,6 +181,8 @@ export default defineLazyEventHandler(async () => {
     return END
   }
 
+  // including OutputState in the graph causes a typescript error
+  // see multi.post.ts for a similar issue
   // const builder = new StateGraph({
   //   input: InputState,
   //   output: OutputState,
