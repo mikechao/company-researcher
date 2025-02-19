@@ -6,9 +6,11 @@ import { END, START, StateGraph } from '@langchain/langgraph'
 import { tavily } from '@tavily/core'
 import { consola } from 'consola'
 import { z } from 'zod'
-import { QUERY_WRITER_PROMPT } from '../prompts/prompts'
+import { INFO_PROMPT, QUERY_WRITER_PROMPT } from '../prompts/prompts'
 import { ConfigurableAnnotation, getConfig } from '../state/configuration'
 import { InputState, OutputState, OverallState } from '../state/state'
+import { deduplicateSources } from '../utils/deduplicateSources'
+import { formatSource } from '../utils/formatSources'
 
 export default defineLazyEventHandler(async () => {
   const runtimeConfig = useRuntimeConfig()
@@ -74,6 +76,27 @@ export default defineLazyEventHandler(async () => {
       )
     }
     const searchResults = await Promise.all(searchTasks)
+    const deduplicatedSearchResults = deduplicateSources(searchResults)
+    const sourceStr = formatSource(deduplicatedSearchResults)
+
+    const prompt = await PromptTemplate.fromTemplate(INFO_PROMPT)
+      .format({
+        company: state.company,
+        info: JSON.stringify(state.extractionSchema, null, 2),
+        content: sourceStr,
+        user_notes: state.userNotes,
+      })
+    const result = await model.invoke([
+      { role: 'system', content: prompt },
+      { role: 'user', content: 'Please provide detailed research notes.' },
+    ])
+    const stateUpdate = {
+      completedNotes: result.content,
+      ...(config.configurable?.includeSearchResults && {
+        searchResult: deduplicatedSearchResults,
+      }),
+    }
+    return stateUpdate
   }
 
   // const builder = new StateGraph({
@@ -87,8 +110,10 @@ export default defineLazyEventHandler(async () => {
     stateSchema: OverallState,
   }, ConfigurableAnnotation)
     .addNode('generateQueries', generateQueries)
+    .addNode('researchCompany', researchCompany)
     .addEdge(START, 'generateQueries')
-    .addEdge('generateQueries', END)
+    .addEdge('generateQueries', 'researchCompany')
+    .addEdge('researchCompany', END)
 
   const graph = builder.compile()
 
