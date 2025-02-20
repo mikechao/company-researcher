@@ -65,6 +65,7 @@ async function processStream(stream: ReadableStream) {
       if (line.trim()) { // skip empty line
         try {
           const message = JSON.parse(line) as ResearchEvent
+          task.value = steps.indexOf(message.event)
           console.log('Message:', message)
         }
         catch (error: any) {
