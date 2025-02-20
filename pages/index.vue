@@ -97,19 +97,11 @@ function finished() {
         :loading="isLoading"
         @click="research"
       />
-      <UProgress
-        size="lg"
+      <ProgressBar
         :value="task"
         :max="steps"
-        indicator
         class="mt-4"
-      >
-        <template #step-0="{ step }">
-          <span class="text-primary">
-            {{ step }}
-          </span>
-        </template>
-      </UProgress>
+      />
     </div>
   </UCard>
 </template>
