@@ -184,7 +184,8 @@ export default defineLazyEventHandler(async () => {
         info: state.info,
         ...(config.configurable?.includeSearchResults && {
           searchResult: state.searchResult,
-        })}
+        }),
+      }
       dispatchCustomEvent(EVENT_NAMES.END, endData)
       return END
     }
@@ -199,7 +200,8 @@ export default defineLazyEventHandler(async () => {
       info: state.info,
       ...(config.configurable?.includeSearchResults && {
         searchResult: state.searchResult,
-    })}
+      }),
+    }
     dispatchCustomEvent(EVENT_NAMES.END, endData)
     return END
   }
@@ -229,8 +231,8 @@ export default defineLazyEventHandler(async () => {
   const graph = builder.compile()
 
   const inputSchema = z.object({
-    sessionId: z.string().min(1, { message: "Session ID is required" }),
-    company: z.string().min(1, { message: "Company name is required" }),
+    sessionId: z.string().min(1, { message: 'Session ID is required' }),
+    company: z.string().min(1, { message: 'Company name is required' }),
     maxSearchQueries: z.number().optional().default(3),
     maxSearchResults: z.number().optional().default(3),
     maxReflectionSteps: z.number().optional().default(0),
@@ -245,8 +247,8 @@ export default defineLazyEventHandler(async () => {
       consola.error({ tag: 'eventHandler', message: `Invalid input: ${JSON.stringify(formattedError)}` })
       throw createError({
         statusCode: 400,
-        statusMessage: "Bad Request",
-        message: JSON.stringify(formattedError) || "Invalid input",
+        statusMessage: 'Bad Request',
+        message: JSON.stringify(formattedError) || 'Invalid input',
       })
     }
     const validatedBody = parsedBody.data
@@ -254,40 +256,61 @@ export default defineLazyEventHandler(async () => {
     const { sessionId, company, maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults } = validatedBody
     const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults }) } }
     const input = { company }
-    const eventStream = graph.streamEvents(input, config)
-    let returnValue
-    for await (const event of eventStream) {
-      if (event.event === 'on_custom_event') {
-        if (event.name === EVENT_NAMES.GENERATE_QUERIES) {
-          consola.debug({ tag: 'eventHandler', message: `Generate queries event. ${JSON.stringify(event.data)}` })
+    const encoder = new TextEncoder()
+    return new ReadableStream({
+      async start(controller) {
+        const eventStream = graph.streamEvents(input, config)
+        for await (const event of eventStream) {
+          if (event.event === 'on_custom_event') {
+            if (event.name === EVENT_NAMES.GENERATE_QUERIES) {
+              consola.debug({ tag: 'eventHandler', message: `Generate queries event. ${JSON.stringify(event.data)}` })
+              const data = { event: EVENT_NAMES.GENERATE_QUERIES, data: event.data }
+              controller.enqueue(encoder.encode(JSON.stringify(data)))
+            }
+            if (event.name === EVENT_NAMES.BEFORE_EXECUTE_QUERIES) {
+              consola.debug({ tag: 'eventHandler', message: `Before execute queries event. ${JSON.stringify(event.data)}` })
+              const data = { event: EVENT_NAMES.BEFORE_EXECUTE_QUERIES, data: event.data }
+              controller.enqueue(encoder.encode(JSON.stringify(data)))
+            }
+            if (event.name === EVENT_NAMES.AFTER_EXECUTE_QUERIES) {
+              consola.debug({ tag: 'eventHandler', message: `After execute queries event. ${JSON.stringify(event.data)}` })
+              const data = { event: EVENT_NAMES.AFTER_EXECUTE_QUERIES, data: event.data }
+              controller.enqueue(encoder.encode(JSON.stringify(data)))
+            }
+            if (event.name === EVENT_NAMES.GENERATE_NOTES) {
+              consola.debug({ tag: 'eventHandler', message: `Generate notes event. ${JSON.stringify(event.data)}` })
+              const data = { event: EVENT_NAMES.GENERATE_NOTES, data: event.data }
+              controller.enqueue(encoder.encode(JSON.stringify(data)))
+            }
+            if (event.name === EVENT_NAMES.BEFORE_NOTES_TO_SCHEMA) {
+              consola.debug({ tag: 'eventHandler', message: `Before notes to schema event. ${JSON.stringify(event.data)}` })
+              const data = { event: EVENT_NAMES.BEFORE_NOTES_TO_SCHEMA, data: event.data }
+              controller.enqueue(encoder.encode(JSON.stringify(data)))
+            }
+            if (event.name === EVENT_NAMES.AFTER_NOTES_TO_SCHEMA) {
+              consola.debug({ tag: 'eventHandler', message: `After notes to schema event. ${JSON.stringify(event.data)} ` })
+              const data = { event: EVENT_NAMES.AFTER_NOTES_TO_SCHEMA, data: event.data }
+              controller.enqueue(encoder.encode(JSON.stringify(data)))
+            }
+            if (event.name === EVENT_NAMES.BEFORE_REFLECTION) {
+              consola.debug({ tag: 'eventHandler', message: `Before reflection event. ${JSON.stringify(event.data)}` })
+              const data = { event: EVENT_NAMES.BEFORE_REFLECTION, data: event.data }
+              controller.enqueue(encoder.encode(JSON.stringify(data)))
+            }
+            if (event.name === EVENT_NAMES.AFTER_REFLECTION) {
+              consola.debug({ tag: 'eventHandler', message: `After reflection event. ${JSON.stringify(event.data)}` })
+              const data = { event: EVENT_NAMES.AFTER_REFLECTION, data: event.data }
+              controller.enqueue(encoder.encode(JSON.stringify(data)))
+            }
+            if (event.name === EVENT_NAMES.END) {
+              consola.debug({ tag: 'eventHandler', message: `End event` })
+              const data = { event: EVENT_NAMES.END, data: event.data }
+              controller.enqueue(encoder.encode(JSON.stringify(data)))
+            }
+          }
         }
-        if (event.name === EVENT_NAMES.BEFORE_EXECUTE_QUERIES) {
-          consola.debug({ tag: 'eventHandler', message: `Before execute queries event. ${JSON.stringify(event.data)}` })
-        }
-        if (event.name === EVENT_NAMES.AFTER_EXECUTE_QUERIES) {
-          consola.debug({ tag: 'eventHandler', message: `After execute queries event. ${JSON.stringify(event.data)}` })
-        }
-        if (event.name === EVENT_NAMES.GENERATE_NOTES) {
-          consola.debug({ tag: 'eventHandler', message: `Generate notes event. ${JSON.stringify(event.data)}` })
-        }
-        if (event.name === EVENT_NAMES.BEFORE_NOTES_TO_SCHEMA) {
-          consola.debug({ tag: 'eventHandler', message: `Before notes to schema event. ${JSON.stringify(event.data)}` })
-        }
-        if (event.name === EVENT_NAMES.AFTER_NOTES_TO_SCHEMA) {
-          consola.debug({ tag: 'eventHandler', message: `After notes to schema event. ${JSON.stringify(event.data)} ` })
-        }
-        if (event.name === EVENT_NAMES.BEFORE_REFLECTION) {
-          consola.debug({ tag: 'eventHandler', message: `Before reflection event. ${JSON.stringify(event.data)}` })
-        }
-        if (event.name === EVENT_NAMES.AFTER_REFLECTION) {
-          consola.debug({ tag: 'eventHandler', message: `After reflection event. ${JSON.stringify(event.data)}` })
-        }
-        if (event.name === EVENT_NAMES.END) {
-          consola.debug({ tag: 'eventHandler', message: `End event` })
-          returnValue = event.data
-        }
-      }
-    }
-    return returnValue
+        controller.close()
+      },
+    })
   })
 })
