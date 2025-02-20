@@ -264,47 +264,146 @@ export default defineLazyEventHandler(async () => {
           if (event.event === 'on_custom_event') {
             if (event.name === EVENT_NAMES.GENERATE_QUERIES) {
               consola.debug({ tag: 'eventHandler', message: `Generate queries event. ${JSON.stringify(event.data)}` })
-              const data: ResearchEvent = { event: EVENT_NAMES.GENERATE_QUERIES, data: event.data }
+              const timestamp = new Date().toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                fractionalSecondDigits: 3,
+              })
+              const data: ResearchEvent = {
+                event: EVENT_NAMES.GENERATE_QUERIES,
+                data: event.data,
+                timestamp: timestamp.toString(),
+              }
               controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
             }
             if (event.name === EVENT_NAMES.BEFORE_EXECUTE_QUERIES) {
               consola.debug({ tag: 'eventHandler', message: `Before execute queries event. ${JSON.stringify(event.data)}` })
-              const data: ResearchEvent = { event: EVENT_NAMES.BEFORE_EXECUTE_QUERIES, data: event.data }
+              const timestamp = new Date().toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                fractionalSecondDigits: 3,
+              })
+              const data: ResearchEvent = {
+                event: EVENT_NAMES.BEFORE_EXECUTE_QUERIES,
+                data: event.data,
+                timestamp: timestamp.toString(),
+              }
               controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
             }
             if (event.name === EVENT_NAMES.AFTER_EXECUTE_QUERIES) {
               consola.debug({ tag: 'eventHandler', message: `After execute queries event. ${JSON.stringify(event.data)}` })
-              const data: ResearchEvent = { event: EVENT_NAMES.AFTER_EXECUTE_QUERIES, data: event.data }
+              const timestamp = new Date().toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                fractionalSecondDigits: 3,
+              })
+              const data: ResearchEvent = {
+                event: EVENT_NAMES.AFTER_EXECUTE_QUERIES,
+                data: event.data,
+                timestamp: timestamp.toString(),
+              }
               controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
             }
             if (event.name === EVENT_NAMES.GENERATE_NOTES) {
               consola.debug({ tag: 'eventHandler', message: `Generate notes event. ${JSON.stringify(event.data)}` })
-              const data: ResearchEvent = { event: EVENT_NAMES.GENERATE_NOTES, data: event.data }
+              const timestamp = new Date().toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                fractionalSecondDigits: 3,
+              })
+              const data: ResearchEvent = {
+                event: EVENT_NAMES.GENERATE_NOTES,
+                data: event.data,
+                timestamp: timestamp.toString(),
+              }
               controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
             }
             if (event.name === EVENT_NAMES.BEFORE_NOTES_TO_SCHEMA) {
               consola.debug({ tag: 'eventHandler', message: `Before notes to schema event. ${JSON.stringify(event.data)}` })
-              const data: ResearchEvent = { event: EVENT_NAMES.BEFORE_NOTES_TO_SCHEMA, data: event.data }
+              const timestamp = new Date().toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                fractionalSecondDigits: 3,
+              })
+              const data: ResearchEvent = {
+                event: EVENT_NAMES.BEFORE_NOTES_TO_SCHEMA,
+                data: event.data,
+                timestamp: timestamp.toString(),
+              }
               controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
             }
             if (event.name === EVENT_NAMES.AFTER_NOTES_TO_SCHEMA) {
               consola.debug({ tag: 'eventHandler', message: `After notes to schema event. ${JSON.stringify(event.data)} ` })
-              const data: ResearchEvent = { event: EVENT_NAMES.AFTER_NOTES_TO_SCHEMA, data: event.data }
+              const timestamp = new Date().toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                fractionalSecondDigits: 3,
+              })
+              const data: ResearchEvent = {
+                event: EVENT_NAMES.AFTER_NOTES_TO_SCHEMA,
+                data: event.data,
+                timestamp: timestamp.toString(),
+              }
               controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
             }
             if (event.name === EVENT_NAMES.BEFORE_REFLECTION) {
               consola.debug({ tag: 'eventHandler', message: `Before reflection event. ${JSON.stringify(event.data)}` })
-              const data: ResearchEvent = { event: EVENT_NAMES.BEFORE_REFLECTION, data: event.data }
+              const timestamp = new Date().toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                fractionalSecondDigits: 3,
+              })
+              const data: ResearchEvent = {
+                event: EVENT_NAMES.BEFORE_REFLECTION,
+                data: event.data,
+                timestamp: timestamp.toString(),
+              }
               controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
             }
             if (event.name === EVENT_NAMES.AFTER_REFLECTION) {
               consola.debug({ tag: 'eventHandler', message: `After reflection event. ${JSON.stringify(event.data)}` })
-              const data: ResearchEvent = { event: EVENT_NAMES.AFTER_REFLECTION, data: event.data }
+              const timestamp = new Date().toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                fractionalSecondDigits: 3,
+              })
+              const data: ResearchEvent = {
+                event: EVENT_NAMES.AFTER_REFLECTION,
+                data: event.data,
+                timestamp: timestamp.toString(),
+              }
               controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
             }
             if (event.name === EVENT_NAMES.END) {
               consola.debug({ tag: 'eventHandler', message: `End event` })
-              const data: ResearchEvent = { event: EVENT_NAMES.END, data: event.data }
+              const timestamp = new Date().toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                fractionalSecondDigits: 3,
+              })
+              const data: ResearchEvent = {
+                event: EVENT_NAMES.END,
+                data: event.data,
+                timestamp: timestamp.toString(),
+              }
               controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
             }
           }

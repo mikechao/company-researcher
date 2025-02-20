@@ -10,6 +10,7 @@ declare global {
    * research process.
    */
   interface ResearchEvent {
+    timestamp: string
     event: EVENT_NAMES
     data: any
   }
