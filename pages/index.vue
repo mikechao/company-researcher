@@ -7,6 +7,8 @@ const companyName = ref('Apple')
 const isLoading = ref(false)
 
 const task = ref(0)
+// ProgressBar.vue depends on the order of steps
+// also needed here because of data, that is send from backend
 const steps = [
   'Waiting...',
   EVENT_NAMES.GENERATE_QUERIES,
