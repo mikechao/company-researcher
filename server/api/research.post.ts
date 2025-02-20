@@ -219,9 +219,27 @@ export default defineLazyEventHandler(async () => {
 
   const graph = builder.compile()
 
+  const inputSchema = z.object({
+    sessionId: z.string().min(1, { message: "Session ID is required" }),
+    company: z.string().min(1, { message: "Company name is required" }),
+    maxSearchQueries: z.number().optional().default(3),
+    maxSearchResults: z.number().optional().default(3),
+    maxReflectionSteps: z.number().optional().default(0),
+    includeSearchResults: z.boolean().optional().default(false),
+  })
+
   return defineEventHandler(async (webEvent) => {
     const body = await readBody(webEvent)
-    consola.debug({ tag: 'eventHandler', message: `Got ${JSON.stringify(body)}` })
+    const parsedBody = inputSchema.safeParse(body)
+    if (!parsedBody.success) {
+      const formattedError = parsedBody.error.flatten()
+      consola.error({ tag: 'eventHandler', message: `Invalid input: ${JSON.stringify(formattedError)}` })
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Bad Request",
+        message: JSON.stringify(formattedError) || "Invalid input",
+      })
+    }
     return "hello"
     const sessionId = uuidv4()
     const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries: 3 }) } }

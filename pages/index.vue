@@ -28,23 +28,28 @@
 </template>
 
 <script setup lang="ts">
-import { set } from 'zod'
-
+import { v4 as uuidv4 } from 'uuid'
 const companyName = ref('Apple')
 const isLoading = ref(false)
 
 async function research() {
   isLoading.value = true
-  const response = await $fetch('/api/research', {
-    method: 'POST',
-    body: JSON.stringify({
-      company: companyName.value,
-      maxSearchQueries: 3,
-      maxSearchResults: 3,
-      maxReflectionSteps: 0,
-      includeSearchResults: true,
+  let response = undefined
+  try {
+    response = await $fetch('/api/research', {
+      method: 'POST',
+      body: JSON.stringify({
+        sessionId: uuidv4(),
+        company: companyName.value,
+        maxSearchQueries: 3,
+        maxSearchResults: 3,
+        maxReflectionSteps: 0,
+        includeSearchResults: true,
+      })
     })
-  })
+  } catch (error: any) {
+    console.error(error.message)
+  }
   console.log(`got response ${response}`)
   setTimeout(() => {
     isLoading.value = false
