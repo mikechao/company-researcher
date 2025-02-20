@@ -48,7 +48,12 @@ Please provide detailed research notes that:
 4. Maintain accuracy of the original content
 5. Note when important information appears to be missing or unclear
 
-Remember: Don't try to format the output to match the schema - just take clear notes that capture all relevant information.`
+Remember: Don't try to format the output to match the schema - just take clear notes that capture all relevant information.
+Make sure your notes fit into the output schema below:
+<output_schema>
+{output_schema}
+<output_schema>
+`
 
 export const EXTRACTION_PROMPT = `Your task is to take notes gathered from web research and extract them into the following schema.
 

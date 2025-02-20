@@ -8,6 +8,7 @@ import { tavily } from '@tavily/core'
 import { consola } from 'consola'
 import { LocalFileCache } from 'langchain/cache/file_system'
 import { z } from 'zod'
+import { zodToJsonSchema } from 'zod-to-json-schema'
 import { EVENT_NAMES } from '~/types/constants'
 import { EXTRACTION_PROMPT, INFO_PROMPT, QUERY_WRITER_PROMPT, REFLECTION_PROMPT } from '../prompts/prompts'
 import { ConfigurableAnnotation, getConfig } from '../state/configuration'
@@ -92,16 +93,18 @@ export default defineLazyEventHandler(async () => {
     const deduplicatedSearchResults = deduplicateSources(searchResults)
     const sourceStr = formatSource(deduplicatedSearchResults)
     const beforeModel = performance.now()
+    const outputSchema = z.object({
+      notes: z.array(z.string()).describe('List of research notes.'),
+    })
     const prompt = await PromptTemplate.fromTemplate(INFO_PROMPT)
       .format({
         company: state.company,
         info: JSON.stringify(state.extractionSchema, null, 2),
         content: sourceStr,
         user_notes: state.userNotes,
+        output_schema: JSON.stringify(zodToJsonSchema(outputSchema), null, 2),
       })
-    const outputSchema = z.object({
-      notes: z.array(z.string()).describe('List of research notes.'),
-    })
+
     const modelWithOutput = model.withStructuredOutput(outputSchema)
     const result = await modelWithOutput.invoke([
       { role: 'system', content: prompt },
