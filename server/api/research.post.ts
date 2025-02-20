@@ -7,7 +7,6 @@ import { END, START, StateGraph } from '@langchain/langgraph'
 import { tavily } from '@tavily/core'
 import { consola } from 'consola'
 import { LocalFileCache } from 'langchain/cache/file_system'
-import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import { EVENT_NAMES } from '~/types/constants'
 import { EXTRACTION_PROMPT, INFO_PROMPT, QUERY_WRITER_PROMPT, REFLECTION_PROMPT } from '../prompts/prompts'
@@ -181,7 +180,12 @@ export default defineLazyEventHandler(async () => {
   ) => {
     if (state.isSatisfactory) {
       consola.debug({ tag: 'routeFromReflection', message: 'reflection is satisfactory, going to END' })
-      dispatchCustomEvent(EVENT_NAMES.END, { info: state.info })
+      const endData = {
+        info: state.info,
+        ...(config.configurable?.includeSearchResults && {
+          searchResult: state.searchResult,
+        })}
+      dispatchCustomEvent(EVENT_NAMES.END, endData)
       return END
     }
     const maxReflectionSteps = (config.configurable?.maxReflectionSteps ?? 0)
@@ -191,7 +195,12 @@ export default defineLazyEventHandler(async () => {
       dispatchCustomEvent(EVENT_NAMES.REROUTE, { reroute: 'researchCompany' })
       return 'researchCompany'
     }
-    dispatchCustomEvent(EVENT_NAMES.END, { info: state.info })
+    const endData = {
+      info: state.info,
+      ...(config.configurable?.includeSearchResults && {
+        searchResult: state.searchResult,
+    })}
+    dispatchCustomEvent(EVENT_NAMES.END, endData)
     return END
   }
 
@@ -240,10 +249,11 @@ export default defineLazyEventHandler(async () => {
         message: JSON.stringify(formattedError) || "Invalid input",
       })
     }
-    return "hello"
-    const sessionId = uuidv4()
-    const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries: 3 }) } }
-    const input = { company: 'Apple' }
+    const validatedBody = parsedBody.data
+    consola.debug({ tag: 'eventHandler', message: `Received input: ${JSON.stringify(validatedBody)}` })
+    const { sessionId, company, maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults } = validatedBody
+    const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults }) } }
+    const input = { company }
     const eventStream = graph.streamEvents(input, config)
     let returnValue
     for await (const event of eventStream) {

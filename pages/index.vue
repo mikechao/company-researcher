@@ -49,10 +49,9 @@ async function research() {
     })
   } catch (error: any) {
     console.error(error.message)
-  }
-  console.log(`got response ${response}`)
-  setTimeout(() => {
+  } finally {
     isLoading.value = false
-  }, 2000)
+    console.log(`got response ${JSON.stringify(response)}`)
+  }
 }
 </script>
