@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { useChat } from '@ai-sdk/vue'
 import { v4 as uuidv4 } from 'uuid'
+import { z } from 'zod'
 import { EVENT_NAMES } from '~/types/constants'
-
-const companyName = ref('Apple')
-const includeSearchResults = ref('False')
-const includeSearchResultsBoolean = computed(() => includeSearchResults.value === 'True')
 
 const isLoading = ref(false)
 
@@ -24,16 +21,22 @@ const steps = [
   EVENT_NAMES.AFTER_REFLECTION,
   EVENT_NAMES.END,
 ]
+
+const state = reactive({
+  companyName: 'Apple',
+  includeSearchResults: false
+})
+
 const sessionId = uuidv4()
 const { data, append } = useChat({
   api: '/api/research',
   body: {
     sessionId,
-    company: companyName.value,
+    company: state.companyName,
     maxSearchQueries: 3,
     maxSearchResults: 3,
     maxReflectionSteps: 0,
-    includeSearchResults: includeSearchResultsBoolean.value,
+    includeSearchResults: state.includeSearchResults,
   },
 })
 
@@ -75,35 +78,36 @@ function processData(data: DataItem) {
 function finished() {
   isLoading.value = false
 }
+const schema = z.object({
+  companyName: z.string().describe('The name of the company to research'),
+  includeSearchResults: z.boolean().optional().default(false).describe('Whether to include search results in the research result')
+})
+
 </script>
 
 <template>
   <UCard class="justify-center h-screen">
-    <div class="flex flex-col items-center">
-      <div class="flex items-center">
-        <label for="company-name" class="mr-2">Company Name</label>
+    <UForm :schema="schema" :state="state" class="space-y-4 w-fit" @submit="research">
+      <UFormGroup 
+        label="Company Name" 
+        name="companyName"
+        required
+      >
         <UInput
-          id="company-name"
-          v-model="companyName"
-          label="Company Name"
+          v-model="state.companyName"
           placeholder="Enter company name"
           color="primary"
           variant="outline"
-          :disabled="true"
         />
-      </div>
-      <div class="flex items-center">
-        <label for="include-search-results" class="mt-2">Include Search Results</label>
-        <UInputMenu
-          id="include-search-results"
-          trailing-icon="i-mdi-chevron-down"
-          selected-icon="i-mdi-check"
-          placeholder="Select a value"
-          :options="['True', 'False']"
-          class="mt-2"
-          v-model="includeSearchResults"
+      </UFormGroup>
+      <UFormGroup label="Include Search Results" name="includeSearchResults">
+        <UToggle
+          v-model="state.includeSearchResults"
+          color="primary"
+          :true-label="'Yes'"
+          :false-label="'No'"
         />
-      </div>
+      </UFormGroup>
       <UButton
         label="Research"
         icon="i-mdi-microscope"
@@ -112,8 +116,10 @@ function finished() {
         color="primary"
         class="mt-4"
         :loading="isLoading"
-        @click="research"
+        type="submit"
       />
+    </UForm>
+    <div class="flex flex-col items-center">
       <ProgressBar
         :value="task"
         :max="steps"
