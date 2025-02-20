@@ -34,24 +34,23 @@ const isLoading = ref(false)
 
 async function research() {
   isLoading.value = true
-  let response = undefined
   try {
-    response = await $fetch('/api/research', {
+    const response = await $fetch('/api/research', {
       method: 'POST',
-      body: JSON.stringify({
+      body: {  // $fetch automatically stringifies the body
         sessionId: uuidv4(),
         company: companyName.value,
         maxSearchQueries: 3,
         maxSearchResults: 3,
         maxReflectionSteps: 0,
         includeSearchResults: true,
-      })
+      }
     })
+    console.log(`Response:\n ${JSON.stringify(response, null, 2)}`)
   } catch (error: any) {
-    console.error(error.message)
+    console.error('Error:', error.data || error.message)
   } finally {
     isLoading.value = false
-    console.log(`got response ${JSON.stringify(response)}`)
   }
 }
 </script>
