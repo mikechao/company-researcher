@@ -282,7 +282,7 @@ export default defineLazyEventHandler(async () => {
               }
               const id = uuidv4()
               // format according data part of https://sdk.vercel.ai/docs/ai-sdk-ui/stream-protocol
-              const part = `2:[{"id":"${id}","type":"${event.name}","data":${JSON.stringify(data)}}]\n`
+              const part = `2:[{"id":"${id}","name":"${event.name}","data":${JSON.stringify(data)}}]\n`
               controller.enqueue(part)
             }
           }

@@ -49,64 +49,26 @@ async function research() {
 
 watch (data, (newData) => {
   if (newData && newData.length) {
-    console.log('watch data')
     // this gets call a lot as part of ai-sdk/vue
-    const lastData = newData[newData.length - 1]
+    const lastData = newData[newData.length - 1] as unknown as DataItem
     processData(lastData)
   }
 })
 
-function processData(data: any) {
-  console.log('Data:', data)
+const processedData = new Set()
+function processData(data: DataItem) {
+  if (!data || processedData.has(data.id)) {
+    return
+  }
+  processedData.add(data.id)
+  task.value = steps.indexOf(data.name)
+  if (data.name === EVENT_NAMES.END) {
+    finished()
+  }
 }
 
-async function processStream(stream: ReadableStream) {
-  const reader = stream.pipeThrough(new TextDecoderStream()).getReader()
-  let buffer = '' // buffer for incomplete JSON strings
-  const receivedChunks: Array<{ timestamp: string, value: string }> = []
-
-  while (true) {
-    const { value, done } = await reader.read()
-
-    if (done) {
-      console.log('Stream complete. Received chunks:', receivedChunks)
-      isLoading.value = false
-      break
-    }
-
-    // Log when we receive a chunk
-    receivedChunks.push({
-      timestamp: new Date().toLocaleTimeString('en-US', {
-        hour12: false,
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        fractionalSecondDigits: 3,
-      }),
-      value,
-    })
-    console.log(`Received chunk at ${receivedChunks[receivedChunks.length - 1].timestamp}:`, value)
-
-    // add new chunk to buffer
-    buffer += value
-    // split buffer by newline for each message
-    const lines = buffer.split('\n')
-    // Keep the last (potentially incomplete) line in the buffer
-    buffer = lines.pop() || ''
-
-    for (const line of lines) {
-      if (line.trim()) { // skip empty line
-        try {
-          const message = JSON.parse(line) as ResearchEvent
-          task.value = steps.indexOf(message.event)
-          console.log('Message:', message)
-        }
-        catch (error: any) {
-          console.error('Error:', error.data || error.message)
-        }
-      }
-    }
-  }
+function finished() {
+  isLoading.value = false
 }
 </script>
 
