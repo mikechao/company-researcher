@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     tavilyAPIKey: process.env.NUXT_TAVILY_API_KEY,
   },
 
-  modules: ['@nuxt/ui'],
+  modules: ['@nuxt/ui', '@vueuse/nuxt'],
   tailwindcss: {
     config: {
       theme: {
