@@ -11,6 +11,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@ai-sdk/vue": "^1.1.18",
     "@langchain/anthropic": "^0.3.13",
     "@langchain/community": "^0.3.31",
     "@langchain/core": "^0.3.40",
@@ -20,6 +21,7 @@
     "@nuxtjs/tailwindcss": "6.13.1",
     "@tavily/core": "^0.3.1",
     "@vueuse/nuxt": "12.7.0",
+    "ai": "^4.1.45",
     "consola": "^3.4.0",
     "langchain": "^0.3.19",
     "nuxt": "^3.15.4",
