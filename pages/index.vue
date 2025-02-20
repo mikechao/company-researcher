@@ -1,8 +1,23 @@
 <script setup lang="ts">
 import { v4 as uuidv4 } from 'uuid'
+import { EVENT_NAMES } from '~/types/constants'
 
 const companyName = ref('Apple')
 const isLoading = ref(false)
+
+const task = ref(0)
+const steps = [
+  'Waiting...',
+  EVENT_NAMES.GENERATE_QUERIES,
+  EVENT_NAMES.BEFORE_EXECUTE_QUERIES,
+  EVENT_NAMES.AFTER_EXECUTE_QUERIES,
+  EVENT_NAMES.GENERATE_NOTES,
+  EVENT_NAMES.BEFORE_NOTES_TO_SCHEMA,
+  EVENT_NAMES.AFTER_NOTES_TO_SCHEMA,
+  EVENT_NAMES.BEFORE_REFLECTION,
+  EVENT_NAMES.AFTER_REFLECTION,
+  EVENT_NAMES.END,
+]
 
 async function research() {
   isLoading.value = true
@@ -49,7 +64,7 @@ async function processStream(stream: ReadableStream) {
     for (const line of lines) {
       if (line.trim()) { // skip empty line
         try {
-          const message = JSON.parse(line)
+          const message = JSON.parse(line) as ResearchEvent
           console.log('Message:', message)
         }
         catch (error: any) {
@@ -86,6 +101,19 @@ async function processStream(stream: ReadableStream) {
         :loading="isLoading"
         @click="research"
       />
+      <UProgress
+        size="lg"
+        :value="task"
+        :max="steps"
+        indicator
+        class="mt-4"
+      >
+        <template #step-0="{ step }">
+          <span class="text-primary">
+            {{ step }}
+          </span>
+        </template>
+      </UProgress>
     </div>
   </UCard>
 </template>
