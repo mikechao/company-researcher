@@ -20,6 +20,7 @@ async function research() {
       responseType: 'stream',
     })
     const reader = response.pipeThrough(new TextDecoderStream()).getReader()
+    let buffer = '' // buffer for incomplete JSON strings
     while (true) {
       const { value, done } = await reader.read()
 
@@ -27,8 +28,24 @@ async function research() {
         isLoading.value = false
         break
       }
+      // add new chunk to buffer
+      buffer += value
+      // split buffer by newline for each message
+      const lines = buffer.split('\n')
+      // Keep the last (potentially incomplete) line in the buffer
+      buffer = lines.pop() || ''
 
-      console.log('Received:', value)
+      for (const line of lines) {
+        if (line.trim()) { // skip empty line
+          try {
+            const message = JSON.parse(line)
+            console.log('Message:', message)
+          }
+          catch (error: any) {
+            console.error('Error:', error.data || error.message)
+          }
+        }
+      }
     }
   }
   catch (error: any) {
