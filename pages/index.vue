@@ -47,13 +47,30 @@ async function research() {
 async function processStream(stream: ReadableStream) {
   const reader = stream.pipeThrough(new TextDecoderStream()).getReader()
   let buffer = '' // buffer for incomplete JSON strings
+  const receivedChunks: Array<{ timestamp: string, value: string }> = []
+
   while (true) {
     const { value, done } = await reader.read()
 
     if (done) {
+      console.log('Stream complete. Received chunks:', receivedChunks)
       isLoading.value = false
       break
     }
+
+    // Log when we receive a chunk
+    receivedChunks.push({
+      timestamp: new Date().toLocaleTimeString('en-US', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        fractionalSecondDigits: 3,
+      }),
+      value,
+    })
+    console.log(`Received chunk at ${receivedChunks[receivedChunks.length - 1].timestamp}:`, value)
+
     // add new chunk to buffer
     buffer += value
     // split buffer by newline for each message
