@@ -7,6 +7,7 @@ import { END, START, StateGraph } from '@langchain/langgraph'
 import { tavily } from '@tavily/core'
 import { consola } from 'consola'
 import { LocalFileCache } from 'langchain/cache/file_system'
+import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
 import { EVENT_NAMES } from '~/types/constants'
@@ -259,40 +260,40 @@ export default defineLazyEventHandler(async () => {
     const { sessionId, company, maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults } = validatedBody
     const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults }) } }
     const input = { company }
-    const encoder = new TextEncoder()
-    const eventStream = new TransformStream({
-      transform(event, controller) {
-        if (event.event === 'on_custom_event') {
-          const timestamp = new Date().toLocaleTimeString('en-US', {
-            hour12: false,
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            fractionalSecondDigits: 3,
-          })
 
-          const data: ResearchEvent = {
-            event: event.name,
-            data: event.data,
-            timestamp: timestamp.toString(),
+    return new ReadableStream({
+      async start(controller) {
+        try {
+          const graphEvents = graph.streamEvents(input, config)
+          for await (const event of graphEvents) {
+            if (event.event === 'on_custom_event') {
+              const timestamp = new Date().toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                fractionalSecondDigits: 3,
+              })
+
+              const data: ResearchEvent = {
+                event: event.name,
+                data: event.data,
+                timestamp: timestamp.toString(),
+              }
+              const id = uuidv4()
+              // format according data part of https://sdk.vercel.ai/docs/ai-sdk-ui/stream-protocol
+              const part = `2:[{"id":"${id}","type":"${event.name}","data":${JSON.stringify(data)}}]\n`
+              controller.enqueue(part)
+            }
           }
-
-          // Send each event as a separate chunk and force flush
-          controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
-          controller.enqueue(encoder.encode('\n')) // Force flush with empty line
+        }
+        catch (error) {
+          console.error('Error in graph.streamEvents', error)
+        }
+        finally {
+          controller.close()
         }
       },
     })
-    setHeader(webEvent, 'Content-Type', 'text/event-stream')
-    setHeader(webEvent, 'Cache-Control', 'no-cache')
-    setHeader(webEvent, 'Connection', 'keep-alive')
-    setHeader(webEvent, 'X-Accel-Buffering', 'no')
-    return graph.streamEvents(input, config)
-      .pipeThrough(eventStream)
-      .pipeThrough(new TransformStream({
-        transform(chunk, controller) {
-          controller.enqueue(chunk)
-        },
-      }, { highWaterMark: 1 }))
   })
 })

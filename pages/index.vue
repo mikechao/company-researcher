@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useChat } from '@ai-sdk/vue'
 import { v4 as uuidv4 } from 'uuid'
 import { EVENT_NAMES } from '~/types/constants'
 
@@ -18,30 +19,45 @@ const steps = [
   EVENT_NAMES.AFTER_REFLECTION,
   EVENT_NAMES.END,
 ]
+const sessionId = uuidv4()
+const { data, append } = useChat({
+  api: '/api/research',
+  body: {
+    sessionId,
+    company: companyName.value,
+    maxSearchQueries: 3,
+    maxSearchResults: 3,
+    maxReflectionSteps: 0,
+    includeSearchResults: true,
+  },
+})
 
 async function research() {
   isLoading.value = true
   try {
-    const response = await $fetch<ReadableStream>('/api/research', {
-      method: 'POST',
-      body: { // $fetch automatically stringifies the body
-        sessionId: uuidv4(),
-        company: companyName.value,
-        maxSearchQueries: 3,
-        maxSearchResults: 3,
-        maxReflectionSteps: 0,
-        includeSearchResults: true,
-      },
-      responseType: 'stream',
-    })
-    await processStream(response)
+    // use append to trigger call the research endpoint
+    // the message is ignored by the server
+    await append(
+      { role: 'user', content: 'Hello' },
+    )
   }
   catch (error: any) {
     console.error('Error:', error.data || error.message)
-  }
-  finally {
     isLoading.value = false
   }
+}
+
+watch (data, (newData) => {
+  if (newData && newData.length) {
+    console.log('watch data')
+    // this gets call a lot as part of ai-sdk/vue
+    const lastData = newData[newData.length - 1]
+    processData(lastData)
+  }
+})
+
+function processData(data: any) {
+  console.log('Data:', data)
 }
 
 async function processStream(stream: ReadableStream) {
