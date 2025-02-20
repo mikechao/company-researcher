@@ -260,163 +260,39 @@ export default defineLazyEventHandler(async () => {
     const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults }) } }
     const input = { company }
     const encoder = new TextEncoder()
+    const eventStream = new TransformStream({
+      transform(event, controller) {
+        if (event.event === 'on_custom_event') {
+          const timestamp = new Date().toLocaleTimeString('en-US', {
+            hour12: false,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            fractionalSecondDigits: 3,
+          })
+
+          const data: ResearchEvent = {
+            event: event.name,
+            data: event.data,
+            timestamp: timestamp.toString(),
+          }
+
+          // Send each event as a separate chunk and force flush
+          controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
+          controller.enqueue(encoder.encode('\n')) // Force flush with empty line
+        }
+      },
+    })
     setHeader(webEvent, 'Content-Type', 'text/event-stream')
     setHeader(webEvent, 'Cache-Control', 'no-cache')
     setHeader(webEvent, 'Connection', 'keep-alive')
     setHeader(webEvent, 'X-Accel-Buffering', 'no')
-    return new ReadableStream({
-      async start(controller) {
-        const eventStream = graph.streamEvents(input, config)
-        for await (const event of eventStream) {
-          if (event.event === 'on_custom_event') {
-            if (event.name === EVENT_NAMES.GENERATE_QUERIES) {
-              consola.debug({ tag: 'eventHandler', message: `Generate queries event. ${JSON.stringify(event.data)}` })
-              const timestamp = new Date().toLocaleTimeString('en-US', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                fractionalSecondDigits: 3,
-              })
-              const data: ResearchEvent = {
-                event: EVENT_NAMES.GENERATE_QUERIES,
-                data: event.data,
-                timestamp: timestamp.toString(),
-              }
-              controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
-            }
-            if (event.name === EVENT_NAMES.BEFORE_EXECUTE_QUERIES) {
-              consola.debug({ tag: 'eventHandler', message: `Before execute queries event. ${JSON.stringify(event.data)}` })
-              const timestamp = new Date().toLocaleTimeString('en-US', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                fractionalSecondDigits: 3,
-              })
-              const data: ResearchEvent = {
-                event: EVENT_NAMES.BEFORE_EXECUTE_QUERIES,
-                data: event.data,
-                timestamp: timestamp.toString(),
-              }
-              controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
-            }
-            if (event.name === EVENT_NAMES.AFTER_EXECUTE_QUERIES) {
-              consola.debug({ tag: 'eventHandler', message: `After execute queries event. ${JSON.stringify(event.data)}` })
-              const timestamp = new Date().toLocaleTimeString('en-US', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                fractionalSecondDigits: 3,
-              })
-              const data: ResearchEvent = {
-                event: EVENT_NAMES.AFTER_EXECUTE_QUERIES,
-                data: event.data,
-                timestamp: timestamp.toString(),
-              }
-              controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
-            }
-            if (event.name === EVENT_NAMES.GENERATE_NOTES) {
-              consola.debug({ tag: 'eventHandler', message: `Generate notes event. ${JSON.stringify(event.data)}` })
-              const timestamp = new Date().toLocaleTimeString('en-US', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                fractionalSecondDigits: 3,
-              })
-              const data: ResearchEvent = {
-                event: EVENT_NAMES.GENERATE_NOTES,
-                data: event.data,
-                timestamp: timestamp.toString(),
-              }
-              controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
-            }
-            if (event.name === EVENT_NAMES.BEFORE_NOTES_TO_SCHEMA) {
-              consola.debug({ tag: 'eventHandler', message: `Before notes to schema event. ${JSON.stringify(event.data)}` })
-              const timestamp = new Date().toLocaleTimeString('en-US', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                fractionalSecondDigits: 3,
-              })
-              const data: ResearchEvent = {
-                event: EVENT_NAMES.BEFORE_NOTES_TO_SCHEMA,
-                data: event.data,
-                timestamp: timestamp.toString(),
-              }
-              controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
-            }
-            if (event.name === EVENT_NAMES.AFTER_NOTES_TO_SCHEMA) {
-              consola.debug({ tag: 'eventHandler', message: `After notes to schema event. ${JSON.stringify(event.data)} ` })
-              const timestamp = new Date().toLocaleTimeString('en-US', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                fractionalSecondDigits: 3,
-              })
-              const data: ResearchEvent = {
-                event: EVENT_NAMES.AFTER_NOTES_TO_SCHEMA,
-                data: event.data,
-                timestamp: timestamp.toString(),
-              }
-              controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
-            }
-            if (event.name === EVENT_NAMES.BEFORE_REFLECTION) {
-              consola.debug({ tag: 'eventHandler', message: `Before reflection event. ${JSON.stringify(event.data)}` })
-              const timestamp = new Date().toLocaleTimeString('en-US', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                fractionalSecondDigits: 3,
-              })
-              const data: ResearchEvent = {
-                event: EVENT_NAMES.BEFORE_REFLECTION,
-                data: event.data,
-                timestamp: timestamp.toString(),
-              }
-              controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
-            }
-            if (event.name === EVENT_NAMES.AFTER_REFLECTION) {
-              consola.debug({ tag: 'eventHandler', message: `After reflection event. ${JSON.stringify(event.data)}` })
-              const timestamp = new Date().toLocaleTimeString('en-US', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                fractionalSecondDigits: 3,
-              })
-              const data: ResearchEvent = {
-                event: EVENT_NAMES.AFTER_REFLECTION,
-                data: event.data,
-                timestamp: timestamp.toString(),
-              }
-              controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
-            }
-            if (event.name === EVENT_NAMES.END) {
-              consola.debug({ tag: 'eventHandler', message: `End event` })
-              const timestamp = new Date().toLocaleTimeString('en-US', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                fractionalSecondDigits: 3,
-              })
-              const data: ResearchEvent = {
-                event: EVENT_NAMES.END,
-                data: event.data,
-                timestamp: timestamp.toString(),
-              }
-              controller.enqueue(encoder.encode(`${JSON.stringify(data)}\n`))
-            }
-          }
-        }
-        controller.close()
-      },
-    })
+    return graph.streamEvents(input, config)
+      .pipeThrough(eventStream)
+      .pipeThrough(new TransformStream({
+        transform(chunk, controller) {
+          controller.enqueue(chunk)
+        },
+      }, { highWaterMark: 1 }))
   })
 })
