@@ -7,7 +7,7 @@ const isLoading = ref(false)
 async function research() {
   isLoading.value = true
   try {
-    const response = await $fetch('/api/research', {
+    const response = await $fetch<ReadableStream>('/api/research', {
       method: 'POST',
       body: { // $fetch automatically stringifies the body
         sessionId: uuidv4(),
@@ -17,8 +17,19 @@ async function research() {
         maxReflectionSteps: 0,
         includeSearchResults: true,
       },
+      responseType: 'stream',
     })
-    console.log(`Response:\n ${JSON.stringify(response, null, 2)}`)
+    const reader = response.pipeThrough(new TextDecoderStream()).getReader()
+    while (true) {
+      const { value, done } = await reader.read()
+
+      if (done) {
+        isLoading.value = false
+        break
+      }
+
+      console.log('Received:', value)
+    }
   }
   catch (error: any) {
     console.error('Error:', error.data || error.message)
