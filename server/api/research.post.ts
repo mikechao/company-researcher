@@ -260,6 +260,10 @@ export default defineLazyEventHandler(async () => {
     const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults }) } }
     const input = { company }
     const encoder = new TextEncoder()
+    setHeader(webEvent, 'Content-Type', 'text/event-stream')
+    setHeader(webEvent, 'Cache-Control', 'no-cache')
+    setHeader(webEvent, 'Connection', 'keep-alive')
+    setHeader(webEvent, 'X-Accel-Buffering', 'no')
     return new ReadableStream({
       async start(controller) {
         const eventStream = graph.streamEvents(input, config)
