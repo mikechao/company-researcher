@@ -1,15 +1,46 @@
+<script setup lang="ts">
+import { v4 as uuidv4 } from 'uuid'
+
+const companyName = ref('Apple')
+const isLoading = ref(false)
+
+async function research() {
+  isLoading.value = true
+  try {
+    const response = await $fetch('/api/research', {
+      method: 'POST',
+      body: { // $fetch automatically stringifies the body
+        sessionId: uuidv4(),
+        company: companyName.value,
+        maxSearchQueries: 3,
+        maxSearchResults: 3,
+        maxReflectionSteps: 0,
+        includeSearchResults: true,
+      },
+    })
+    console.log(`Response:\n ${JSON.stringify(response, null, 2)}`)
+  }
+  catch (error: any) {
+    console.error('Error:', error.data || error.message)
+  }
+  finally {
+    isLoading.value = false
+  }
+}
+</script>
+
 <template>
   <UCard class="justify-center h-screen">
     <div class="flex flex-col items-center">
       <div class="flex items-center">
         <label for="company-name" class="mr-2">Company Name</label>
         <UInput
+          id="company-name"
           v-model="companyName"
           label="Company Name"
           placeholder="Enter company name"
           color="primary"
           variant="outline"
-          id="company-name"
           :disabled="true"
         />
       </div>
@@ -20,37 +51,9 @@
         :trailing="true"
         color="primary"
         class="mt-4"
-        @click="research"
         :loading="isLoading"
+        @click="research"
       />
     </div>
   </UCard>
 </template>
-
-<script setup lang="ts">
-import { v4 as uuidv4 } from 'uuid'
-const companyName = ref('Apple')
-const isLoading = ref(false)
-
-async function research() {
-  isLoading.value = true
-  try {
-    const response = await $fetch('/api/research', {
-      method: 'POST',
-      body: {  // $fetch automatically stringifies the body
-        sessionId: uuidv4(),
-        company: companyName.value,
-        maxSearchQueries: 3,
-        maxSearchResults: 3,
-        maxReflectionSteps: 0,
-        includeSearchResults: true,
-      }
-    })
-    console.log(`Response:\n ${JSON.stringify(response, null, 2)}`)
-  } catch (error: any) {
-    console.error('Error:', error.data || error.message)
-  } finally {
-    isLoading.value = false
-  }
-}
-</script>
