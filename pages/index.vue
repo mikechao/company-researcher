@@ -4,6 +4,9 @@ import { v4 as uuidv4 } from 'uuid'
 import { EVENT_NAMES } from '~/types/constants'
 
 const companyName = ref('Apple')
+const includeSearchResults = ref('False')
+const includeSearchResultsBoolean = computed(() => includeSearchResults.value === 'True')
+
 const isLoading = ref(false)
 
 const task = ref(0)
@@ -30,7 +33,7 @@ const { data, append } = useChat({
     maxSearchQueries: 3,
     maxSearchResults: 3,
     maxReflectionSteps: 0,
-    includeSearchResults: true,
+    includeSearchResults: includeSearchResultsBoolean.value,
   },
 })
 
@@ -87,6 +90,18 @@ function finished() {
           color="primary"
           variant="outline"
           :disabled="true"
+        />
+      </div>
+      <div class="flex items-center">
+        <label for="include-search-results" class="mt-2">Include Search Results</label>
+        <UInputMenu
+          id="include-search-results"
+          trailing-icon="i-mdi-chevron-down"
+          selected-icon="i-mdi-check"
+          placeholder="Select a value"
+          :options="['True', 'False']"
+          class="mt-2"
+          v-model="includeSearchResults"
         />
       </div>
       <UButton
