@@ -203,21 +203,9 @@ const schema = z.object({
             </div>
 
             <div class="min-w-fit">
-              <UFormGroup label="Include Search Results" name="includeSearchResults">
-                <UToggle
-                  v-model="state.includeSearchResults"
-                  color="primary"
-                  on-icon="i-mdi-thumb-up-outline"
-                  off-icon="i-mdi-thumb-down-outline"
-                  size="lg"
-                />
-              </UFormGroup>
-            </div>
-
-            <div class="min-w-fit">
               <NumberInput
                 v-model="state.maxSearchQueries"
-                label="Max Search Queries"
+                label="Search Queries"
                 name="maxSearchQueries"
                 :min="1"
                 :max="5"
@@ -227,7 +215,7 @@ const schema = z.object({
             <div class="min-w-fit">
               <NumberInput
                 v-model="state.maxSearchResults"
-                label="Max Search Results"
+                label="Search Results"
                 name="maxSearchResults"
                 :min="1"
                 :max="5"
@@ -237,7 +225,7 @@ const schema = z.object({
             <div class="min-w-fit">
               <NumberInput
                 v-model="state.maxReflectionSteps"
-                label="Number of Reflection Steps"
+                label="Reflection Steps"
                 name="maxReflectionSteps"
                 :min="0"
                 :max="3"
@@ -255,7 +243,18 @@ const schema = z.object({
               </UFormGroup>
             </div>
 
-            <!-- Button section -->
+            <div class="min-w-fit">
+              <UFormGroup label="Search Results" name="includeSearchResults">
+                <UToggle
+                  v-model="state.includeSearchResults"
+                  color="primary"
+                  on-icon="i-mdi-thumb-up-outline"
+                  off-icon="i-mdi-thumb-down-outline"
+                  size="lg"
+                />
+              </UFormGroup>
+            </div>
+
             <div class="w-full flex justify-center">
               <UButton
                 label="Research"
