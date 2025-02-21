@@ -91,7 +91,13 @@ const schema = z.object({
     .optional()
     .default(3)
     .describe('The maximum number of search queries to generate'),
-  maxSearchResults: z.number().optional().default(3).describe('The maximum number of search results to include'),
+  maxSearchResults: z.number()
+    .min(1, {message: "Must be at least 1 result"})
+    .max(5, {message: "Cannot exceed 5 results"})
+    .int({message: "Must be a whole number"})
+    .optional()
+    .default(3)
+    .describe('The maximum number of search results to include'),
   maxReflectionSteps: z.number().optional().default(0).describe('The maximum number of reflection steps to include'),
 })
 
@@ -112,6 +118,7 @@ const schema = z.object({
           variant="outline"
         />
       </UFormGroup>
+      <UDivider/>
       <UFormGroup label="Include Search Results" name="includeSearchResults">
         <UToggle
           v-model="state.includeSearchResults"
@@ -120,6 +127,7 @@ const schema = z.object({
           :false-label="'No'"
         />
       </UFormGroup>
+      <UDivider/>
       <UFormGroup label="Max Search Queries" name="maxSearchQueries">
         <UInput
           v-model="state.maxSearchQueries"
@@ -138,6 +146,26 @@ const schema = z.object({
           class="mt-1"
         />
       </UFormGroup>
+      <UDivider/>
+      <UFormGroup label="Max Search Results" name="maxSearchResults">
+        <UInput
+          v-model="state.maxSearchResults"
+          type="number"
+          color="primary"
+          variant="outline"
+          :min="1"
+          :max="5"
+          step="1"
+        />
+        <URange
+          v-model="state.maxSearchResults"
+          color="primary"
+          :min="1"
+          :max="5"
+          class="mt-1"
+        />
+      </UFormGroup>
+      <UDivider/>
       <UButton
         label="Research"
         icon="i-mdi-microscope"
