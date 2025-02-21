@@ -50,8 +50,9 @@ function asArray(item: any) {
 <template>
   <UCard
     ref="card"
-    class="p-4" :ui="{
-      ring: 'ring-1 ring-inset ring-primary-500 dark:ring-primary-400 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400',
+    class="p-4"
+    :ui="{
+      ring: 'app-ring',
     }"
   >
     <!-- If the data is an object -->

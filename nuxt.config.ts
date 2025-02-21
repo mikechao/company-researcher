@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     anthropicAPIKey: process.env.NUXT_ANTHROPIC_API_KEY,
     tavilyAPIKey: process.env.NUXT_TAVILY_API_KEY,
   },
-
+  css: ['~/assets/css/app.css'],
   modules: ['@nuxt/ui', '@vueuse/nuxt'],
   tailwindcss: {
     config: {
@@ -30,7 +30,7 @@ export default defineNuxtConfig({
           'srcDir/app/spa-loading-template.html',
         ],
       },
-      plugins: []
+      plugins: [],
     },
   },
 })

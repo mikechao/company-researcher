@@ -152,7 +152,7 @@ const schema = z.object({
           <UForm
             :schema="schema"
             :state="state"
-            class="flex flex-wrap gap-3 p-6 shadow-md rounded-md ring-1 ring-inset ring-primary-500 dark:ring-primary-400 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
+            class="flex flex-wrap gap-3 p-6 shadow-md rounded-md app-ring"
             @submit="research"
           >
             <!-- Company name section -->
