@@ -126,7 +126,7 @@ const schema = z.object({
   <UCard class="justify-center h-screen">
     <Transition name="slide-fade">
       <div v-show="showResults" class="mb-2 flex justify-center">
-        <ResearchResults :data="results" class="w-[800px]" />
+        <ResearchResults :data="results" :is-root="true" class="w-[800px]" />
       </div>
     </Transition>
 
