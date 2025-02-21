@@ -41,6 +41,10 @@ const card: Ref<HTMLElement | null> = ref(null)
 function copyToClipboard() {
   navigator.clipboard.writeText(JSON.stringify(props.data, null, 2))
 }
+
+function asArray(item: any) {
+  return item as unknown[]
+}
 </script>
 
 <template>
@@ -71,13 +75,8 @@ function copyToClipboard() {
     <!-- If the data is an array -->
     <template v-else-if="isArray(data)">
       <div v-for="(item, index) in data" :key="index" class="mb-2 pl-4 ">
-        <ResearchResults :data="item as Record<string, any>" :is-root="false" />
+        <ResearchResults :is-root="false" :data="asArray(item)" />
       </div>
-    </template>
-
-    <!-- If the data is a primitive -->
-    <template v-else>
-      <span class="text-gray-600">{{ data }}</span>
     </template>
 
     <!-- Buttons section - only shown for root instance -->
