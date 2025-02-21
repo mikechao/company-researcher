@@ -83,7 +83,10 @@ function finished() {
 }
 const schema = z.object({
   companyName: z.string().describe('The name of the company to research'),
-  includeSearchResults: z.boolean().optional().default(false).describe('Whether to include search results in the research result'),
+  includeSearchResults: z.boolean()
+    .optional()
+    .default(false)
+    .describe('Whether to include search results in the research result'),
   maxSearchQueries: z.number()
     .min(1, {message: "Must be at least 1 query"})
     .max(5, {message: "Cannot exceed 5 queries"})
@@ -98,14 +101,20 @@ const schema = z.object({
     .optional()
     .default(3)
     .describe('The maximum number of search results to include'),
-  maxReflectionSteps: z.number().optional().default(0).describe('The maximum number of reflection steps to include'),
+  maxReflectionSteps: z.number()
+    .min(0, {message: "Cannot be negative"})
+    .max(3, {message: "Cannot exceed 3 steps"})
+    .int({message: "Must be a whole number"})
+    .optional()
+    .default(0)
+    .describe('The maximum number of reflection steps to take'),
 })
 
 </script>
 
 <template>
   <UCard class="justify-center h-screen">
-    <UForm :schema="schema" :state="state" class="space-y-4 w-fit" @submit="research">
+    <UForm :schema="schema" :state="state" class="space-y-2 w-fit" @submit="research">
       <UFormGroup 
         label="Company Name" 
         name="companyName"
@@ -164,6 +173,26 @@ const schema = z.object({
           :max="5"
           class="mt-1"
         />
+      </UFormGroup>
+      <UDivider/>
+      <UFormGroup label="Number of Reflection Steps" name="maxReflectionSteps">
+        <UInput
+          v-model="state.maxReflectionSteps"
+          type="number"
+          color="primary"
+          variant="outline"
+          :min="0"
+          :max="3"
+          step="1"
+        />
+        <URange
+          v-model="state.maxReflectionSteps"
+          color="primary"
+          :min="0"
+          :max="3"
+          class="mt-1"
+        />
+
       </UFormGroup>
       <UDivider/>
       <UButton
