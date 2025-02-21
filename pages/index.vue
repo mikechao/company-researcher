@@ -80,10 +80,17 @@ function processData(data: DataItem) {
 
 const results = ref('')
 const showResults = ref(false)
-function finished(data: DataItem) {
-  results.value = JSON.stringify(data.data)
+function finished(dataItem: DataItem) {
+  results.value = extractData(dataItem.data)
   showResults.value = true
   isLoading.value = false
+}
+function extractData(data: any) {
+  if ('data' in data && 'info' in data.data) {
+    return data.data.info
+  }
+  console.warn('No info found in data:', data)
+  return JSON.stringify(data, null, 2)
 }
 const schema = z.object({
   companyName: z.string().describe('The name of the company to research'),
@@ -118,7 +125,7 @@ const schema = z.object({
 <template>
   <UCard class="justify-center h-screen">
     <div v-show="showResults" class="mb-2 flex justify-center">
-      <UTextarea v-model="results" color="primary" variant="outline" class="w-[800px]" />
+      <ResearchResults :data="results" class="w-[800px]" />
     </div>
     <div class="flex justify-center">
       <div class="w-[800px]">
