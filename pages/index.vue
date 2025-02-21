@@ -30,13 +30,13 @@ interface ResearchParams {
   maxReflectionSteps: number
 }
 
-const defaultState: ResearchParams = {
+const defaultState = Object.freeze({
   companyName: '',
   includeSearchResults: false,
   maxSearchQueries: 3,
   maxSearchResults: 3,
   maxReflectionSteps: 0,
-} as const
+} satisfies ResearchParams)
 
 const state: ResearchParams = reactive({
   ...defaultState,
