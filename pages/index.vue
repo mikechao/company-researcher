@@ -32,7 +32,7 @@ const state = reactive({
 
 const sessionId = uuidv4()
 const { data, append } = useChat({
-  api: '/api/research',
+  api: '/api/test',
   body: {
     sessionId,
     company: state.companyName,
@@ -117,7 +117,9 @@ const schema = z.object({
 
 <template>
   <UCard class="justify-center h-screen">
-    <UTextarea v-show="showResults" v-model="results" color="primary" variant="outline" />
+    <div v-show="showResults" class="mb-2 flex justify-center">
+      <UTextarea v-model="results" color="primary" variant="outline" class="w-[800px]" />
+    </div>
     <div class="flex justify-center">
       <div class="w-[800px]">
         <UForm :schema="schema" :state="state" class="flex flex-wrap gap-3" @submit="research">
