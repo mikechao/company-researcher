@@ -173,6 +173,9 @@ const schema = z.object({
                 <UToggle
                   v-model="state.includeSearchResults"
                   color="primary"
+                  on-icon="i-mdi-thumb-up-outline"
+                  off-icon="i-mdi-thumb-down-outline"
+                  size="lg"
                 />
               </UFormGroup>
             </div>
