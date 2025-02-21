@@ -124,125 +124,152 @@ const schema = z.object({
 
 <template>
   <UCard class="justify-center h-screen">
-    <div v-show="showResults" class="mb-2 flex justify-center">
-      <ResearchResults :data="results" class="w-[800px]" />
-    </div>
-    <div class="flex justify-center">
-      <div class="w-[800px]">
-        <UForm :schema="schema" :state="state" class="flex flex-wrap gap-3" @submit="research">
-          <!-- Company name section -->
-          <div class="w-full flex justify-center mb-4">
-            <div class="flex-1">
-              <UFormGroup
-                label="Company Name"
-                name="companyName"
-                required
-              >
-                <UInput
-                  v-model="state.companyName"
-                  placeholder="Enter company name"
+    <Transition name="slide-fade">
+      <div v-show="showResults" class="mb-2 flex justify-center">
+        <ResearchResults :data="results" class="w-[800px]" />
+      </div>
+    </Transition>
+
+    <Transition name="collapse">
+      <div v-show="!showResults" class="flex justify-center">
+        <div class="w-[800px]">
+          <UForm :schema="schema" :state="state" class="flex flex-wrap gap-3" @submit="research">
+            <!-- Company name section -->
+            <div class="w-full flex justify-center mb-4">
+              <div class="flex-1">
+                <UFormGroup
+                  label="Company Name"
+                  name="companyName"
+                  required
+                >
+                  <UInput
+                    v-model="state.companyName"
+                    placeholder="Enter company name"
+                    color="primary"
+                    variant="outline"
+                  />
+                </UFormGroup>
+              </div>
+            </div>
+
+            <div class="min-w-fit">
+              <UFormGroup label="Include Search Results" name="includeSearchResults">
+                <UToggle
+                  v-model="state.includeSearchResults"
                   color="primary"
-                  variant="outline"
                 />
               </UFormGroup>
             </div>
-          </div>
 
-          <div class="min-w-fit">
-            <UFormGroup label="Include Search Results" name="includeSearchResults">
-              <UToggle
-                v-model="state.includeSearchResults"
-                color="primary"
-              />
-            </UFormGroup>
-          </div>
+            <div class="min-w-fit">
+              <UFormGroup label="Max Search Queries" name="maxSearchQueries">
+                <UInput
+                  v-model="state.maxSearchQueries"
+                  type="number"
+                  color="primary"
+                  variant="outline"
+                  :min="1"
+                  :max="5"
+                  step="1"
+                />
+                <URange
+                  v-model="state.maxSearchQueries"
+                  color="primary"
+                  :min="1"
+                  :max="5"
+                  class="mt-1"
+                />
+              </UFormGroup>
+            </div>
 
-          <div class="min-w-fit">
-            <UFormGroup label="Max Search Queries" name="maxSearchQueries">
-              <UInput
-                v-model="state.maxSearchQueries"
-                type="number"
-                color="primary"
-                variant="outline"
-                :min="1"
-                :max="5"
-                step="1"
-              />
-              <URange
-                v-model="state.maxSearchQueries"
-                color="primary"
-                :min="1"
-                :max="5"
-                class="mt-1"
-              />
-            </UFormGroup>
-          </div>
+            <div class="min-w-fit">
+              <UFormGroup label="Max Search Results" name="maxSearchResults">
+                <UInput
+                  v-model="state.maxSearchResults"
+                  type="number"
+                  color="primary"
+                  variant="outline"
+                  :min="1"
+                  :max="5"
+                  step="1"
+                />
+                <URange
+                  v-model="state.maxSearchResults"
+                  color="primary"
+                  :min="1"
+                  :max="5"
+                  class="mt-1"
+                />
+              </UFormGroup>
+            </div>
 
-          <div class="min-w-fit">
-            <UFormGroup label="Max Search Results" name="maxSearchResults">
-              <UInput
-                v-model="state.maxSearchResults"
-                type="number"
-                color="primary"
-                variant="outline"
-                :min="1"
-                :max="5"
-                step="1"
-              />
-              <URange
-                v-model="state.maxSearchResults"
-                color="primary"
-                :min="1"
-                :max="5"
-                class="mt-1"
-              />
-            </UFormGroup>
-          </div>
+            <div class="min-w-fit">
+              <UFormGroup label="Number of Reflection Steps" name="maxReflectionSteps">
+                <UInput
+                  v-model="state.maxReflectionSteps"
+                  type="number"
+                  color="primary"
+                  variant="outline"
+                  :min="0"
+                  :max="3"
+                  step="1"
+                />
+                <URange
+                  v-model="state.maxReflectionSteps"
+                  color="primary"
+                  :min="0"
+                  :max="3"
+                  class="mt-1"
+                />
+              </UFormGroup>
+            </div>
 
-          <div class="min-w-fit">
-            <UFormGroup label="Number of Reflection Steps" name="maxReflectionSteps">
-              <UInput
-                v-model="state.maxReflectionSteps"
-                type="number"
+            <!-- Button section -->
+            <div class="w-full flex justify-center">
+              <UButton
+                label="Research"
+                icon="i-mdi-microscope"
+                loading-icon="i-mdi-loading"
+                :trailing="true"
                 color="primary"
-                variant="outline"
-                :min="0"
-                :max="3"
-                step="1"
+                class="mt-4"
+                :loading="isLoading"
+                type="submit"
               />
-              <URange
-                v-model="state.maxReflectionSteps"
-                color="primary"
-                :min="0"
-                :max="3"
-                class="mt-1"
-              />
-            </UFormGroup>
-          </div>
-
-          <!-- Button section -->
-          <div class="w-full flex justify-center">
-            <UButton
-              label="Research"
-              icon="i-mdi-microscope"
-              loading-icon="i-mdi-loading"
-              :trailing="true"
-              color="primary"
+            </div>
+          </UForm>
+          <div class="flex justify-center">
+            <ProgressBar
+              :value="task"
+              :max="steps"
               class="mt-4"
-              :loading="isLoading"
-              type="submit"
             />
           </div>
-        </UForm>
-
-        <div class="flex justify-center">
-          <ProgressBar
-            :value="task"
-            :max="steps"
-            class="mt-4"
-          />
         </div>
       </div>
-    </div>
+    </Transition>
   </UCard>
 </template>
+
+<style scoped>
+/* Slide down animation for results */
+.slide-fade-enter-active {
+  transition: all 1.5s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+
+/* Form minimize animation */
+.collapse-enter-active,
+.collapse-leave-active {
+  transition: all 1s ease;
+}
+</style>
