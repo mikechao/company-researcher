@@ -24,7 +24,10 @@ const steps = [
 
 const state = reactive({
   companyName: 'Apple',
-  includeSearchResults: false
+  includeSearchResults: false,
+  maxSearchQueries: 3,
+  maxSearchResults: 3,
+  maxReflectionSteps: 0,
 })
 
 const sessionId = uuidv4()
@@ -80,7 +83,16 @@ function finished() {
 }
 const schema = z.object({
   companyName: z.string().describe('The name of the company to research'),
-  includeSearchResults: z.boolean().optional().default(false).describe('Whether to include search results in the research result')
+  includeSearchResults: z.boolean().optional().default(false).describe('Whether to include search results in the research result'),
+  maxSearchQueries: z.number()
+    .min(1, {message: "Must be at least 1 query"})
+    .max(5, {message: "Cannot exceed 5 queries"})
+    .int({message: "Must be a whole number"})
+    .optional()
+    .default(3)
+    .describe('The maximum number of search queries to generate'),
+  maxSearchResults: z.number().optional().default(3).describe('The maximum number of search results to include'),
+  maxReflectionSteps: z.number().optional().default(0).describe('The maximum number of reflection steps to include'),
 })
 
 </script>
@@ -106,6 +118,24 @@ const schema = z.object({
           color="primary"
           :true-label="'Yes'"
           :false-label="'No'"
+        />
+      </UFormGroup>
+      <UFormGroup label="Max Search Queries" name="maxSearchQueries">
+        <UInput
+          v-model="state.maxSearchQueries"
+          type="number"
+          color="primary"
+          variant="outline"
+          :min="1"
+          :max="5"
+          step="1"
+        />
+        <URange
+          v-model="state.maxSearchQueries"
+          color="primary"
+          :min="1"
+          :max="5"
+          class="mt-1"
         />
       </UFormGroup>
       <UButton
