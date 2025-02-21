@@ -16,21 +16,21 @@ const props = defineProps({
 /**
  * Check if a value is a non-null object (and not an array)
  */
-function isObject(val) {
+function isObject(val: any) {
   return typeof val === 'object' && val !== null && !Array.isArray(val)
 }
 
 /**
  * Check if a value is an array
  */
-function isArray(val) {
+function isArray(val: unknown): val is unknown[] {
   return Array.isArray(val)
 }
 
 /**
  * Format a key by replacing underscores with spaces and capitalizing each word.
  */
-function formatKey(key) {
+function formatKey(key: string) {
   return key
     .replace(/_/g, ' ')
     .replace(/\b\w/g, char => char.toUpperCase())
@@ -60,7 +60,7 @@ function copyToClipboard() {
         </template>
         <template v-else-if="isArray(value)">
           <!-- For arrays, join the values or render each item recursively -->
-          <span class="text-gray-600 dark:text-gray-400">{{ value.join(', ') }}</span>
+          <span class="text-gray-600 dark:text-gray-400">{{ (value as unknown[]).join(', ') }}</span>
         </template>
         <template v-else>
           <span class="text-gray-600 dark:text-gray-400">{{ value }}</span>
@@ -71,7 +71,7 @@ function copyToClipboard() {
     <!-- If the data is an array -->
     <template v-else-if="isArray(data)">
       <div v-for="(item, index) in data" :key="index" class="mb-2 pl-4 ">
-        <ResearchResults :data="item" :is-root="false" />
+        <ResearchResults :data="item as Record<string, any>" :is-root="false" />
       </div>
     </template>
 
