@@ -45,11 +45,8 @@ const state: ResearchParams = reactive({
 const sessionId = uuidv4()
 const chatBody = computed(() => ({
   sessionId,
+  ...state,
   company: state.companyName,
-  maxSearchQueries: state.maxSearchQueries,
-  maxSearchResults: state.maxSearchResults,
-  maxReflectionSteps: state.maxReflectionSteps,
-  includeSearchResults: state.includeSearchResults,
 }))
 
 const { data, append } = useChat({
