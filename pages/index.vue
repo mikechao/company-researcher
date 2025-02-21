@@ -74,11 +74,15 @@ function processData(data: DataItem) {
   processedData.add(data.id)
   task.value = steps.indexOf(data.name)
   if (data.name === EVENT_NAMES.END) {
-    finished()
+    finished(data)
   }
 }
 
-function finished() {
+const results = ref('')
+const showResults = ref(false)
+function finished(data: DataItem) {
+  results.value = JSON.stringify(data.data)
+  showResults.value = true
   isLoading.value = false
 }
 const schema = z.object({
@@ -114,6 +118,7 @@ const schema = z.object({
 
 <template>
   <UCard class="justify-center h-screen">
+    <UTextarea v-show="showResults" color="primary" variant="outline" v-model="results"/>
     <div class="flex justify-center">
       <div class="w-[800px]">
         <UForm :schema="schema" :state="state" class="flex flex-wrap gap-3" @submit="research">
