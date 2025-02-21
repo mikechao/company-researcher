@@ -11,6 +11,7 @@ export default defineLazyEventHandler(async () => {
     maxSearchResults: z.number().optional().default(3),
     maxReflectionSteps: z.number().optional().default(0),
     includeSearchResults: z.boolean().optional().default(false),
+    userNotes: z.string().optional().default(''),
   })
 
   function timestamp(): string {

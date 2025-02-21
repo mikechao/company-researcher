@@ -28,6 +28,7 @@ interface ResearchParams {
   maxSearchQueries: number
   maxSearchResults: number
   maxReflectionSteps: number
+  userNotes: string
 }
 
 const defaultState = Object.freeze({
@@ -36,6 +37,7 @@ const defaultState = Object.freeze({
   maxSearchQueries: 3,
   maxSearchResults: 3,
   maxReflectionSteps: 0,
+  userNotes: '',
 } satisfies ResearchParams)
 
 const state: ResearchParams = reactive({
@@ -240,6 +242,17 @@ const schema = z.object({
                 :min="0"
                 :max="3"
               />
+            </div>
+
+            <div class="min-wit">
+              <UFormGroup label="User Notes" name="userNotes">
+                <UTextarea
+                  v-model="state.userNotes"
+                  placeholder="Enter notes"
+                  color="primary"
+                  variant="outline"
+                />
+              </UFormGroup>
             </div>
 
             <!-- Button section -->

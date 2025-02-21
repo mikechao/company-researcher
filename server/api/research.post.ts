@@ -241,6 +241,7 @@ export default defineLazyEventHandler(async () => {
     maxSearchResults: z.number().optional().default(3),
     maxReflectionSteps: z.number().optional().default(0),
     includeSearchResults: z.boolean().optional().default(false),
+    userNotes: z.string().optional().default(''),
   })
 
   return defineEventHandler(async (webEvent) => {
@@ -257,9 +258,9 @@ export default defineLazyEventHandler(async () => {
     }
     const validatedBody = parsedBody.data
     consola.debug({ tag: 'eventHandler', message: `Received input: ${JSON.stringify(validatedBody)}` })
-    const { sessionId, company, maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults } = validatedBody
+    const { sessionId, company, userNotes, maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults } = validatedBody
     const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults }) } }
-    const input = { company }
+    const input = { company, userNotes }
 
     return new ReadableStream({
       async start(controller) {
