@@ -31,16 +31,18 @@ const state = reactive({
 })
 
 const sessionId = uuidv4()
+const chatBody = computed(() => ({
+  sessionId,
+  company: state.companyName,
+  maxSearchQueries: state.maxSearchQueries,
+  maxSearchResults: state.maxSearchResults,
+  maxReflectionSteps: state.maxReflectionSteps,
+  includeSearchResults: state.includeSearchResults,
+}))
+
 const { data, append } = useChat({
   api: '/api/test',
-  body: {
-    sessionId,
-    company: state.companyName,
-    maxSearchQueries: 3,
-    maxSearchResults: 3,
-    maxReflectionSteps: 0,
-    includeSearchResults: state.includeSearchResults,
-  },
+  body: chatBody,
 })
 
 async function research() {
@@ -162,66 +164,33 @@ const schema = z.object({
             </div>
 
             <div class="min-w-fit">
-              <UFormGroup label="Max Search Queries" name="maxSearchQueries">
-                <UInput
-                  v-model="state.maxSearchQueries"
-                  type="number"
-                  color="primary"
-                  variant="outline"
-                  :min="1"
-                  :max="5"
-                  step="1"
-                />
-                <URange
-                  v-model="state.maxSearchQueries"
-                  color="primary"
-                  :min="1"
-                  :max="5"
-                  class="mt-1"
-                />
-              </UFormGroup>
+              <NumberInput
+                v-model="state.maxSearchQueries"
+                label="Max Search Queries"
+                name="maxSearchQueries"
+                :min="1"
+                :max="5"
+              />
             </div>
 
             <div class="min-w-fit">
-              <UFormGroup label="Max Search Results" name="maxSearchResults">
-                <UInput
-                  v-model="state.maxSearchResults"
-                  type="number"
-                  color="primary"
-                  variant="outline"
-                  :min="1"
-                  :max="5"
-                  step="1"
-                />
-                <URange
-                  v-model="state.maxSearchResults"
-                  color="primary"
-                  :min="1"
-                  :max="5"
-                  class="mt-1"
-                />
-              </UFormGroup>
+              <NumberInput
+                v-model="state.maxSearchResults"
+                label="Max Search Results"
+                name="maxSearchResults"
+                :min="1"
+                :max="5"
+              />
             </div>
 
             <div class="min-w-fit">
-              <UFormGroup label="Number of Reflection Steps" name="maxReflectionSteps">
-                <UInput
-                  v-model="state.maxReflectionSteps"
-                  type="number"
-                  color="primary"
-                  variant="outline"
-                  :min="0"
-                  :max="3"
-                  step="1"
-                />
-                <URange
-                  v-model="state.maxReflectionSteps"
-                  color="primary"
-                  :min="0"
-                  :max="3"
-                  class="mt-1"
-                />
-              </UFormGroup>
+              <NumberInput
+                v-model="state.maxReflectionSteps"
+                label="Number of Reflection Steps"
+                name="maxReflectionSteps"
+                :min="0"
+                :max="3"
+              />
             </div>
 
             <!-- Button section -->
