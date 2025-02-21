@@ -126,13 +126,27 @@ const schema = z.object({
 
 <template>
   <UCard class="justify-center h-screen">
-    <Transition name="slide-fade">
+    <Transition
+      enter-from-class="translate-y-[150%] opacity-0"
+      enter-active-class="transition-all duration-1000 ease-out"
+      enter-to-class="translate-y-0 opacity-100"
+      leave-active-class="transition-all duration-1000 ease-in"
+      leave-from-class="translate-y-0 opacity-100"
+      leave-to-class="translate-y-[150%] opacity-0"
+    >
       <div v-show="showResults" class="mb-2 flex justify-center">
         <ResearchResults :data="results" :is-root="true" class="w-[800px]" />
       </div>
     </Transition>
 
-    <Transition name="collapse">
+    <Transition
+      enter-from-class="translate-y-0 opacity-100"
+      enter-active-class="transition-all duration-1000 ease-out"
+      enter-to-class="translate-y-[-150%] opacity-0"
+      leave-active-class="transition-all duration-1000 ease-in"
+      leave-from-class="translate-y-[-150%] opacity-0"
+      leave-to-class="translate-y-0 opacity-100"
+    >
       <div v-show="!showResults" class="flex justify-center">
         <div class="w-[800px]">
           <UForm :schema="schema" :state="state" class="flex flex-wrap gap-3" @submit="research">
@@ -219,26 +233,3 @@ const schema = z.object({
     </Transition>
   </UCard>
 </template>
-
-<style scoped>
-/* Slide down animation for results */
-.slide-fade-enter-active {
-  transition: all 1.5s ease-out;
-}
-
-.slide-fade-leave-active {
-  transition: all 3s cubic-bezier(1, 0.5, 0.8, 1);
-}
-
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateX(20px);
-  opacity: 0;
-}
-
-/* Form minimize animation */
-.collapse-enter-active,
-.collapse-leave-active {
-  transition: all 1s ease;
-}
-</style>
