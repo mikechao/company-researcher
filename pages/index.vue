@@ -92,41 +92,40 @@ const schema = z.object({
     .default(false)
     .describe('Whether to include search results in the research result'),
   maxSearchQueries: z.number()
-    .min(1, {message: "Must be at least 1 query"})
-    .max(5, {message: "Cannot exceed 5 queries"})
-    .int({message: "Must be a whole number"})
+    .min(1, { message: 'Must be at least 1 query' })
+    .max(5, { message: 'Cannot exceed 5 queries' })
+    .int({ message: 'Must be a whole number' })
     .optional()
     .default(3)
     .describe('The maximum number of search queries to generate'),
   maxSearchResults: z.number()
-    .min(1, {message: "Must be at least 1 result"})
-    .max(5, {message: "Cannot exceed 5 results"})
-    .int({message: "Must be a whole number"})
+    .min(1, { message: 'Must be at least 1 result' })
+    .max(5, { message: 'Cannot exceed 5 results' })
+    .int({ message: 'Must be a whole number' })
     .optional()
     .default(3)
     .describe('The maximum number of search results to include'),
   maxReflectionSteps: z.number()
-    .min(0, {message: "Cannot be negative"})
-    .max(3, {message: "Cannot exceed 3 steps"})
-    .int({message: "Must be a whole number"})
+    .min(0, { message: 'Cannot be negative' })
+    .max(3, { message: 'Cannot exceed 3 steps' })
+    .int({ message: 'Must be a whole number' })
     .optional()
     .default(0)
     .describe('The maximum number of reflection steps to take'),
 })
-
 </script>
 
 <template>
   <UCard class="justify-center h-screen">
-    <UTextarea v-show="showResults" color="primary" variant="outline" v-model="results"/>
+    <UTextarea v-show="showResults" v-model="results" color="primary" variant="outline" />
     <div class="flex justify-center">
       <div class="w-[800px]">
         <UForm :schema="schema" :state="state" class="flex flex-wrap gap-3" @submit="research">
           <!-- Company name section -->
           <div class="w-full flex justify-center mb-4">
             <div class="flex-1">
-              <UFormGroup 
-                label="Company Name" 
+              <UFormGroup
+                label="Company Name"
                 name="companyName"
                 required
               >
@@ -145,8 +144,6 @@ const schema = z.object({
               <UToggle
                 v-model="state.includeSearchResults"
                 color="primary"
-                :true-label="'Yes'"
-                :false-label="'No'"
               />
             </UFormGroup>
           </div>
