@@ -22,7 +22,15 @@ const steps = [
   EVENT_NAMES.END,
 ]
 
-const defaultState = {
+interface ResearchParams {
+  companyName: string
+  includeSearchResults: boolean
+  maxSearchQueries: number
+  maxSearchResults: number
+  maxReflectionSteps: number
+}
+
+const defaultState: ResearchParams = {
   companyName: '',
   includeSearchResults: false,
   maxSearchQueries: 3,
@@ -30,7 +38,7 @@ const defaultState = {
   maxReflectionSteps: 0,
 } as const
 
-const state = reactive({
+const state: ResearchParams = reactive({
   ...defaultState,
 })
 
@@ -110,7 +118,9 @@ function restart() {
 }
 
 const schema = z.object({
-  companyName: z.string().describe('The name of the company to research'),
+  companyName: z.string()
+    .nonempty({ message: 'Company name cannot be empty' })
+    .describe('The name of the company to research'),
   includeSearchResults: z.boolean()
     .optional()
     .default(false)
