@@ -22,12 +22,16 @@ const steps = [
   EVENT_NAMES.END,
 ]
 
-const state = reactive({
-  companyName: 'Apple',
+const defaultState = {
+  companyName: '',
   includeSearchResults: false,
   maxSearchQueries: 3,
   maxSearchResults: 3,
   maxReflectionSteps: 0,
+} as const
+
+const state = reactive({
+  ...defaultState,
 })
 
 const sessionId = uuidv4()
@@ -82,11 +86,13 @@ function processData(data: DataItem) {
 
 const results = ref('')
 const showResults = ref(false)
+
 function finished(dataItem: DataItem) {
   results.value = extractData(dataItem.data)
   showResults.value = true
   isLoading.value = false
 }
+
 function extractData(data: any) {
   if ('data' in data && 'info' in data.data) {
     return data.data.info
@@ -94,6 +100,15 @@ function extractData(data: any) {
   console.warn('No info found in data:', data)
   return JSON.stringify(data, null, 2)
 }
+
+function restart() {
+  showResults.value = false
+  Object.assign(state, defaultState)
+  results.value = ''
+  processedData.clear()
+  task.value = 0
+}
+
 const schema = z.object({
   companyName: z.string().describe('The name of the company to research'),
   includeSearchResults: z.boolean()
@@ -135,7 +150,12 @@ const schema = z.object({
       leave-to-class="translate-y-[150%] opacity-0"
     >
       <div v-show="showResults" class="mb-2 flex justify-center">
-        <ResearchResults :data="results" :is-root="true" class="w-[800px]" />
+        <ResearchResults
+          :data="results"
+          :is-root="true"
+          class="w-[800px]"
+          @restart="restart"
+        />
       </div>
     </Transition>
 
