@@ -149,7 +149,12 @@ const schema = z.object({
     >
       <div v-show="!showResults" class="flex justify-center">
         <div class="w-[800px]">
-          <UForm :schema="schema" :state="state" class="flex flex-wrap gap-3" @submit="research">
+          <UForm
+            :schema="schema"
+            :state="state"
+            class="flex flex-wrap gap-3 p-6 shadow-md rounded-md ring-1 ring-inset ring-primary-500 dark:ring-primary-400 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
+            @submit="research"
+          >
             <!-- Company name section -->
             <div class="w-full flex justify-center mb-4">
               <div class="flex-1">
