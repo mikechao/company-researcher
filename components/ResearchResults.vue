@@ -13,6 +13,10 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits<{
+  (e: 'restart', value: void): void
+}>()
+
 /**
  * Check if a value is a non-null object (and not an array)
  */
@@ -38,8 +42,28 @@ function formatKey(key: string) {
 
 const card: Ref<HTMLElement | null> = ref(null)
 
+interface ButtonState {
+  text: string
+  icon: string
+}
+
+const defaultState: ButtonState = {
+  text: 'Copy Raw Data',
+  icon: 'i-mdi-content-copy',
+}
+
+const copiedState: ButtonState = {
+  text: 'Copied!',
+  icon: 'i-mdi-check',
+}
+
+const buttonState = ref<ButtonState>(defaultState)
 function copyToClipboard() {
   navigator.clipboard.writeText(JSON.stringify(props.data, null, 2))
+  buttonState.value = copiedState
+  setTimeout(() => {
+    buttonState.value = defaultState
+  }, 2000)
 }
 
 function asArray(item: any) {
@@ -55,6 +79,21 @@ function asArray(item: any) {
       ring: 'app-ring',
     }"
   >
+    <template #header>
+      <div class="flex justify-between items-center">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-300">
+          {{ isRoot ? 'Research Results' : '' }}
+        </h3>
+        <UButton
+          v-if="isRoot"
+          :label="buttonState.text"
+          color="gray"
+          variant="ghost"
+          :icon="buttonState.icon"
+          @click="copyToClipboard"
+        />
+      </div>
+    </template>
     <!-- If the data is an object -->
     <template v-if="isObject(data)">
       <div v-for="(value, key) in data" :key="key" class="mb-2 pl-4 ">
@@ -79,19 +118,14 @@ function asArray(item: any) {
         <ResearchResults :is-root="false" :data="asArray(item)" />
       </div>
     </template>
-
-    <!-- Buttons section - only shown for root instance -->
-    <template v-if="isRoot" #footer>
-      <div class="flex justify-start mt-1">
-        <UButton
-          color="gray"
-          variant="ghost"
-          icon="i-mdi-content-copy"
-          @click="copyToClipboard"
-        >
-          Copy Raw Data
-        </UButton>
-      </div>
+    <template #footer>
+      <UButton
+        label="Restart"
+        icon="i-mdi-restart"
+        :trailing="true"
+        color="primary"
+        @click="() => emit('restart')"
+      />
     </template>
   </UCard>
 </template>
