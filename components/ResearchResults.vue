@@ -74,9 +74,17 @@ function asArray(item: any) {
 <template>
   <UCard
     ref="card"
-    class="p-4"
     :ui="{
       ring: 'app-ring',
+      header: {
+        padding: 'px-3 py-3',
+      },
+      body: {
+        padding: 'px-3 py-3',
+      },
+      footer: {
+        padding: 'px-3 py-3',
+      },
     }"
   >
     <template #header>
