@@ -151,12 +151,6 @@ const schema = z.object({
     .default(0)
     .describe('The maximum number of reflection steps to take'),
 })
-
-watch(hoveredField, (field) => {
-  if (field) {
-    console.log('Hovered field:', field)
-  }
-})
 </script>
 
 <template>
