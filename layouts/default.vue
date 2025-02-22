@@ -1,9 +1,42 @@
 <script setup lang="ts">
-const links = [{
-  label: 'Research',
-  icon: 'i-mdi-microscope',
-  to: '/',
-}]
+const colorMode = useColorMode()
+
+interface ColorModeLabel {
+  label: string
+  icon: string
+}
+
+const darkMode: ColorModeLabel = {
+  label: 'Dark',
+  icon: 'i-mdi-weather-night',
+}
+
+const lightMode: ColorModeLabel = {
+  label: 'Light',
+  icon: 'i-mdi-weather-sunny',
+}
+
+const selectedMode = computed<ColorModeLabel>(() =>
+  colorMode.value === 'dark' ? darkMode : lightMode,
+)
+
+function changeColorMode() {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+
+const links = computed(() => [
+  [{
+    label: 'Research',
+    icon: 'i-mdi-microscope',
+    to: '/',
+  }],
+  [{
+    label: selectedMode.value.label,
+    icon: selectedMode.value.icon,
+    click: changeColorMode,
+
+  }],
+])
 </script>
 
 <template>
