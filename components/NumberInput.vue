@@ -6,6 +6,7 @@ interface Props {
   step?: number
   label?: string
   name?: string
+  disable: boolean
 }
 
 const props = defineProps<Props>()
@@ -33,6 +34,7 @@ function updateValue(value: string | number) {
       :min="min"
       :max="max"
       :step="step ?? 1"
+      :disabled="disable"
       @update:model-value="updateValue"
     />
     <URange
@@ -41,6 +43,7 @@ function updateValue(value: string | number) {
       :min="min"
       :max="max"
       class="mt-1"
+      :disabled="disable"
       @update:model-value="updateValue"
     />
   </UFormGroup>

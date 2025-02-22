@@ -98,6 +98,7 @@ function processData(data: DataItem) {
 
 const results = ref('')
 const showResults = ref(false)
+const formEnabled = computed(() => !isLoading.value)
 
 function finished(dataItem: DataItem) {
   results.value = extractData(dataItem.data)
@@ -204,6 +205,7 @@ const schema = z.object({
                     placeholder="Enter company name"
                     color="primary"
                     variant="outline"
+                    :disabled="!formEnabled"
                   />
                 </UFormGroup>
               </div>
@@ -216,6 +218,7 @@ const schema = z.object({
                 name="maxSearchQueries"
                 :min="1"
                 :max="5"
+                :disable="!formEnabled"
                 @mouseenter="hoveredField = 'maxSearchQueries'"
                 @mouseleave="hoveredField = null"
               />
@@ -228,6 +231,7 @@ const schema = z.object({
                 name="maxSearchResults"
                 :min="1"
                 :max="5"
+                :disable="!formEnabled"
                 @mouseenter="hoveredField = 'maxSearchResults'"
                 @mouseleave="hoveredField = null"
               />
@@ -240,6 +244,7 @@ const schema = z.object({
                 name="maxReflectionSteps"
                 :min="0"
                 :max="3"
+                :disable="!formEnabled"
                 @mouseenter="hoveredField = 'maxReflectionSteps'"
                 @mouseleave="hoveredField = null"
               />
@@ -257,6 +262,7 @@ const schema = z.object({
                   placeholder="Enter notes"
                   color="primary"
                   variant="outline"
+                  :disabled="!formEnabled"
                 />
               </UFormGroup>
             </div>
@@ -274,6 +280,7 @@ const schema = z.object({
                   on-icon="i-mdi-thumb-up-outline"
                   off-icon="i-mdi-thumb-down-outline"
                   size="lg"
+                  :disabled="!formEnabled"
                 />
               </UFormGroup>
             </div>
@@ -290,6 +297,7 @@ const schema = z.object({
                   icon="i-mdi-application-edit"
                   :trailing="true"
                   color="primary"
+                  :disabled="!formEnabled"
                   @click="isSchemaEditorOpen = true"
                 />
               </UFormGroup>
