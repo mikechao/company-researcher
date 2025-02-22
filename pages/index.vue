@@ -7,6 +7,8 @@ import { defaultExtractionSchema, EVENT_NAMES } from '~/types/constants'
 const isLoading = ref(false)
 const isSchemaEditorOpen = ref(false)
 const task = ref(0)
+const hoveredField = ref<string | null>(null)
+
 // ProgressBar.vue depends on the order of steps
 // also needed here because of data, that is send from backend
 const steps = [
@@ -148,6 +150,12 @@ const schema = z.object({
     .default(0)
     .describe('The maximum number of reflection steps to take'),
 })
+
+watch(hoveredField, (field) => {
+  if (field) {
+    console.log('Hovered field:', field)
+  }
+})
 </script>
 
 <template>
@@ -193,6 +201,8 @@ const schema = z.object({
                   label="Company Name"
                   name="companyName"
                   required
+                  @mouseenter="hoveredField = 'companyName'"
+                  @mouseleave="hoveredField = null"
                 >
                   <UInput
                     v-model="state.companyName"
@@ -211,6 +221,8 @@ const schema = z.object({
                 name="maxSearchQueries"
                 :min="1"
                 :max="5"
+                @mouseenter="hoveredField = 'maxSearchQueries'"
+                @mouseleave="hoveredField = null"
               />
             </div>
 
@@ -221,6 +233,8 @@ const schema = z.object({
                 name="maxSearchResults"
                 :min="1"
                 :max="5"
+                @mouseenter="hoveredField = 'maxSearchResults'"
+                @mouseleave="hoveredField = null"
               />
             </div>
 
@@ -231,11 +245,18 @@ const schema = z.object({
                 name="maxReflectionSteps"
                 :min="0"
                 :max="3"
+                @mouseenter="hoveredField = 'maxReflectionSteps'"
+                @mouseleave="hoveredField = null"
               />
             </div>
 
             <div class="min-wit">
-              <UFormGroup label="User Notes" name="userNotes">
+              <UFormGroup
+                label="User Notes"
+                name="userNotes"
+                @mouseenter="hoveredField = 'userNotes'"
+                @mouseleave="hoveredField = null"
+              >
                 <UTextarea
                   v-model="state.userNotes"
                   placeholder="Enter notes"
@@ -246,7 +267,12 @@ const schema = z.object({
             </div>
 
             <div class="min-w-fit">
-              <UFormGroup label="Search Results" name="includeSearchResults">
+              <UFormGroup
+                label="Search Results"
+                name="includeSearchResults"
+                @mouseenter="hoveredField = 'includeSearchResults'"
+                @mouseleave="hoveredField = null"
+              >
                 <UToggle
                   v-model="state.includeSearchResults"
                   color="primary"
@@ -258,7 +284,12 @@ const schema = z.object({
             </div>
 
             <div class="min-w-fit">
-              <UFormGroup label="Report Schema" name="reportSchema">
+              <UFormGroup
+                label="Report Schema"
+                name="reportSchema"
+                @mouseenter="hoveredField = 'reportSchema'"
+                @mouseleave="hoveredField = null"
+              >
                 <UButton
                   label="Edit"
                   icon="i-mdi-application-edit"
