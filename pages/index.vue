@@ -2,6 +2,7 @@
 import { useChat } from '@ai-sdk/vue'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
+import ResearchParamHelp from '~/components/ResearchParamHelp.vue'
 import { defaultExtractionSchema, EVENT_NAMES } from '~/types/constants'
 
 const isLoading = ref(false)
@@ -320,6 +321,7 @@ watch(hoveredField, (field) => {
               class="mt-4"
             />
           </div>
+          <ResearchParamHelp v-if="hoveredField" :param-name="hoveredField" />
         </div>
       </div>
     </Transition>
