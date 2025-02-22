@@ -10,7 +10,7 @@ const task = ref(0)
 // ProgressBar.vue depends on the order of steps
 // also needed here because of data, that is send from backend
 const steps = [
-  'Waiting...',
+  'Waiting to start...',
   EVENT_NAMES.GENERATE_QUERIES,
   EVENT_NAMES.BEFORE_EXECUTE_QUERIES,
   EVENT_NAMES.AFTER_EXECUTE_QUERIES,
@@ -151,7 +151,7 @@ const schema = z.object({
 </script>
 
 <template>
-  <UCard class="justify-center h-screen">
+  <UCard class="h-full">
     <Transition
       enter-from-class="translate-y-[150%] opacity-0"
       enter-active-class="transition-all duration-1000 ease-out"

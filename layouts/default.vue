@@ -40,7 +40,7 @@ const links = computed(() => [
 </script>
 
 <template>
-  <div class="overflow-hidden">
+  <div class="flex flex-col h-screen overflow-hidden">
     <UHorizontalNavigation :links="links" class="border-b border-gray-200 dark:border-gray-800" />
     <slot />
   </div>
