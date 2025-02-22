@@ -46,13 +46,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <UModal :model-value="props.isOpen">
+  <UModal :model-value="props.isOpen" fullscreen>
     <UCard :ui="{ ring: 'app-ring' }">
       <template #header>
         <div class="flex justify-between items-center">
           <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">
             Edit Schema
           </h3>
+          <UButton color="gray" variant="ghost" icon="i-mdi-close-circle-outline" class="-my-1" @click="emit('close')" />
         </div>
       </template>
 
