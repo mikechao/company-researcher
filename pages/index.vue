@@ -2,10 +2,10 @@
 import { useChat } from '@ai-sdk/vue'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
-import { EVENT_NAMES } from '~/types/constants'
+import { defaultExtractionSchema, EVENT_NAMES } from '~/types/constants'
 
 const isLoading = ref(false)
-
+const isSchemaEditorOpen = ref(false)
 const task = ref(0)
 // ProgressBar.vue depends on the order of steps
 // also needed here because of data, that is send from backend
@@ -29,6 +29,7 @@ interface ResearchParams {
   maxSearchResults: number
   maxReflectionSteps: number
   userNotes: string
+  extractionSchema: string
 }
 
 const defaultState = Object.freeze({
@@ -38,6 +39,7 @@ const defaultState = Object.freeze({
   maxSearchResults: 3,
   maxReflectionSteps: 0,
   userNotes: '',
+  extractionSchema: JSON.stringify(defaultExtractionSchema, null, 2),
 } satisfies ResearchParams)
 
 const state: ResearchParams = reactive({
@@ -255,6 +257,18 @@ const schema = z.object({
               </UFormGroup>
             </div>
 
+            <div class="min-w-fit">
+              <UFormGroup label="Report Schema" name="reportSchema">
+                <UButton
+                  label="Edit"
+                  icon="i-mdi-application-edit"
+                  :trailing="true"
+                  color="primary"
+                  @click="isSchemaEditorOpen = true"
+                />
+              </UFormGroup>
+            </div>
+
             <div class="w-full flex justify-center">
               <UButton
                 label="Research"
@@ -279,4 +293,10 @@ const schema = z.object({
       </div>
     </Transition>
   </UCard>
+  <SchemaEditor
+    v-if="isSchemaEditorOpen"
+    v-model="state.extractionSchema"
+    :is-open="isSchemaEditorOpen"
+    @close="isSchemaEditorOpen = false"
+  />
 </template>
