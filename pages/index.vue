@@ -154,7 +154,7 @@ const schema = z.object({
 </script>
 
 <template>
-  <UCard class="h-full">
+  <div class="h-full p-4">
     <Transition
       enter-from-class="translate-y-[150%] opacity-0"
       enter-active-class="transition-all duration-1000 ease-out"
@@ -331,7 +331,7 @@ const schema = z.object({
         </div>
       </div>
     </Transition>
-  </UCard>
+  </div>
   <SchemaEditor
     v-if="isSchemaEditorOpen"
     v-model="state.extractionSchema"

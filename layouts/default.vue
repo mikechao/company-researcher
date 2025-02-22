@@ -18,7 +18,7 @@ const links = [
         <ColorModeButton class="mr-2" />
       </ColorScheme>
     </div>
-    <div class="flex-1 overflow-auto">
+    <div class="flex-1 overflow-auto bg-white dark:bg-gray-900">
       <slot />
     </div>
   </div>
