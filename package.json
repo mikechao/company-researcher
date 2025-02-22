@@ -18,6 +18,7 @@
     "@langchain/langgraph": "^0.2.46",
     "@nuxt/icon": "1.10.3",
     "@nuxt/ui": "2.21.0",
+    "@nuxtjs/color-mode": "3.5.2",
     "@nuxtjs/tailwindcss": "6.13.1",
     "@tavily/core": "^0.3.1",
     "@vueuse/nuxt": "12.7.0",
