@@ -7,6 +7,7 @@ interface Props {
   label?: string
   name?: string
   disable: boolean
+  defaultValue: number
 }
 
 const props = defineProps<Props>()
@@ -45,6 +46,14 @@ function updateValue(value: string | number) {
       class="mt-1"
       :disabled="disable"
       @update:model-value="updateValue"
+    />
+    <UButton
+      label="Default"
+      color="primary"
+      class="mt-1"
+      size="2xs"
+      :disabled="disable"
+      @click="updateValue(defaultValue)"
     />
   </UFormGroup>
 </template>
