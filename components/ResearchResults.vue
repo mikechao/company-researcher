@@ -13,6 +13,25 @@ const emit = defineEmits<{
   (e: 'restart', value: void): void
 }>()
 
+const formattedHtml = computed(() => formatJson(props.data))
+
+interface ButtonState {
+  text: string
+  icon: string
+}
+
+const defaultState: ButtonState = {
+  text: 'Copy Raw Data',
+  icon: 'i-mdi-content-copy',
+}
+
+const copiedState: ButtonState = {
+  text: 'Copied!',
+  icon: 'i-mdi-check',
+}
+
+const buttonState = ref<ButtonState>(defaultState)
+
 /**
  * Check if a value is a non-null object (and not an array)
  */
@@ -53,24 +72,6 @@ function formatJson(data: any): string {
   }
 }
 
-const formattedHtml = computed(() => formatJson(props.data))
-
-interface ButtonState {
-  text: string
-  icon: string
-}
-
-const defaultState: ButtonState = {
-  text: 'Copy Raw Data',
-  icon: 'i-mdi-content-copy',
-}
-
-const copiedState: ButtonState = {
-  text: 'Copied!',
-  icon: 'i-mdi-check',
-}
-
-const buttonState = ref<ButtonState>(defaultState)
 function copyToClipboard() {
   navigator.clipboard.writeText(JSON.stringify(props.data, null, 2))
   buttonState.value = copiedState
