@@ -87,7 +87,7 @@ function asArray(item: any) {
       },
     }"
   >
-    <template #header>
+    <template v-if="isRoot" #header>
       <div class="flex justify-between items-center">
         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-300">
           {{ isRoot ? 'Research Results' : '' }}
@@ -104,29 +104,38 @@ function asArray(item: any) {
     </template>
     <!-- If the data is an object -->
     <template v-if="isObject(data)">
-      <div v-for="(value, key) in data" :key="key" class="mb-2 pl-4 ">
+      <div v-for="(value, key) in data" :key="key" class="mb-2 pl-4">
         <span class="font-semibold text-gray-700 dark:text-gray-300 mr-2">{{ formatKey(key) }}:</span>
         <template v-if="isObject(value)">
           <!-- Recursively render nested objects -->
           <ResearchResults :data="value" :is-root="false" />
         </template>
         <template v-else-if="isArray(value)">
-          <!-- For arrays, join the values or render each item recursively -->
-          <span class="text-gray-600 dark:text-gray-400">{{ (value as unknown[]).join(', ') }}</span>
+          <div v-for="(item, index) in value" :key="index" class="mb-2 pl-4">
+            <template v-if="isObject(item)">
+              <ResearchResults :data="item" :is-root="false" />
+            </template>
+            <template v-else>
+              <span class="text-gray-600 dark:text-gray-400">{{ item }}</span>
+            </template>
+          </div>
         </template>
         <template v-else>
+          <!-- Add this section to handle primitive values -->
           <span class="text-gray-600 dark:text-gray-400">{{ value }}</span>
         </template>
       </div>
     </template>
-
     <!-- If the data is an array -->
     <template v-else-if="isArray(data)">
       <div v-for="(item, index) in data" :key="index" class="mb-2 pl-4 ">
         <ResearchResults :is-root="false" :data="asArray(item)" />
       </div>
     </template>
-    <template #footer>
+    <template v-else>
+      <span class="text-gray-600 dark:text-gray-400">{{ data }}</span>
+    </template>
+    <template v-if="isRoot" #footer>
       <UButton
         label="Restart"
         icon="i-mdi-restart"
