@@ -7,10 +7,6 @@ const props = defineProps({
     type: [Object, Array, String, Number, Boolean, null],
     required: true,
   },
-  isRoot: {
-    type: Boolean,
-    default: false,
-  },
 })
 
 const emit = defineEmits<{
@@ -25,13 +21,6 @@ function isObject(val: any) {
 }
 
 /**
- * Check if a value is an array
- */
-function isArray(val: unknown): val is unknown[] {
-  return Array.isArray(val)
-}
-
-/**
  * Format a key by replacing underscores with spaces and capitalizing each word.
  */
 function formatKey(key: string) {
@@ -39,6 +28,32 @@ function formatKey(key: string) {
     .replace(/_/g, ' ')
     .replace(/\b\w/g, char => char.toUpperCase())
 }
+
+function formatJson(data: any): string {
+  if (Array.isArray(data)) {
+    let html = `<ul class="list-disc ml-5">`
+    data.forEach((item) => {
+      html += `<li class="mb-1">${formatJson(item)}</li>`
+    })
+    html += `</ul>`
+    return html
+  }
+  else if (isObject(data)) {
+    let html = `<ul class="list-none ml-4">`
+    for (const key in data) {
+      html += `<li class="mb-2">
+                <span class="font-bold text-primary">${formatKey(key)}</span>: ${formatJson(data[key])}
+              </li>`
+    }
+    html += `</ul>`
+    return html
+  }
+  else {
+    return `<p class="text-md">${data}</p>`
+  }
+}
+
+const formattedHtml = computed(() => formatJson(props.data))
 
 const card: Ref<HTMLElement | null> = ref(null)
 
@@ -65,10 +80,6 @@ function copyToClipboard() {
     buttonState.value = defaultState
   }, 2000)
 }
-
-function asArray(item: any) {
-  return item as unknown[]
-}
 </script>
 
 <template>
@@ -87,13 +98,12 @@ function asArray(item: any) {
       },
     }"
   >
-    <template v-if="isRoot" #header>
+    <template #header>
       <div class="flex justify-between items-center">
         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-300">
           {{ isRoot ? 'Research Results' : '' }}
         </h3>
         <UButton
-          v-if="isRoot"
           :label="buttonState.text"
           color="gray"
           variant="ghost"
@@ -102,40 +112,8 @@ function asArray(item: any) {
         />
       </div>
     </template>
-    <!-- If the data is an object -->
-    <template v-if="isObject(data)">
-      <div v-for="(value, key) in data" :key="key" class="mb-2 pl-4">
-        <span class="font-semibold text-gray-700 dark:text-gray-300 mr-2">{{ formatKey(key) }}:</span>
-        <template v-if="isObject(value)">
-          <!-- Recursively render nested objects -->
-          <ResearchResults :data="value" :is-root="false" />
-        </template>
-        <template v-else-if="isArray(value)">
-          <div v-for="(item, index) in value" :key="index" class="mb-2 pl-4">
-            <template v-if="isObject(item)">
-              <ResearchResults :data="item" :is-root="false" />
-            </template>
-            <template v-else>
-              <span class="text-gray-600 dark:text-gray-400">{{ item }}</span>
-            </template>
-          </div>
-        </template>
-        <template v-else>
-          <!-- Add this section to handle primitive values -->
-          <span class="text-gray-600 dark:text-gray-400">{{ value }}</span>
-        </template>
-      </div>
-    </template>
-    <!-- If the data is an array -->
-    <template v-else-if="isArray(data)">
-      <div v-for="(item, index) in data" :key="index" class="mb-2 pl-4 ">
-        <ResearchResults :is-root="false" :data="asArray(item)" />
-      </div>
-    </template>
-    <template v-else>
-      <span class="text-gray-600 dark:text-gray-400">{{ data }}</span>
-    </template>
-    <template v-if="isRoot" #footer>
+    <div v-html="formattedHtml" />
+    <template #footer>
       <UButton
         label="Restart"
         icon="i-mdi-restart"
