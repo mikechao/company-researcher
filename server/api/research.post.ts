@@ -10,7 +10,7 @@ import { LocalFileCache } from 'langchain/cache/file_system'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
-import { EVENT_NAMES } from '~/types/constants'
+import { defaultExtractionSchema, EVENT_NAMES } from '~/types/constants'
 import { EXTRACTION_PROMPT, INFO_PROMPT, QUERY_WRITER_PROMPT, REFLECTION_PROMPT } from '../prompts/prompts'
 import { ConfigurableAnnotation, getConfig } from '../state/configuration'
 import { InputState, OverallState } from '../state/state'
@@ -242,6 +242,7 @@ export default defineLazyEventHandler(async () => {
     maxReflectionSteps: z.number().optional().default(0),
     includeSearchResults: z.boolean().optional().default(false),
     userNotes: z.string().optional().default(''),
+    extractionSchema: z.record(z.any()).optional().default(() => defaultExtractionSchema),
   })
 
   return defineEventHandler(async (webEvent) => {
@@ -258,9 +259,9 @@ export default defineLazyEventHandler(async () => {
     }
     const validatedBody = parsedBody.data
     consola.debug({ tag: 'eventHandler', message: `Received input: ${JSON.stringify(validatedBody)}` })
-    const { sessionId, company, userNotes, maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults } = validatedBody
+    const { sessionId, company, userNotes, extractionSchema, maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults } = validatedBody
     const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults }) } }
-    const input = { company, userNotes }
+    const input = { company, userNotes, extractionSchema }
 
     return new ReadableStream({
       async start(controller) {

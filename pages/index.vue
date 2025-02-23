@@ -57,10 +57,11 @@ const chatBody = computed(() => ({
   sessionId,
   ...state,
   company: state.companyName,
+  extractionSchema: JSON.parse(state.extractionSchema),
 }))
 
 const { data, append } = useChat({
-  api: '/api/test',
+  api: '/api/research',
   body: chatBody,
 })
 
