@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     tavilyAPIKey: process.env.NUXT_TAVILY_API_KEY,
   },
   css: ['~/assets/css/app.css'],
-  modules: ['@nuxt/ui', '@vueuse/nuxt', '@nuxtjs/color-mode'],
+  modules: ['@nuxt/ui', '@vueuse/nuxt', '@nuxtjs/color-mode', 'nuxt-codemirror'],
   colorMode: {
     preference: 'system',
     fallback: 'light',

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { jsonLanguage } from '@codemirror/lang-json'
+import { okaidia } from '@uiw/codemirror-theme-okaidia'
+
 const props = defineProps<{
   modelValue: string
   isOpen: boolean
@@ -9,15 +12,9 @@ const emit = defineEmits<{
   'close': []
 }>()
 
-const localSchema = ref(props.modelValue)
-const windowHeight = ref(window.innerHeight)
+const extensions = [jsonLanguage]
 
-const optimalRows = computed(() => {
-  // Assuming each row is roughly 24px (typical line-height)
-  // and accounting for modal header/footer (approximately 150px)
-  const availableHeight = windowHeight.value - 150
-  return Math.floor(availableHeight / 24)
-})
+const localSchema = ref(props.modelValue)
 
 function save() {
   try {
@@ -31,23 +28,28 @@ function save() {
     console.error('Invalid JSON schema', e)
   }
 }
-
-onMounted(() => {
-  window.addEventListener('resize', () => {
-    windowHeight.value = window.innerHeight
-  })
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', () => {
-    windowHeight.value = window.innerHeight
-  })
-})
 </script>
 
 <template>
   <UModal :model-value="props.isOpen" fullscreen>
-    <UCard :ui="{ ring: 'app-ring' }">
+    <UCard
+      :ui="{
+        ring: 'app-ring',
+        base: 'h-full flex flex-col',
+        header: {
+          base: 'shrink-0',
+          padding: 'px-4 py-3',
+        },
+        body: {
+          base: 'flex-1 overflow-hidden',
+          padding: 'p-0',
+        },
+        footer: {
+          base: 'shrink-0',
+          padding: 'px-4 py-3',
+        },
+      }"
+    >
       <template #header>
         <div class="flex justify-between items-center">
           <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">
@@ -57,15 +59,18 @@ onUnmounted(() => {
         </div>
       </template>
 
-      <UTextarea
-        v-model="localSchema"
-        color="primary"
-        variant="outline"
-        font-mono
-        class="w-full h-full min-h-[50vh]"
-        :rows="optimalRows"
-        resize
-      />
+      <div class="w-full h-full overflow-auto">
+        <NuxtCodeMirror
+          v-model="localSchema"
+          :extensions="extensions"
+          :theme="okaidia"
+          :auto-focus="true"
+          :editable="true"
+          :basic-setup="true"
+          :indent-with-tab="true"
+          style="width: 100%; height: 100%;"
+        />
+      </div>
 
       <template #footer>
         <div class="flex justify-end gap-2">
