@@ -6,6 +6,8 @@ import ResearchParamHelp from '~/components/ResearchParamHelp.vue'
 import { defaultExtractionSchema, EVENT_NAMES } from '~/types/constants'
 
 const SchemaEditor = defineAsyncComponent(() => import('~/components/SchemaEditor.vue'))
+const ResearchResults = defineAsyncComponent(() => import('~/components/ResearchResults.vue'))
+
 const isLoading = ref(false)
 const isSchemaEditorOpen = ref(false)
 const task = ref(0)
