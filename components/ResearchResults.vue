@@ -50,25 +50,19 @@ function formatKey(key: string) {
 
 function formatJson(data: any): string {
   if (Array.isArray(data)) {
-    let html = `<ul class="list-disc ml-5">`
-    data.forEach((item) => {
-      html += `<li class="mb-1">${formatJson(item)}</li>`
-    })
-    html += `</ul>`
-    return html
+    const items = data.map(item => `<li class="mb-1">${formatJson(item)}</li>`).join('')
+    return `<ul class="list-disc ml-5">${items}</ul>`
   }
   else if (isObject(data)) {
-    let html = `<ul class="list-none ml-4">`
-    for (const key in data) {
-      html += `<li class="mb-2">
-                <span class="font-bold text-primary">${formatKey(key)}</span>: ${formatJson(data[key])}
-              </li>`
-    }
-    html += `</ul>`
-    return html
+    const items = Object.entries(data).map(([key, value]) => `
+      <li class="mb-2">
+        <span class="font-bold text-primary">${formatKey(key)}</span>: ${formatJson(value)}
+      </li>
+    `).join('')
+    return `<ul class="list-none ml-4">${items}</ul>`
   }
   else {
-    return `${data}`
+    return String(data)
   }
 }
 
