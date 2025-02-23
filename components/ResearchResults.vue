@@ -17,7 +17,7 @@ const emit = defineEmits<{
  * Check if a value is a non-null object (and not an array)
  */
 function isObject(val: any) {
-  return typeof val === 'object' && val !== null && !Array.isArray(val)
+  return val !== null && typeof val === 'object' && !Array.isArray(val)
 }
 
 /**
@@ -49,13 +49,11 @@ function formatJson(data: any): string {
     return html
   }
   else {
-    return `<p class="text-md">${data}</p>`
+    return `${data}`
   }
 }
 
 const formattedHtml = computed(() => formatJson(props.data))
-
-const card: Ref<HTMLElement | null> = ref(null)
 
 interface ButtonState {
   text: string
@@ -84,7 +82,6 @@ function copyToClipboard() {
 
 <template>
   <UCard
-    ref="card"
     :ui="{
       ring: 'app-ring',
       header: {
