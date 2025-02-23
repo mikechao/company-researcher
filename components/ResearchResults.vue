@@ -101,7 +101,7 @@ function copyToClipboard() {
     <template #header>
       <div class="flex justify-between items-center">
         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-300">
-          {{ isRoot ? 'Research Results' : '' }}
+          Research Results
         </h3>
         <UButton
           :label="buttonState.text"
