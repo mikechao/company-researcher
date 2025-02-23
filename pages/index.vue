@@ -159,14 +159,7 @@ const schema = z.object({
 
 <template>
   <div class="h-full p-4">
-    <Transition
-      enter-from-class="translate-y-[150%] opacity-0"
-      enter-active-class="transition-all duration-1000 ease-out"
-      enter-to-class="translate-y-0 opacity-100"
-      leave-active-class="transition-all duration-1000 ease-in"
-      leave-from-class="translate-y-0 opacity-100"
-      leave-to-class="translate-y-[150%] opacity-0"
-    >
+    <transition-expand :duration="1000">
       <div v-show="showResults" class="mb-2 flex justify-center">
         <ResearchResults
           :data="results"
@@ -175,16 +168,9 @@ const schema = z.object({
           @restart="restart"
         />
       </div>
-    </Transition>
+    </transition-expand>
 
-    <Transition
-      enter-from-class="translate-y-0 opacity-100"
-      enter-active-class="transition-all duration-1000 ease-out"
-      enter-to-class="translate-y-[-150%] opacity-0"
-      leave-active-class="transition-all duration-1000 ease-in"
-      leave-from-class="translate-y-[-150%] opacity-0"
-      leave-to-class="translate-y-0 opacity-100"
-    >
+    <transition-expand :duration="1000">
       <div v-show="!showResults" class="flex justify-center">
         <div class="w-[800px]">
           <UForm
@@ -329,22 +315,15 @@ const schema = z.object({
               class="mt-4"
             />
           </div>
-          <Transition
-            enter-active-class="transition duration-300 ease-out"
-            enter-from-class="transform -translate-y-2 opacity-0"
-            enter-to-class="transform translate-y-0 opacity-100"
-            leave-active-class="transition duration-200 ease-in"
-            leave-from-class="transform translate-y-0 opacity-100"
-            leave-to-class="transform -translate-y-2 opacity-0"
-          >
+          <transition-fade>
             <ResearchParamHelp
               v-if="hoveredField"
               :param-name="hoveredField"
             />
-          </Transition>
+          </transition-fade>
         </div>
       </div>
-    </Transition>
+    </transition-expand>
   </div>
   <SchemaEditor
     v-if="isSchemaEditorOpen"
