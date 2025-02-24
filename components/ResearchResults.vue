@@ -1,7 +1,4 @@
 <script setup lang="ts">
-/**
- * Accepts any JSON data (object, array, or primitive)
- */
 const props = defineProps({
   data: {
     type: Object as PropType<ResearchResults>,
@@ -31,6 +28,23 @@ const copiedState: ButtonState = {
 }
 
 const buttonState = ref<ButtonState>(defaultState)
+
+// VerticalNavigationLink
+const researchResultLink = {
+  label: 'Research Results',
+  icon: 'i-mdi-file-document-outline',
+  active: true,
+}
+
+const searchResultLink = {
+  label: 'Search Results',
+  icon: 'i-mdi-clipboard-text-search-outline',
+}
+
+const links = [
+  researchResultLink,
+  searchResultLink,
+]
 
 /**
  * Check if a value is a non-null object (and not an array)
@@ -76,6 +90,10 @@ function copyToClipboard() {
 </script>
 
 <template>
+  <UVerticalNavigation
+    :links="links"
+    class="mb-4"
+  />
   <UCard
     :ui="{
       ring: 'app-ring',
