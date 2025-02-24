@@ -61,7 +61,7 @@ const chatBody = computed(() => ({
 }))
 
 const { data, append } = useChat({
-  api: '/api/test',
+  api: '/api/research',
   body: chatBody,
 })
 
@@ -100,7 +100,7 @@ function processData(data: DataItem) {
   }
 }
 
-const results = ref('')
+const results = ref<ResearchResults>()
 const showResults = ref(false)
 const formEnabled = computed(() => !isLoading.value)
 
@@ -111,17 +111,16 @@ function finished(dataItem: DataItem) {
 }
 
 function extractData(data: any) {
-  if ('data' in data && 'info' in data.data) {
-    return data.data.info
+  if ('data' in data) {
+    return data.data as ResearchResults
   }
   console.warn('No info found in data:', data)
-  return JSON.stringify(data, null, 2)
 }
 
 function restart() {
   showResults.value = false
   Object.assign(state, defaultState)
-  results.value = ''
+  results.value = undefined
   processedData.clear()
   task.value = 0
 }
@@ -163,6 +162,7 @@ const schema = z.object({
     <transition-expand :duration="1000">
       <div v-show="showResults" class="mb-2 flex justify-center">
         <ResearchResults
+          v-if="results"
           :data="results"
           :is-root="true"
           class="w-[800px]"

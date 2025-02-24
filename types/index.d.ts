@@ -18,6 +18,26 @@ declare global {
   type ResearchParamName = (typeof RESEARCH_PARAM_NAMES)[keyof typeof RESEARCH_PARAM_NAMES]
 
   /**
+   * The research results returned from the research post endpoint.
+   *
+   * Emitted from the routeFromReflection node in the graph when reflection
+   * is satisfactory.
+   */
+  interface ResearchResults {
+    /**
+     * A dictionary containing the extracted and processed information
+     * based on the user's query and the graph's execution.
+     * This is the primary output of the enrichment process.
+     */
+    info: Record<string, any>
+    /**
+     * A list of search results if includeSearchResults is true.
+     *
+     */
+    searchResult?: Record<string, any>[]
+  }
+
+  /**
    * Represents a data item that is returned from the
    * research post endpoint. Created from the custom events
    * emitted by the graph during the research process.

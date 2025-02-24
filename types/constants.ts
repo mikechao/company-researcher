@@ -25,8 +25,6 @@ export const RESEARCH_PARAM_NAMES = Object.freeze({
   REPORT_SCHEMA: 'reportSchema',
 } as const)
 
-type ResearchParamName = (typeof RESEARCH_PARAM_NAMES)[keyof typeof RESEARCH_PARAM_NAMES]
-
 export const defaultExtractionSchema: Record<string, any> = Object.freeze({
   title: 'CompanyInfo',
   description: 'Basic information about a company',

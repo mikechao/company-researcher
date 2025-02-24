@@ -4,7 +4,7 @@
  */
 const props = defineProps({
   data: {
-    type: [Object, Array, String, Number, Boolean, null],
+    type: Object as PropType<ResearchResults>,
     required: true,
   },
 })
@@ -13,7 +13,7 @@ const emit = defineEmits<{
   (e: 'restart', value: void): void
 }>()
 
-const formattedHtml = computed(() => formatJson(props.data))
+const formattedHtml = computed(() => formatJson(props.data.info))
 
 interface ButtonState {
   text: string
@@ -48,13 +48,13 @@ function formatKey(key: string) {
     .replace(/\b\w/g, char => char.toUpperCase())
 }
 
-function formatJson(data: any): string {
-  if (Array.isArray(data)) {
-    const items = data.map(item => `<li class="mb-1">${formatJson(item)}</li>`).join('')
+function formatJson(info: Record<string, any>): string {
+  if (Array.isArray(info)) {
+    const items = info.map(item => `<li class="mb-1">${formatJson(item)}</li>`).join('')
     return `<ul class="list-disc ml-5">${items}</ul>`
   }
-  else if (isObject(data)) {
-    const items = Object.entries(data).map(([key, value]) => `
+  else if (isObject(info)) {
+    const items = Object.entries(info).map(([key, value]) => `
       <li class="mb-2">
         <span class="font-bold text-primary">${formatKey(key)}</span>: ${formatJson(value)}
       </li>
@@ -62,7 +62,7 @@ function formatJson(data: any): string {
     return `<ul class="list-none ml-4">${items}</ul>`
   }
   else {
-    return String(data)
+    return String(info)
   }
 }
 
