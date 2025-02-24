@@ -11,6 +11,20 @@ export const EVENT_NAMES = Object.freeze({
   REROUTE: 'reroute',
 } as const)
 
+/**
+ * constants used in UFormGroup name and hoveredField
+ * and ResearchParamHelp
+ */
+export const RESEARCH_PARAM_NAMES = Object.freeze({
+  COMPANY_NAME: 'companyName',
+  MAX_SEARCH_QUERIES: 'maxSearchQueries',
+  MAX_SEARCH_RESULTS: 'maxSearchResults',
+  MAX_REFLECTION_STEPS: 'maxReflectionSteps',
+  USER_NOTES: 'userNotes',
+  INCLUDE_SEARCH_RESULTS: 'includeSearchResults',
+  REPORT_SCHEMA: 'reportSchema',
+} as const)
+
 export const defaultExtractionSchema: Record<string, any> = Object.freeze({
   title: 'CompanyInfo',
   description: 'Basic information about a company',

@@ -3,7 +3,7 @@ import { useChat } from '@ai-sdk/vue'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import ResearchParamHelp from '~/components/ResearchParamHelp.vue'
-import { defaultExtractionSchema, EVENT_NAMES } from '~/types/constants'
+import { defaultExtractionSchema, EVENT_NAMES, RESEARCH_PARAM_NAMES } from '~/types/constants'
 
 const SchemaEditor = defineAsyncComponent(() => import('~/components/SchemaEditor.vue'))
 const ResearchResults = defineAsyncComponent(() => import('~/components/ResearchResults.vue'))
@@ -185,9 +185,9 @@ const schema = z.object({
               <div class="flex-1">
                 <UFormGroup
                   label="Company Name"
-                  name="companyName"
+                  :name="RESEARCH_PARAM_NAMES.COMPANY_NAME"
                   required
-                  @mouseenter="hoveredField = 'companyName'"
+                  @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.COMPANY_NAME"
                   @mouseleave="hoveredField = null"
                 >
                   <UInput
@@ -205,12 +205,12 @@ const schema = z.object({
               <NumberInput
                 v-model="state.maxSearchQueries"
                 label="Search Queries"
-                name="maxSearchQueries"
+                :name="RESEARCH_PARAM_NAMES.MAX_SEARCH_QUERIES"
                 :min="1"
                 :max="5"
                 :default-value="defaultState.maxSearchQueries"
                 :disable="!formEnabled"
-                @mouseenter="hoveredField = 'maxSearchQueries'"
+                @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.MAX_SEARCH_QUERIES"
                 @mouseleave="hoveredField = null"
               />
             </div>
@@ -219,12 +219,12 @@ const schema = z.object({
               <NumberInput
                 v-model="state.maxSearchResults"
                 label="Search Results"
-                name="maxSearchResults"
+                :name="RESEARCH_PARAM_NAMES.MAX_SEARCH_RESULTS"
                 :min="1"
                 :max="5"
                 :default-value="defaultState.maxSearchResults"
                 :disable="!formEnabled"
-                @mouseenter="hoveredField = 'maxSearchResults'"
+                @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.MAX_SEARCH_RESULTS"
                 @mouseleave="hoveredField = null"
               />
             </div>
@@ -233,12 +233,12 @@ const schema = z.object({
               <NumberInput
                 v-model="state.maxReflectionSteps"
                 label="Reflection Steps"
-                name="maxReflectionSteps"
+                :name="RESEARCH_PARAM_NAMES.MAX_REFLECTION_STEPS"
                 :min="0"
                 :max="3"
                 :default-value="defaultState.maxReflectionSteps"
                 :disable="!formEnabled"
-                @mouseenter="hoveredField = 'maxReflectionSteps'"
+                @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.MAX_REFLECTION_STEPS"
                 @mouseleave="hoveredField = null"
               />
             </div>
@@ -246,8 +246,8 @@ const schema = z.object({
             <div class="min-wit">
               <UFormGroup
                 label="User Notes"
-                name="userNotes"
-                @mouseenter="hoveredField = 'userNotes'"
+                :name="RESEARCH_PARAM_NAMES.USER_NOTES"
+                @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.USER_NOTES"
                 @mouseleave="hoveredField = null"
               >
                 <UTextarea
@@ -263,8 +263,8 @@ const schema = z.object({
             <div class="min-w-fit">
               <UFormGroup
                 label="Search Results"
-                name="includeSearchResults"
-                @mouseenter="hoveredField = 'includeSearchResults'"
+                :name="RESEARCH_PARAM_NAMES.INCLUDE_SEARCH_RESULTS"
+                @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.INCLUDE_SEARCH_RESULTS"
                 @mouseleave="hoveredField = null"
               >
                 <UToggle
@@ -281,8 +281,8 @@ const schema = z.object({
             <div class="min-w-fit">
               <UFormGroup
                 label="Report Schema"
-                name="reportSchema"
-                @mouseenter="hoveredField = 'reportSchema'"
+                :name="RESEARCH_PARAM_NAMES.REPORT_SCHEMA"
+                @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.REPORT_SCHEMA"
                 @mouseleave="hoveredField = null"
               >
                 <UButton
