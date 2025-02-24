@@ -61,7 +61,7 @@ const chatBody = computed(() => ({
 }))
 
 const { data, append } = useChat({
-  api: '/api/research',
+  api: '/api/test',
   body: chatBody,
 })
 
