@@ -24,6 +24,11 @@ defineProps({
           <UDivider />
         </div>
       </div>
+      <div v-else>
+        <p class="text-gray-500 dark:text-gray-400">
+          No search results.
+        </p>
+      </div>
     </div>
   </div>
 </template>

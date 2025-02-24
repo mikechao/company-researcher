@@ -46,6 +46,7 @@ export default defineLazyEventHandler(async () => {
     }
     const validatedBody = parsedBody.data
     consola.debug({ tag: 'eventHandler', message: `Received input: ${JSON.stringify(validatedBody)}` })
+    const { includeSearchResults } = validatedBody
     return new ReadableStream({
       async start(controller) {
         await delay(1000)
@@ -338,7 +339,10 @@ export default defineLazyEventHandler(async () => {
         ]
         const end: ResearchEvent = {
           event: EVENT_NAMES.END,
-          data: { info: endData, searchResults: searchResult },
+          data: {
+            info: endData,
+            ...(includeSearchResults && { searchResults: searchResult }),
+          },
           timestamp: timestamp(),
         }
         controller.enqueue(encode(EVENT_NAMES.END, end))
