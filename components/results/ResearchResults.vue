@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ExtractedResult from './ExtractedResult.vue'
+import SearchResults from './SearchResults.vue'
 
 const props = defineProps({
   data: {
@@ -14,16 +15,36 @@ const emit = defineEmits<{
 
 const formattedHtml = formatJson(props.data.info)
 
+const showResearchResults = ref(true)
+const showSearchResults = ref(false)
+
+const activeLink = ref('researchResult')
+
 // VerticalNavigationLink
 const researchResultLink = {
   label: 'Research Results',
   icon: 'i-mdi-file-document-outline',
-  active: true,
+  get active() {
+    return activeLink.value === 'researchResult'
+  },
+  click: () => {
+    showResearchResults.value = true
+    showSearchResults.value = false
+    activeLink.value = 'researchResult'
+  },
 }
 
 const searchResultLink = {
   label: 'Search Results',
   icon: 'i-mdi-clipboard-text-search-outline',
+  get active() {
+    return activeLink.value === 'searchResult'
+  },
+  click: () => {
+    showResearchResults.value = false
+    showSearchResults.value = true
+    activeLink.value = 'searchResult'
+  },
 }
 
 const restartLink = {
@@ -32,7 +53,7 @@ const restartLink = {
   click: () => emit('restart'),
 }
 
-const links = [
+const links = computed(() => [
   [
     researchResultLink,
     searchResultLink,
@@ -40,7 +61,7 @@ const links = [
   [
     restartLink,
   ],
-]
+])
 
 /**
  * Check if a value is a non-null object (and not an array)
@@ -86,8 +107,12 @@ function formatJson(info: Record<string, any>): string {
     </div>
     <div class="flex-1 overflow-auto">
       <ExtractedResult
+        v-if="showResearchResults"
         :html="formattedHtml"
         :data="data"
+      />
+      <SearchResults
+        v-if="showSearchResults"
       />
     </div>
   </div>
