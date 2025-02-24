@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ExtractedResult from './ExtractedResult.vue'
+
 const props = defineProps({
   data: {
     type: Object as PropType<ResearchResults>,
@@ -81,7 +83,7 @@ function formatJson(info: Record<string, any>): string {
     class="mb-4"
   />
   <ExtractedResult
-    :data="data"
     :html="formattedHtml"
+    :data="data"
   />
 </template>

@@ -6,7 +6,7 @@ import ResearchParamHelp from '~/components/ResearchParamHelp.vue'
 import { defaultExtractionSchema, EVENT_NAMES, RESEARCH_PARAM_NAMES } from '~/types/constants'
 
 const SchemaEditor = defineAsyncComponent(() => import('~/components/SchemaEditor.vue'))
-const ResearchResults = defineAsyncComponent(() => import('~/components/ResearchResults.vue'))
+const ResearchResults = defineAsyncComponent(() => import('~/components/results/ResearchResults.vue'))
 
 const isLoading = ref(false)
 const isSchemaEditorOpen = ref(false)
@@ -164,7 +164,6 @@ const schema = z.object({
         <ResearchResults
           v-if="results"
           :data="results"
-          :is-root="true"
           class="w-[800px]"
           @restart="restart"
         />
