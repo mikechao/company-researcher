@@ -99,7 +99,7 @@ function formatJson(info: Record<string, any>): string {
 </script>
 
 <template>
-  <div class="flex h-full">
+  <div class="flex h-full w-full">
     <div class="w-fit">
       <UVerticalNavigation
         :links="links"
