@@ -7,6 +7,18 @@ const props = defineProps({
     required: true,
   },
 })
+
+const items = [{
+  label: 'Content',
+  content: props.searchResult.content,
+}]
+
+if (props.searchResult.rawContent) {
+  items.push({
+    label: 'Raw Content',
+    content: props.searchResult.rawContent,
+  })
+}
 </script>
 
 <template>
@@ -17,7 +29,19 @@ const props = defineProps({
     </div>
     <div class="flex">
       <span class="font-bold text-primary mr-2">URL:</span>
-      <span>{{ searchResult.url }}</span>
+      <UButton
+        :to="searchResult.url"
+        target="_blank"
+        label="New Tab"
+        size="2xs"
+        icon="i-mdi-open-in-new"
+        :trailing="true"
+      />
     </div>
+    <div class="flex">
+      <span class="font-bold text-primary mr-2">Score:</span>
+      <span>{{ searchResult.score }}</span>
+    </div>
+    <UAccordion :items="items" />
   </div>
 </template>
