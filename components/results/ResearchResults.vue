@@ -113,6 +113,7 @@ function formatJson(info: Record<string, any>): string {
       />
       <SearchResults
         v-if="showSearchResults"
+        :search-results="data.searchResult"
       />
     </div>
   </div>
