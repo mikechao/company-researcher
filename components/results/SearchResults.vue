@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CopyButton from './CopyButton.vue'
 import SearchResult from './SearchResult.vue'
 
 defineProps({
@@ -14,6 +15,7 @@ defineProps({
       <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-300">
         Search Results
       </h3>
+      <CopyButton :data="searchResults" />
     </div>
     <div class="flex-1 min-h-0 overflow-y-auto p-3">
       <div v-if="searchResults">

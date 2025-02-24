@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const props = defineProps({
+import CopyButton from './CopyButton.vue'
+
+defineProps({
   html: {
     type: String,
     required: true,
@@ -9,31 +11,6 @@ const props = defineProps({
     required: true,
   },
 })
-
-interface ButtonState {
-  text: string
-  icon: string
-}
-
-const defaultState: ButtonState = {
-  text: 'Copy Raw Data',
-  icon: 'i-mdi-content-copy',
-}
-
-const copiedState: ButtonState = {
-  text: 'Copied!',
-  icon: 'i-mdi-check',
-}
-
-const buttonState = ref<ButtonState>(defaultState)
-
-function copyToClipboard() {
-  navigator.clipboard.writeText(JSON.stringify(props.data, null, 2))
-  buttonState.value = copiedState
-  setTimeout(() => {
-    buttonState.value = defaultState
-  }, 2000)
-}
 </script>
 
 <template>
@@ -42,13 +19,7 @@ function copyToClipboard() {
       <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-300">
         Research Results
       </h3>
-      <UButton
-        :label="buttonState.text"
-        color="gray"
-        variant="ghost"
-        :icon="buttonState.icon"
-        @click="copyToClipboard"
-      />
+      <CopyButton :data="data.info" />
     </div>
 
     <!-- Body -->
