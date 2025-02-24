@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import SearchResult from './SearchResult.vue'
+
 defineProps({
   searchResults: {
-    type: Array as PropType<Record<string, any>>,
+    type: Array as PropType<SearchResult[]>,
   },
 })
 </script>
@@ -13,18 +15,12 @@ defineProps({
         Search Results
       </h3>
     </div>
-
     <div class="flex-1 min-h-0 overflow-y-auto p-3">
       <div v-if="searchResults">
-        <ul class="list-disc ml-5">
-          <li v-for="(result, index) in searchResults" :key="index" class="mb-1">
-            <ul class="list-none ml-4">
-              <li v-for="([key, value]) in Object.entries(result)" :key="key" class="mb-1">
-                <span class="font-bold text-primary">{{ key.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase()) }}</span>: {{ value }}
-              </li>
-            </ul>
-          </li>
-        </ul>
+        <div v-for="searchResult in searchResults" :key="searchResult.title">
+          <SearchResult :search-result="searchResult" />
+          <UDivider />
+        </div>
       </div>
     </div>
   </div>
