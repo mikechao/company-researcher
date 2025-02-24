@@ -12,23 +12,6 @@ const emit = defineEmits<{
 
 const formattedHtml = formatJson(props.data.info)
 
-interface ButtonState {
-  text: string
-  icon: string
-}
-
-const defaultState: ButtonState = {
-  text: 'Copy Raw Data',
-  icon: 'i-mdi-content-copy',
-}
-
-const copiedState: ButtonState = {
-  text: 'Copied!',
-  icon: 'i-mdi-check',
-}
-
-const buttonState = ref<ButtonState>(defaultState)
-
 // VerticalNavigationLink
 const researchResultLink = {
   label: 'Research Results',
@@ -80,7 +63,7 @@ function formatJson(info: Record<string, any>): string {
   }
   else if (isObject(info)) {
     const items = Object.entries(info).map(([key, value]) => `
-      <li class="mb-2">
+      <li class="mb-1">
         <span class="font-bold text-primary">${formatKey(key)}</span>: ${formatJson(value)}
       </li>
     `).join('')
@@ -89,14 +72,6 @@ function formatJson(info: Record<string, any>): string {
   else {
     return String(info)
   }
-}
-
-function copyToClipboard() {
-  navigator.clipboard.writeText(JSON.stringify(props.data, null, 2))
-  buttonState.value = copiedState
-  setTimeout(() => {
-    buttonState.value = defaultState
-  }, 2000)
 }
 </script>
 
