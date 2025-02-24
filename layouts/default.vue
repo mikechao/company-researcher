@@ -3,9 +3,14 @@ import ColorModeButton from '~/components/ColorModeButton.vue'
 
 const links = [
   {
+    label: 'Home',
+    icon: 'i-mdi-home',
+    to: '/',
+  },
+  {
     label: 'Research',
     icon: 'i-mdi-microscope',
-    to: '/',
+    to: '/research',
   },
 ]
 </script>
