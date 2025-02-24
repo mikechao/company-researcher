@@ -10,7 +10,7 @@ const emit = defineEmits<{
   (e: 'restart', value: void): void
 }>()
 
-const formattedHtml = computed(() => formatJson(props.data.info))
+const formattedHtml = formatJson(props.data.info)
 
 interface ButtonState {
   text: string
@@ -41,9 +41,20 @@ const searchResultLink = {
   icon: 'i-mdi-clipboard-text-search-outline',
 }
 
+const restartLink = {
+  label: 'Restart',
+  icon: 'i-mdi-restart',
+  click: () => emit('restart'),
+}
+
 const links = [
-  researchResultLink,
-  searchResultLink,
+  [
+    researchResultLink,
+    searchResultLink,
+  ],
+  [
+    restartLink,
+  ],
 ]
 
 /**
@@ -94,43 +105,8 @@ function copyToClipboard() {
     :links="links"
     class="mb-4"
   />
-  <UCard
-    :ui="{
-      ring: 'app-ring',
-      header: {
-        padding: 'px-3 py-3',
-      },
-      body: {
-        padding: 'px-3 py-3',
-      },
-      footer: {
-        padding: 'px-3 py-3',
-      },
-    }"
-  >
-    <template #header>
-      <div class="flex justify-between items-center">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-300">
-          Research Results
-        </h3>
-        <UButton
-          :label="buttonState.text"
-          color="gray"
-          variant="ghost"
-          :icon="buttonState.icon"
-          @click="copyToClipboard"
-        />
-      </div>
-    </template>
-    <div v-html="formattedHtml" />
-    <template #footer>
-      <UButton
-        label="Restart"
-        icon="i-mdi-restart"
-        :trailing="true"
-        color="primary"
-        @click="() => emit('restart')"
-      />
-    </template>
-  </UCard>
+  <ExtractedResult
+    :data="data"
+    :html="formattedHtml"
+  />
 </template>
