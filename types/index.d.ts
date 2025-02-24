@@ -34,7 +34,20 @@ declare global {
      * A list of search results if includeSearchResults is true.
      *
      */
-    searchResult?: Record<string, any>[]
+    searchResults?: SearchResult[]
+  }
+
+  /**
+   * Represents a search result that is returned from the
+   * researchCompany node in the research process. Is part of
+   * the response from the Tavily search API.
+   */
+  interface SearchResult {
+    title: string
+    url: string
+    content: string
+    rawContent?: string
+    score: number
   }
 
   /**

@@ -338,7 +338,7 @@ export default defineLazyEventHandler(async () => {
         ]
         const end: ResearchEvent = {
           event: EVENT_NAMES.END,
-          data: { info: endData, searchResult },
+          data: { info: endData, searchResults: searchResult },
           timestamp: timestamp(),
         }
         controller.enqueue(encode(EVENT_NAMES.END, end))
