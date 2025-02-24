@@ -22,7 +22,7 @@ if (props.searchResult.rawContent) {
 </script>
 
 <template>
-  <div class="flex flex-col space-y-2">
+  <div class="flex flex-col space-y-1 mb-2">
     <div class="flex">
       <span class="font-bold text-primary mr-2">Title:</span>
       <span>{{ searchResult.title }}</span>
