@@ -11,7 +11,7 @@ const ResearchResults = defineAsyncComponent(() => import('~/components/Research
 const isLoading = ref(false)
 const isSchemaEditorOpen = ref(false)
 const task = ref(0)
-const hoveredField = ref<string | null>(null)
+const hoveredField = ref<ResearchParamName | null>(null)
 
 // ProgressBar.vue depends on the order of steps
 // also needed here because of data, that is send from backend

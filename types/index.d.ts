@@ -15,6 +15,8 @@ declare global {
     data: any
   }
 
+  type ResearchParamName = (typeof RESEARCH_PARAM_NAMES)[keyof typeof RESEARCH_PARAM_NAMES]
+
   /**
    * Represents a data item that is returned from the
    * research post endpoint. Created from the custom events

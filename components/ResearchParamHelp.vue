@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { RESEARCH_PARAM_NAMES } from '~/types/constants'
 
-type ResearchParamName = (typeof RESEARCH_PARAM_NAMES)[keyof typeof RESEARCH_PARAM_NAMES]
-
 const props = defineProps({
   paramName: {
     type: String as PropType<ResearchParamName>,
