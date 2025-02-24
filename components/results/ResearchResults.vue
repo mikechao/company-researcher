@@ -106,15 +106,19 @@ function formatJson(info: Record<string, any>): string {
       />
     </div>
     <div class="flex-1 overflow-auto">
-      <ExtractedResult
-        v-if="showResearchResults"
-        :html="formattedHtml"
-        :data="data"
-      />
-      <SearchResults
-        v-if="showSearchResults"
-        :search-results="data.searchResults"
-      />
+      <transition-fade>
+        <ExtractedResult
+          v-if="showResearchResults"
+          :html="formattedHtml"
+          :data="data"
+        />
+      </transition-fade>
+      <transition-fade>
+        <SearchResults
+          v-if="showSearchResults"
+          :search-results="data.searchResults"
+        />
+      </transition-fade>
     </div>
   </div>
 </template>
