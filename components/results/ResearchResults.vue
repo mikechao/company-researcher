@@ -78,12 +78,17 @@ function formatJson(info: Record<string, any>): string {
 </script>
 
 <template>
-  <UVerticalNavigation
-    :links="links"
-    class="mb-4"
-  />
-  <ExtractedResult
-    :html="formattedHtml"
-    :data="data"
-  />
+  <div class="flex h-full">
+    <div class="w-fit">
+      <UVerticalNavigation
+        :links="links"
+      />
+    </div>
+    <div class="flex-1 overflow-auto">
+      <ExtractedResult
+        :html="formattedHtml"
+        :data="data"
+      />
+    </div>
+  </div>
 </template>

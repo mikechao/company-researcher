@@ -164,7 +164,6 @@ const schema = z.object({
         <ResearchResults
           v-if="results"
           :data="results"
-          class="w-[800px]"
           @restart="restart"
         />
       </div>
