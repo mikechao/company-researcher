@@ -44,6 +44,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^4.3.0",
     "@headlessui/tailwindcss": "^0.2.2",
+    "@iconify-json/heroicons": "^1.2.2",
     "@iconify-json/mdi": "^1.2.3",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/container-queries": "^0.1.1",
