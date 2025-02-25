@@ -22,4 +22,10 @@ export default defineNuxtConfig({
     storage: 'localStorage',
     storageKey: 'company-researcher',
   },
+  ui: {
+    colors: {
+      primary: 'green',
+      accent: 'blue',
+    },
+  },
 })
