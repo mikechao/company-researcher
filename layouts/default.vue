@@ -1,11 +1,6 @@
 <script setup lang="ts">
 const links = [
   {
-    label: 'Home',
-    icon: 'i-mdi-home',
-    to: '/',
-  },
-  {
     label: 'Research',
     icon: 'i-mdi-microscope',
     to: '/research',
@@ -15,8 +10,11 @@ const links = [
 
 <template>
   <UHeader :links="links">
+    <template #logo>
+      Company Researcher
+    </template>
     <template #right>
-      <UColorModeButton />
+      <UColorModeSelect />
     </template>
   </UHeader>
   <UMain>
