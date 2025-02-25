@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     'nuxt-codemirror',
     '@morev/vue-transitions/nuxt',
   ],
+  extends: ['@nuxt/ui-pro'],
   colorMode: {
     preference: 'system',
     fallback: 'light',
