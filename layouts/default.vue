@@ -14,7 +14,7 @@ const links = [
       Company Researcher
     </template>
     <template #right>
-      <UColorModeSelect />
+      <UColorModeButton />
     </template>
   </UHeader>
   <UMain>
