@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import ColorModeButton from '~/components/ColorModeButton.vue'
-
 const links = [
   {
     label: 'Home',
@@ -19,9 +17,7 @@ const links = [
   <div class="flex flex-col h-screen overflow-hidden">
     <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800">
       <UHorizontalNavigation :links="links" />
-      <ColorScheme placeholder="..." tag="span" class="mr-2">
-        <ColorModeButton class="mr-2" />
-      </ColorScheme>
+      <UColorModeButton />
     </div>
     <div class="flex-1 overflow-auto bg-white dark:bg-gray-900">
       <slot />
