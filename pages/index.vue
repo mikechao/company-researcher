@@ -1,21 +1,42 @@
 <template>
-  <div class="flex flex-col h-full w-full overflow-hidden">
-    <div class="flex flex-col items-center justify-center mt-2 space-y-2">
-      <h1>
-        <span class="text-5xl max-sm:text-2xl font-bold">
-          Company Researcher Agent
-        </span>
-      </h1>
-      <h2>
-        <span class="text-2xl max-sm:text-lg">
-          An AI agent that scans the web for details about a company provided by the user.
-        </span>
-      </h2>
-      <h2>
-        <span class="text-2xl max-sm:text-lg">
-          A report will be generated based on a JSON schema specified by the user.
-        </span>
-      </h2>
-    </div>
-  </div>
+  <ULandingHero
+    title="Company Researcher"
+    description="An AI agent that scans the web for details about a company provided by the user"
+  >
+    <template #links>
+      <UButton
+        label="Research"
+        icon="i-mdi-microscope"
+        to="/research"
+        :trailing="true"
+        color="primary"
+      />
+      <UButton
+        label="How it works"
+        icon="i-mdi-arrow-down"
+        variant="outline"
+        :trailing="true"
+        color="primary"
+        to="#how-it-works"
+      />
+    </template>
+  </ULandingHero>
+  <ULandingSection
+    id="how-it-works"
+    icon="i-mdi-head-cog-outline"
+    title="How it works"
+    description="The Company Researcher Agent utilizes a multi-phase workflow that decouples web research from schema extraction, resulting in more efficient resource allocation and thorough data collection"
+    align="center"
+  >
+    <UPageGrid>
+      <ULandingCard
+        title="Phase 1: Generate Search Queries"
+        description="The agent generates search queries based on the company name and the JSON schema provided by the user"
+      />
+      <ULandingCard
+        title="Phase 2: Search the Web"
+        description="The agent searches the web for relevant information using the generated search queries"
+      />
+    </UPageGrid>
+  </ULandingSection>
 </template>
