@@ -23,6 +23,7 @@
     "@morev/vue-transitions": "^3.0.5",
     "@nuxt/icon": "1.10.3",
     "@nuxt/ui": "2.21.0",
+    "@nuxt/ui-pro": "^1.7.0",
     "@nuxtjs/color-mode": "3.5.2",
     "@nuxtjs/tailwindcss": "6.13.1",
     "@tavily/core": "^0.3.1",
