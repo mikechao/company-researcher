@@ -47,9 +47,6 @@ importers:
       '@nuxtjs/color-mode':
         specifier: 3.5.2
         version: 3.5.2(magicast@0.3.5)
-      '@nuxtjs/tailwindcss':
-        specifier: 6.13.1
-        version: 6.13.1(magicast@0.3.5)
       '@tavily/core':
         specifier: ^0.3.1
         version: 0.3.1
