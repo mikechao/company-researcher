@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/app.css'],
   modules: [
-    '@nuxt/ui',
+    '@nuxt/ui-pro',
     '@vueuse/nuxt',
     '@nuxtjs/color-mode',
     'nuxt-codemirror',
