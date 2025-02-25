@@ -25,7 +25,7 @@
     id="how-it-works"
     icon="i-mdi-head-cog-outline"
     title="How it works"
-    description="The Company Researcher Agent utilizes the LangGraph graph to the right to scan the web for details about a company provided by the user"
+    description="The Company Researcher Agent utilizes a graph created with LangGraph to scan the web for details about a company provided by the user"
     align="left"
     :ui="{
       features: {
