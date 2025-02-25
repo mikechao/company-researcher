@@ -12,6 +12,7 @@ const isLoading = ref(false)
 const isSchemaEditorOpen = ref(false)
 const task = ref(0)
 const hoveredField = ref<ResearchParamName | null>(null)
+const runtimeConfig = useRuntimeConfig()
 
 // ProgressBar.vue depends on the order of steps
 // also needed here because of data, that is send from backend
@@ -61,7 +62,7 @@ const chatBody = computed(() => ({
 }))
 
 const { data, append } = useChat({
-  api: '/api/test',
+  api: runtimeConfig.public.endPoint,
   body: chatBody,
 })
 
