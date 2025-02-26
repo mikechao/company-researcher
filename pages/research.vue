@@ -253,7 +253,7 @@ const schema = z.object({
               />
             </div>
 
-            <div class="min-wit">
+            <div class="min-w-fit">
               <UFormGroup
                 label="User Notes"
                 :name="RESEARCH_PARAM_NAMES.USER_NOTES"
