@@ -24,6 +24,9 @@
   <ULandingSection
     id="how-it-works"
     icon="i-mdi-head-cog-outline"
+    data-aos="fade-up"
+    data-aos-easing="ease-out-cubic"
+    data-aos-duration="1500"
     title="How it works"
     align="left"
     :ui="{
