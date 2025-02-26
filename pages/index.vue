@@ -25,7 +25,6 @@
     id="how-it-works"
     icon="i-mdi-head-cog-outline"
     title="How it works"
-    description="The Company Researcher Agent utilizes a graph created with LangGraph to scan the web for details about a company provided by the user"
     align="left"
     :ui="{
       features: {
@@ -55,6 +54,21 @@
       },
     ]"
   >
+    <template #description>
+      <span>
+        The Company Researcher Agent utilizes a graph created with
+        <a
+          href="https://langchain-ai.github.io/langgraph/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary-500 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
+        >
+          LangGraph
+          <UIcon name="i-line-md-external-link" class="inline-block align-middle" />
+        </a>
+        to scan the web for details about a company provided by the user.
+      </span>
+    </template>
     <img
       src="/graph.png"
       class="w-fit rounded-md shadow-xl ring-1 ring-gray-300 dark:ring-gray-700 mx-auto"
