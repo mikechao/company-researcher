@@ -67,7 +67,7 @@
           class="text-primary-500 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
         >
           LangGraph
-          <UIcon name="i-line-md-external-link" class="inline-block align-middle" />
+          <UIcon name="i-mdi-launch" class="inline-block align-middle" />
         </a>
         to scan the web for details about a company provided by the user.
       </span>
