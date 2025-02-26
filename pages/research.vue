@@ -172,7 +172,7 @@ const schema = z.object({
 <template>
   <div class="h-full w-full p-4">
     <transition-expand :duration="1000">
-      <div v-show="showResults" class="flex justify-center">
+      <div v-show="showResults" class="flex justify-start">
         <ResearchResults
           v-if="results"
           :data="results"
