@@ -4,6 +4,10 @@ const props = defineProps({
     type: Object as PropType<Record<string, any> | undefined>,
     required: true,
   },
+  title: {
+    type: String,
+    required: true,
+  },
 })
 
 interface ButtonState {
@@ -26,31 +30,41 @@ const noDataState: ButtonState = {
   icon: 'i-mdi-alphabetical-off',
 }
 
-const buttonState = ref<ButtonState>(defaultState)
+const button = reactive({
+  label: defaultState.text,
+  color: 'gray' as const,
+  variant: 'ghost' as const,
+  icon: defaultState.icon,
+  click: copyToClipboard,
+  disabled: false,
+})
 
 function copyToClipboard() {
   if (props.data) {
     navigator.clipboard.writeText(JSON.stringify(props.data, null, 2))
-    buttonState.value = copiedState
+    button.label = copiedState.text
+    button.icon = copiedState.icon
+
     setTimeout(() => {
-      buttonState.value = defaultState
+      button.label = defaultState.text
+      button.icon = defaultState.icon
     }, 2000)
   }
 }
-
 onMounted(() => {
   if (!props.data) {
-    buttonState.value = noDataState
+    button.label = noDataState.text
+    button.icon = noDataState.icon
+    button.disabled = true
   }
 })
 </script>
 
 <template>
-  <UButton
-    :label="buttonState.text"
-    color="gray"
-    variant="ghost"
-    :icon="buttonState.icon"
-    @click="copyToClipboard"
+  <UPageHeader
+    :title="title"
+    :links="[
+      button,
+    ]"
   />
 </template>

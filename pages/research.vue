@@ -170,19 +170,19 @@ const schema = z.object({
 </script>
 
 <template>
-  <div class="h-full p-4">
+  <div class="h-full w-full p-4">
     <transition-expand :duration="1000">
-      <UContainer v-show="showResults" class="flex justify-center">
+      <div v-show="showResults" class="flex justify-center">
         <ResearchResults
           v-if="results"
           :data="results"
           @restart="restart"
         />
-      </UContainer>
+      </div>
     </transition-expand>
 
     <transition-expand :duration="1000">
-      <UContainer v-show="!showResults" class="flex justify-center">
+      <div v-show="!showResults" class="flex justify-center">
         <div class="w-[800px]">
           <UForm
             :schema="schema"
@@ -333,7 +333,7 @@ const schema = z.object({
             />
           </transition-fade>
         </div>
-      </UContainer>
+      </div>
     </transition-expand>
   </div>
   <SchemaEditor

@@ -99,26 +99,26 @@ function formatJson(info: Record<string, any>): string {
 </script>
 
 <template>
-  <div class="flex h-full w-full">
-    <div class="w-fit">
-      <UVerticalNavigation
-        :links="links"
+  <UPage>
+    <template #left>
+      <UAside>
+        <UVerticalNavigation
+          :links="links"
+        />
+      </UAside>
+    </template>
+    <transition-fade>
+      <ExtractedResult
+        v-if="showResearchResults"
+        :html="formattedHtml"
+        :data="data"
       />
-    </div>
-    <div class="flex-1 overflow-auto">
-      <transition-fade>
-        <ExtractedResult
-          v-if="showResearchResults"
-          :html="formattedHtml"
-          :data="data"
-        />
-      </transition-fade>
-      <transition-fade>
-        <SearchResults
-          v-if="showSearchResults"
-          :search-results="data.searchResults"
-        />
-      </transition-fade>
-    </div>
-  </div>
+    </transition-fade>
+    <transition-fade>
+      <SearchResults
+        v-if="showSearchResults"
+        :search-results="data.searchResults"
+      />
+    </transition-fade>
+  </UPage>
 </template>
