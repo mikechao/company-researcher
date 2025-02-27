@@ -239,39 +239,11 @@ export default defineLazyEventHandler(async () => {
     const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults }) } }
     const input = { company, userNotes, extractionSchema }
 
-    return new ReadableStream({
-      async start(controller) {
-        try {
-          const graphEvents = graph.streamEvents(input, config)
-          for await (const event of graphEvents) {
-            if (event.event === 'on_custom_event') {
-              const timestamp = new Date().toLocaleTimeString('en-US', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                fractionalSecondDigits: 3,
-              })
-
-              const data: ResearchEvent = {
-                event: event.name,
-                data: event.data,
-                timestamp: timestamp.toString(),
-              }
-              const id = uuidv4()
-              // format according data part of https://sdk.vercel.ai/docs/ai-sdk-ui/stream-protocol
-              const part = `2:[{"id":"${id}","name":"${event.name}","data":${JSON.stringify(data)}}]\n`
-              controller.enqueue(part)
-            }
-          }
-        }
-        catch (error) {
-          console.error('Error in graph.streamEvents', error)
-        }
-        finally {
-          controller.close()
-        }
-      },
-    })
+    const graphResults = await graph.invoke(input, config)
+    const output = {
+      ...(includeSearchResults && { searchResult: graphResults.searchResult }),
+      info: graphResults.info,
+    }
+    return output
   })
 })
