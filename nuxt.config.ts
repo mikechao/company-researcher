@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     dev: process.env.NODE_ENV !== 'production',
     anthropicAPIKey: process.env.NUXT_ANTHROPIC_API_KEY,
     tavilyAPIKey: process.env.NUXT_TAVILY_API_KEY,
+    postgresURL: process.env.NUXT_POSTGRES_URL,
     public: {
       endPoint: process.env.END_POINT ? process.env.END_POINT : '/api/research',
     },

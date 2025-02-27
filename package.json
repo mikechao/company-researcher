@@ -19,6 +19,7 @@
     "@langchain/community": "^0.3.31",
     "@langchain/core": "^0.3.40",
     "@langchain/langgraph": "^0.2.46",
+    "@langchain/langgraph-checkpoint-postgres": "^0.0.4",
     "@morev/vue-transitions": "^3.0.5",
     "@nuxt/icon": "1.10.3",
     "@nuxt/ui": "2.21.0",
