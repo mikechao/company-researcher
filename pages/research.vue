@@ -64,15 +64,10 @@ const { data, input, handleSubmit } = useChat({
       message: messages[messages.length - 1],
     }
   },
-  onResponse: (response) => {
-    // eslint-disable-next-line no-console
-    console.log('Response:', response)
-  },
   onFinish: async (message) => {
-    // eslint-disable-next-line no-console
-    console.log('onFinish', message)
     if (isLoading.value) {
       if (message.content !== EVENT_NAMES.END) {
+        // send a message back to the backend to continue the graph
         input.value = `${message.content} ${timestamp()}`
         handleSubmit()
       }
