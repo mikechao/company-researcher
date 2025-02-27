@@ -1,7 +1,6 @@
 import type { RunnableConfig } from '@langchain/core/runnables'
 import type { TavilySearchResponse } from '@tavily/core'
 import { ChatAnthropic } from '@langchain/anthropic'
-import { dispatchCustomEvent } from '@langchain/core/callbacks/dispatch'
 import { PromptTemplate } from '@langchain/core/prompts'
 import { END, START, StateGraph } from '@langchain/langgraph'
 import { tavily } from '@tavily/core'
@@ -61,7 +60,6 @@ export default defineLazyEventHandler(async () => {
         content: 'Please generate a list of search queries related to the schema that you want to populate.',
       },
     ])
-    dispatchCustomEvent(EVENT_NAMES.GENERATE_QUERIES, { queries: results.queries })
     const after = performance.now()
     consola.debug({ tag: 'generateQueries', message: `Took ${after - before} ms to generate ${results.queries.length} queries` })
     return { searchQueries: results.queries }
@@ -87,9 +85,7 @@ export default defineLazyEventHandler(async () => {
         ),
       )
     }
-    dispatchCustomEvent(EVENT_NAMES.BEFORE_EXECUTE_QUERIES, { time: `${performance.now()}` })
     const searchResults = await Promise.all(searchTasks)
-    dispatchCustomEvent(EVENT_NAMES.AFTER_EXECUTE_QUERIES, { time: `${performance.now()}` })
     consola.debug({ tag: 'researchCompany', message: `Took ${performance.now() - before} ms to execute ${searchTasks.length} queries.` })
     const deduplicatedSearchResults = deduplicateSources(searchResults)
     const sourceStr = formatSource(deduplicatedSearchResults)
@@ -111,7 +107,6 @@ export default defineLazyEventHandler(async () => {
       { role: 'system', content: prompt },
       { role: 'user', content: 'Please provide detailed research notes.' },
     ])
-    dispatchCustomEvent(EVENT_NAMES.GENERATE_NOTES, { notesSize: result.notes.length })
     consola.debug({ tag: 'researchCompany', message: `Took ${performance.now() - beforeModel} ms to generate notes.` })
     const stateUpdate = {
       completedNotes: result.notes,
@@ -133,12 +128,10 @@ export default defineLazyEventHandler(async () => {
         notes,
       })
     const structuredModel = model.withStructuredOutput(state.extractionSchema)
-    dispatchCustomEvent(EVENT_NAMES.BEFORE_NOTES_TO_SCHEMA, { time: `${performance.now()}` })
     const result = await structuredModel.invoke([
       { role: 'system', content: prompt },
       { role: 'user', content: 'Produce a structured output from these notes.' },
     ])
-    dispatchCustomEvent(EVENT_NAMES.AFTER_NOTES_TO_SCHEMA, { time: `${performance.now()}` })
     consola.debug({ tag: 'gatherNotesExtractSchema', message: `Took ${performance.now() - before} ms to extract schema from notes.` })
     return { info: result }
   }
@@ -159,12 +152,10 @@ export default defineLazyEventHandler(async () => {
         schema: JSON.stringify(state.extractionSchema, null, 2),
         info: JSON.stringify(state.info, null, 2),
       })
-    dispatchCustomEvent(EVENT_NAMES.BEFORE_REFLECTION, { time: `${performance.now()}` })
     const result = await structuredModel.invoke([
       { role: 'system', content: prompt },
       { role: 'user', content: 'Produce a structured reflection output.' },
     ])
-    dispatchCustomEvent(EVENT_NAMES.AFTER_REFLECTION, { isSatisfactory: result.isSatisfactory })
     consola.debug({ tag: 'reflection', message: `Took ${performance.now() - before} ms to reflect on the extracted information.` })
     if (result.isSatisfactory) {
       return { isSatisfactory: result.isSatisfactory }
@@ -184,29 +175,14 @@ export default defineLazyEventHandler(async () => {
   ) => {
     if (state.isSatisfactory) {
       consola.debug({ tag: 'routeFromReflection', message: 'reflection is satisfactory, going to END' })
-      const endData = {
-        info: state.info,
-        ...(config.configurable?.includeSearchResults && {
-          searchResult: state.searchResult,
-        }),
-      }
-      dispatchCustomEvent(EVENT_NAMES.END, endData)
       return END
     }
     const maxReflectionSteps = (config.configurable?.maxReflectionSteps ?? 0)
     if (state.reflectionStepsTaken <= maxReflectionSteps) {
       consola.debug({ tag: 'routeFromReflection', message: `reflection is not satisfactory and reflection steps taken ${state.reflectionStepsTaken} 
         is less than or equal to configured max reflection steps of ${maxReflectionSteps}, going to researchCompany` })
-      dispatchCustomEvent(EVENT_NAMES.REROUTE, { reroute: 'researchCompany' })
       return 'researchCompany'
     }
-    const endData = {
-      info: state.info,
-      ...(config.configurable?.includeSearchResults && {
-        searchResults: state.searchResult,
-      }),
-    }
-    dispatchCustomEvent(EVENT_NAMES.END, endData)
     return END
   }
 
