@@ -71,7 +71,7 @@ export default defineLazyEventHandler(async () => {
     ])
     const after = performance.now()
     consola.debug({ tag: 'generateQueries', message: `Took ${after - before} ms to generate ${results.queries.length} queries` })
-    dispatchCustomEvent(EVENT_NAMES.GENERATE_QUERIES, { queries: results.queries })
+    dispatchCustomEvent(EVENT_NAMES.GENERATED_QUERIES, { queries: results.queries })
     return {
       searchQueries: results.queries,
       nextNodeName: 'executeSearchQueries',
@@ -107,7 +107,7 @@ export default defineLazyEventHandler(async () => {
       )
     }
     const searchResults = await Promise.all(searchTasks)
-    dispatchCustomEvent(EVENT_NAMES.AFTER_EXECUTE_QUERIES, { time: `${performance.now()}` })
+    dispatchCustomEvent(EVENT_NAMES.EXECUTED_QUERIES, { time: `${performance.now()}` })
     const deduplicatedSearchResults = deduplicateSources(searchResults)
     const sourceStr = formatSource(deduplicatedSearchResults)
     const after = performance.now()
@@ -144,6 +144,7 @@ export default defineLazyEventHandler(async () => {
       { role: 'user', content: 'Please provide detailed research notes.' },
     ])
     consola.debug({ tag: 'researchCompany', message: `Took ${performance.now() - beforeModel} ms to generate notes.` })
+    dispatchCustomEvent(EVENT_NAMES.GENERATED_NOTES, { notes: result.notes })
     const stateUpdate = {
       completedNotes: result.notes,
       nextNodeName: 'gatherNotesExtractSchema',
@@ -167,6 +168,7 @@ export default defineLazyEventHandler(async () => {
       { role: 'user', content: 'Produce a structured output from these notes.' },
     ])
     consola.debug({ tag: 'gatherNotesExtractSchema', message: `Took ${performance.now() - before} ms to extract schema from notes.` })
+    dispatchCustomEvent(EVENT_NAMES.NOTES_TO_SCHEMA, { time: performance.now() })
     return {
       info: result,
       nextNodeName: 'reflection',
@@ -195,14 +197,20 @@ export default defineLazyEventHandler(async () => {
     ])
     consola.debug({ tag: 'reflection', message: `Took ${performance.now() - before} ms to reflect on the extracted information.` })
     if (result.isSatisfactory) {
-      return { isSatisfactory: result.isSatisfactory }
+      const resultValue = {
+        isSatisfactory: result.isSatisfactory,
+      }
+      dispatchCustomEvent(EVENT_NAMES.REFLECTION, resultValue)
+      return resultValue
     }
     else {
-      return {
+      const returnValue = {
         isSatisfactory: result.isSatisfactory,
         searchQueries: result.searchQueries,
         reflectionStepsTaken: state.reflectionStepsTaken + 1,
       }
+      dispatchCustomEvent(EVENT_NAMES.REFLECTION, returnValue)
+      return returnValue
     }
   }
 

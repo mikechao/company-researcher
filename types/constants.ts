@@ -1,12 +1,9 @@
 export const EVENT_NAMES = Object.freeze({
-  GENERATE_QUERIES: 'generateQueries',
-  BEFORE_EXECUTE_QUERIES: 'beforeExecuteQueries',
-  AFTER_EXECUTE_QUERIES: 'afterExecuteQueries',
-  GENERATE_NOTES: 'generateNotes',
-  BEFORE_NOTES_TO_SCHEMA: 'beforeNotesToSchema',
-  AFTER_NOTES_TO_SCHEMA: 'afterNotesToSchema',
-  BEFORE_REFLECTION: 'beforeReflection',
-  AFTER_REFLECTION: 'afterReflection',
+  GENERATED_QUERIES: 'generatedQueries',
+  EXECUTED_QUERIES: 'executedQueries',
+  GENERATED_NOTES: 'generatedNotes',
+  NOTES_TO_SCHEMA: 'notesToSchema',
+  REFLECTION: 'reflection',
   END: 'END',
   REROUTE: 'reroute',
 } as const)

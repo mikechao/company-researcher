@@ -51,7 +51,7 @@ export default defineLazyEventHandler(async () => {
       async start(controller) {
         await delay(1000)
         const queryEvent: ResearchEvent = {
-          event: EVENT_NAMES.GENERATE_QUERIES,
+          event: EVENT_NAMES.GENERATED_QUERIES,
           data: { queries: [
             'Apple Inc company history founders Steve Jobs Steve Wozniak founding year',
             'Apple Inc financial history funding investment IPO company profile',
@@ -59,7 +59,7 @@ export default defineLazyEventHandler(async () => {
           ] },
           timestamp: timestamp(),
         }
-        controller.enqueue(encode(EVENT_NAMES.GENERATE_QUERIES, queryEvent))
+        controller.enqueue(encode(EVENT_NAMES.GENERATED_QUERIES, queryEvent))
         await delay(500)
         const beforeExecute: ResearchEvent = {
           event: EVENT_NAMES.BEFORE_EXECUTE_QUERIES,
