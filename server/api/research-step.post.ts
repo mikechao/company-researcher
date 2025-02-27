@@ -167,7 +167,10 @@ export default defineLazyEventHandler(async () => {
       { role: 'user', content: 'Produce a structured output from these notes.' },
     ])
     consola.debug({ tag: 'gatherNotesExtractSchema', message: `Took ${performance.now() - before} ms to extract schema from notes.` })
-    return { info: result }
+    return {
+      info: result,
+      nextNodeName: 'reflection',
+    }
   }
 
   const reflection = async (
@@ -252,7 +255,7 @@ export default defineLazyEventHandler(async () => {
     .addEdge('generateQueries', 'waitForResponse')
     .addEdge('executeSearchQueries', 'waitForResponse')
     .addEdge('researchCompany', 'waitForResponse')
-    .addEdge('gatherNotesExtractSchema', 'reflection')
+    .addEdge('gatherNotesExtractSchema', 'waitForResponse')
     .addConditionalEdges('reflection', routeFromReflection)
 
   const graph = builder.compile({ checkpointer })
