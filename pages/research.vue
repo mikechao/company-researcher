@@ -55,24 +55,29 @@ const state: ResearchParams = reactive({
 
 const sessionId = uuidv4()
 
-const { data, append, messages } = useChat({
+const { data, input, handleSubmit } = useChat({
   api: runtimeConfig.public.endPoint,
-  body: computed(() => ({
-    sessionId,
-    ...state,
-    company: state.companyName,
-    extractionSchema: JSON.parse(state.extractionSchema),
-    messages: messages.value.length > 0 ? [messages.value[messages.value.length - 1]] : [],
-  })),
+  experimental_prepareRequestBody: ({ messages }) => {
+    return {
+      sessionId,
+      ...state,
+      company: state.companyName,
+      extractionSchema: JSON.parse(state.extractionSchema),
+      message: messages[messages.length - 1],
+    }
+  },
   onResponse: (response) => {
     // eslint-disable-next-line no-console
     console.log('Response:', response)
   },
-  onFinish: (message) => {
+  onFinish: async (message) => {
     // eslint-disable-next-line no-console
     console.log('onFinish', message)
-    if (message.content !== EVENT_NAMES.END) {
-      append({ role: 'user', content: 'continue' })
+    if (isLoading.value) {
+      if (message.content !== EVENT_NAMES.END) {
+        input.value = message.content
+        handleSubmit()
+      }
     }
   },
 })
@@ -80,9 +85,8 @@ const { data, append, messages } = useChat({
 async function research() {
   isLoading.value = true
   try {
-    await append(
-      { role: 'user', content: 'init' },
-    )
+    input.value = 'init'
+    handleSubmit()
   }
   catch (error: any) {
     console.error('Error:', error.data || error.message)

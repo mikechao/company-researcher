@@ -240,7 +240,7 @@ export default defineLazyEventHandler(async () => {
 
   return defineEventHandler(async (event) => {
     const body = await readBody(event)
-    const { messages } = body
+
     const parsedBody = inputSchema.safeParse(body)
     if (!parsedBody.success) {
       const formattedError = parsedBody.error.flatten()
@@ -252,7 +252,8 @@ export default defineLazyEventHandler(async () => {
       })
     }
     const validatedBody = parsedBody.data
-    const message = messages[0]
+    const { message } = body
+    consola.debug({ tag: 'research-step', message: `Received message: ${message.content}` })
     const { sessionId, company, userNotes, extractionSchema, maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults } = validatedBody
     const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults }) } }
     const initialInput = { company, userNotes, extractionSchema }
