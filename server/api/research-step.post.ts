@@ -223,7 +223,7 @@ export default defineLazyEventHandler(async () => {
       const endData = {
         info: state.info,
         ...(config.configurable?.includeSearchResults && {
-          searchResult: state.searchResult,
+          searchResults: state.searchResult,
         }),
       }
       dispatchCustomEvent(EVENT_NAMES.END, endData)
