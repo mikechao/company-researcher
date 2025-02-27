@@ -291,11 +291,9 @@ export default defineLazyEventHandler(async () => {
     const encoder = new TextEncoder()
     return new ReadableStream({
       async start(controller) {
-        const eventSet = new Set()
         try {
           const graphEvents = graph.streamEvents(input, config)
           for await (const event of graphEvents) {
-            eventSet.add(event.event)
             if (event.event === 'on_custom_event') {
               const data: ResearchEvent = {
                 event: event.name,
@@ -317,7 +315,6 @@ export default defineLazyEventHandler(async () => {
         }
         finally {
           controller.close()
-          consola.debug({ tag: 'eventHandler', message: `Events: ${Array.from(eventSet)}` })
         }
       },
     })
