@@ -74,7 +74,7 @@ export default defineLazyEventHandler(async () => {
     dispatchCustomEvent(EVENT_NAMES.GENERATE_QUERIES, { queries: results.queries })
     return {
       searchQueries: results.queries,
-      nextNodeName: 'researchCompany',
+      nextNodeName: 'executeSearchQueries',
     }
   }
 
@@ -88,20 +88,18 @@ export default defineLazyEventHandler(async () => {
     })
   }
 
-  const researchCompany = async (
+  const executeSearchQueries = async (
     state: typeof OverallState.State,
     config: RunnableConfig<typeof ConfigurableAnnotation.State>,
   ) => {
     const before = performance.now()
-    const maxSearchResults = config.configurable?.maxSearchResults
-
     const searchTasks: Promise<TavilySearchResponse>[] = []
     for (const query of state.searchQueries) {
       searchTasks.push(
         tavilyClient.search(
           query,
           {
-            maxResults: maxSearchResults,
+            maxResults: 3,
             includeRawContent: true,
             topic: 'general',
           },
@@ -109,9 +107,23 @@ export default defineLazyEventHandler(async () => {
       )
     }
     const searchResults = await Promise.all(searchTasks)
-    consola.debug({ tag: 'researchCompany', message: `Took ${performance.now() - before} ms to execute ${searchTasks.length} queries.` })
     const deduplicatedSearchResults = deduplicateSources(searchResults)
     const sourceStr = formatSource(deduplicatedSearchResults)
+    const after = performance.now()
+    consola.debug({ tag: 'executeSearchQueries', message: `Took ${after - before} ms to execute ${searchTasks.length} queries.` })
+    const stateUpdate = {
+      ...(config.configurable?.includeSearchResults && {
+        searchResult: deduplicatedSearchResults,
+        content: sourceStr,
+        nextNodeName: 'researchCompany',
+      }),
+    }
+    return stateUpdate
+  }
+
+  const researchCompany = async (
+    state: typeof OverallState.State,
+  ) => {
     const beforeModel = performance.now()
     const outputSchema = z.object({
       notes: z.array(z.string()).describe('List of research notes.'),
@@ -120,7 +132,7 @@ export default defineLazyEventHandler(async () => {
       .format({
         company: state.company,
         info: JSON.stringify(state.extractionSchema, null, 2),
-        content: sourceStr,
+        content: state.sourceStr,
         user_notes: state.userNotes,
         output_schema: JSON.stringify(zodToJsonSchema(outputSchema), null, 2),
       })
@@ -133,9 +145,6 @@ export default defineLazyEventHandler(async () => {
     consola.debug({ tag: 'researchCompany', message: `Took ${performance.now() - beforeModel} ms to generate notes.` })
     const stateUpdate = {
       completedNotes: result.notes,
-      ...(config.configurable?.includeSearchResults && {
-        searchResult: deduplicatedSearchResults,
-      }),
     }
     return stateUpdate
   }
@@ -232,12 +241,14 @@ export default defineLazyEventHandler(async () => {
     .addNode('researchCompany', researchCompany)
     .addNode('gatherNotesExtractSchema', gatherNotesExtractSchema)
     .addNode('reflection', reflection)
+    .addNode('executeSearchQueries', executeSearchQueries)
     .addNode('waitForResponse', waitForResponse, {
       input: WaitForResponseState,
-      ends: ['generateQueries', 'researchCompany', 'gatherNotesExtractSchema', 'reflection'],
+      ends: ['generateQueries', 'researchCompany', 'gatherNotesExtractSchema', 'reflection', 'executeSearchQueries'],
     })
     .addEdge(START, 'generateQueries')
     .addEdge('generateQueries', 'waitForResponse')
+    .addEdge('executeSearchQueries', 'waitForResponse')
     .addEdge('researchCompany', 'gatherNotesExtractSchema')
     .addEdge('gatherNotesExtractSchema', 'reflection')
     .addConditionalEdges('reflection', routeFromReflection)

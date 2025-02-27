@@ -85,6 +85,11 @@ export const OverallState = Annotation.Root({
     reducer: (_state: number, update: number) => update,
     default: () => 0,
   }),
+
+  /**
+   * The formatted string from deduplicating search results
+   */
+  sourceStr: Annotation<string>(),
 })
 
 /**
