@@ -146,6 +146,7 @@ export default defineLazyEventHandler(async () => {
     consola.debug({ tag: 'researchCompany', message: `Took ${performance.now() - beforeModel} ms to generate notes.` })
     const stateUpdate = {
       completedNotes: result.notes,
+      nextNodeName: 'gatherNotesExtractSchema',
     }
     return stateUpdate
   }
@@ -250,7 +251,7 @@ export default defineLazyEventHandler(async () => {
     .addEdge(START, 'generateQueries')
     .addEdge('generateQueries', 'waitForResponse')
     .addEdge('executeSearchQueries', 'waitForResponse')
-    .addEdge('researchCompany', 'gatherNotesExtractSchema')
+    .addEdge('researchCompany', 'waitForResponse')
     .addEdge('gatherNotesExtractSchema', 'reflection')
     .addConditionalEdges('reflection', routeFromReflection)
 
