@@ -107,6 +107,7 @@ export default defineLazyEventHandler(async () => {
       )
     }
     const searchResults = await Promise.all(searchTasks)
+    dispatchCustomEvent(EVENT_NAMES.AFTER_EXECUTE_QUERIES, { time: `${performance.now()}` })
     const deduplicatedSearchResults = deduplicateSources(searchResults)
     const sourceStr = formatSource(deduplicatedSearchResults)
     const after = performance.now()
@@ -114,9 +115,9 @@ export default defineLazyEventHandler(async () => {
     const stateUpdate = {
       ...(config.configurable?.includeSearchResults && {
         searchResult: deduplicatedSearchResults,
-        content: sourceStr,
-        nextNodeName: 'researchCompany',
       }),
+      sourceStr,
+      nextNodeName: 'researchCompany',
     }
     return stateUpdate
   }
