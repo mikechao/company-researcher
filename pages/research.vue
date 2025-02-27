@@ -3,6 +3,7 @@ import { useChat } from '@ai-sdk/vue'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import ResearchParamHelp from '~/components/ResearchParamHelp.vue'
+import { timestamp } from '~/composables/timestampString'
 import { defaultExtractionSchema, EVENT_NAMES, RESEARCH_PARAM_NAMES } from '~/types/constants'
 
 const SchemaEditor = defineAsyncComponent(() => import('~/components/SchemaEditor.vue'))
@@ -75,7 +76,7 @@ const { data, input, handleSubmit } = useChat({
     console.log('onFinish', message)
     if (isLoading.value) {
       if (message.content !== EVENT_NAMES.END) {
-        input.value = message.content
+        input.value = `${message.content}-client-${timestamp()}`
         handleSubmit()
       }
     }

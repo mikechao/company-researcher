@@ -12,6 +12,7 @@ import { LocalFileCache } from 'langchain/cache/file_system'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
+import { timestamp } from '~/composables/timestampString'
 import { defaultExtractionSchema, EVENT_NAMES } from '~/types/constants'
 import { EXTRACTION_PROMPT, INFO_PROMPT, QUERY_WRITER_PROMPT, REFLECTION_PROMPT } from '../prompts/prompts'
 import { ConfigurableAnnotation, getConfig } from '../state/configuration'
@@ -284,18 +285,10 @@ export default defineLazyEventHandler(async () => {
           for await (const event of graphEvents) {
             eventSet.add(event.event)
             if (event.event === 'on_custom_event') {
-              const timestamp = new Date().toLocaleTimeString('en-US', {
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                fractionalSecondDigits: 3,
-              })
-
               const data: ResearchEvent = {
                 event: event.name,
                 data: event.data,
-                timestamp: timestamp.toString(),
+                timestamp: timestamp(),
               }
               const id = uuidv4()
               // format according data part of https://sdk.vercel.ai/docs/ai-sdk-ui/stream-protocol
