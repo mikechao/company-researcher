@@ -20,6 +20,14 @@ const sharedSearchResult = Annotation<Record<string, any>[]>({
   default: () => [],
 })
 
+export const WaitForResponseState = Annotation.Root({
+  /**
+   * The name of the next node to route to after the response from the client
+   * is received.
+   */
+  nextNodeName: Annotation<string>(),
+})
+
 /**
  * Input state defines the interface between the graph and the user (external API).
  */

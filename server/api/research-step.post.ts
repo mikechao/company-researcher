@@ -1,5 +1,6 @@
 import type { RunnableConfig } from '@langchain/core/runnables'
 import type { TavilySearchResponse } from '@tavily/core'
+import type { WaitForResponseState } from '../state/state'
 import { ChatAnthropic } from '@langchain/anthropic'
 import { dispatchCustomEvent } from '@langchain/core/callbacks/dispatch'
 import { PromptTemplate } from '@langchain/core/prompts'
@@ -71,8 +72,20 @@ export default defineLazyEventHandler(async () => {
     const after = performance.now()
     consola.debug({ tag: 'generateQueries', message: `Took ${after - before} ms to generate ${results.queries.length} queries` })
     dispatchCustomEvent(EVENT_NAMES.GENERATE_QUERIES, { queries: results.queries })
-    interrupt({ value: 'generateQueries' })
-    return { searchQueries: results.queries }
+    return {
+      searchQueries: results.queries,
+      nextNodeName: 'researchCompany',
+    }
+  }
+
+  const waitForResponse = async (
+    state: typeof WaitForResponseState.State,
+  ) => {
+    const interruptValue = interrupt('waiting for response from client')
+    consola.debug({ tag: 'waitForResponse', message: `Resuming with ${interruptValue}. Next node name ${state.nextNodeName}` })
+    return new Command({
+      goto: state.nextNodeName,
+    })
   }
 
   const researchCompany = async (
@@ -219,8 +232,11 @@ export default defineLazyEventHandler(async () => {
     .addNode('researchCompany', researchCompany)
     .addNode('gatherNotesExtractSchema', gatherNotesExtractSchema)
     .addNode('reflection', reflection)
+    .addNode('waitForResponse', waitForResponse, {
+      ends: ['generateQueries', 'researchCompany', 'gatherNotesExtractSchema', 'reflection'],
+    })
     .addEdge(START, 'generateQueries')
-    .addEdge('generateQueries', 'researchCompany')
+    .addEdge('generateQueries', 'waitForResponse')
     .addEdge('researchCompany', 'gatherNotesExtractSchema')
     .addEdge('gatherNotesExtractSchema', 'reflection')
     .addConditionalEdges('reflection', routeFromReflection)
