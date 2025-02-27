@@ -1,6 +1,7 @@
 import consola from 'consola'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
+import { timestamp } from '~/composables/timestampString'
 import { EVENT_NAMES } from '~/types/constants'
 
 export default defineLazyEventHandler(async () => {
@@ -13,16 +14,6 @@ export default defineLazyEventHandler(async () => {
     includeSearchResults: z.boolean().optional().default(false),
     userNotes: z.string().optional().default(''),
   })
-
-  function timestamp(): string {
-    return new Date().toLocaleTimeString('en-US', {
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      fractionalSecondDigits: 3,
-    }).toString()
-  }
 
   function delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms))
@@ -61,54 +52,33 @@ export default defineLazyEventHandler(async () => {
         }
         controller.enqueue(encode(EVENT_NAMES.GENERATED_QUERIES, queryEvent))
         await delay(500)
-        const beforeExecute: ResearchEvent = {
-          event: EVENT_NAMES.BEFORE_EXECUTE_QUERIES,
+        const executeQueries: ResearchEvent = {
+          event: EVENT_NAMES.EXECUTED_QUERIES,
           data: { time: performance.now() },
           timestamp: timestamp(),
         }
-        controller.enqueue(encode(EVENT_NAMES.BEFORE_EXECUTE_QUERIES, beforeExecute))
-        await delay(1500)
-        const afterExecute: ResearchEvent = {
-          event: EVENT_NAMES.AFTER_EXECUTE_QUERIES,
-          data: { time: performance.now() },
-          timestamp: timestamp(),
-        }
-        controller.enqueue(encode(EVENT_NAMES.AFTER_EXECUTE_QUERIES, afterExecute))
+        controller.enqueue(encode(EVENT_NAMES.EXECUTED_QUERIES, executeQueries))
         await delay(100)
         const generateNotes: ResearchEvent = {
-          event: EVENT_NAMES.GENERATE_NOTES,
+          event: EVENT_NAMES.GENERATED_NOTES,
           data: { notesSize: 42 },
           timestamp: timestamp(),
         }
-        controller.enqueue(encode(EVENT_NAMES.GENERATE_NOTES, generateNotes))
+        controller.enqueue(encode(EVENT_NAMES.GENERATED_NOTES, generateNotes))
         await delay(100)
-        const beforeNotes: ResearchEvent = {
-          event: EVENT_NAMES.BEFORE_NOTES_TO_SCHEMA,
+        const notesToSchema: ResearchEvent = {
+          event: EVENT_NAMES.NOTES_TO_SCHEMA,
           data: { time: performance.now() },
           timestamp: timestamp(),
         }
-        controller.enqueue(encode(EVENT_NAMES.BEFORE_NOTES_TO_SCHEMA, beforeNotes))
+        controller.enqueue(encode(EVENT_NAMES.NOTES_TO_SCHEMA, notesToSchema))
         await delay(2000)
-        const afterNotes: ResearchEvent = {
-          event: EVENT_NAMES.AFTER_NOTES_TO_SCHEMA,
+        const reflection: ResearchEvent = {
+          event: EVENT_NAMES.REFLECTION,
           data: { time: performance.now() },
           timestamp: timestamp(),
         }
-        controller.enqueue(encode(EVENT_NAMES.AFTER_NOTES_TO_SCHEMA, afterNotes))
-        await delay(100)
-        const beforeReflection: ResearchEvent = {
-          event: EVENT_NAMES.BEFORE_REFLECTION,
-          data: { time: performance.now() },
-          timestamp: timestamp(),
-        }
-        controller.enqueue(encode(EVENT_NAMES.BEFORE_REFLECTION, beforeReflection))
-        await delay(1000)
-        const afterReflection: ResearchEvent = {
-          event: EVENT_NAMES.AFTER_REFLECTION,
-          data: { isSatisfactory: true },
-          timestamp: timestamp(),
-        }
-        controller.enqueue(encode(EVENT_NAMES.AFTER_REFLECTION, afterReflection))
+        controller.enqueue(encode(EVENT_NAMES.REFLECTION, reflection))
         await delay(100)
         const endData: Record<string, any> = {
           company_name: 'NVIDIA Corporation',
