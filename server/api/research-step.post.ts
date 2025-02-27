@@ -1,6 +1,5 @@
 import type { RunnableConfig } from '@langchain/core/runnables'
 import type { TavilySearchResponse } from '@tavily/core'
-import type { WaitForResponseState } from '../state/state'
 import { ChatAnthropic } from '@langchain/anthropic'
 import { dispatchCustomEvent } from '@langchain/core/callbacks/dispatch'
 import { PromptTemplate } from '@langchain/core/prompts'
@@ -16,7 +15,7 @@ import { zodToJsonSchema } from 'zod-to-json-schema'
 import { defaultExtractionSchema, EVENT_NAMES } from '~/types/constants'
 import { EXTRACTION_PROMPT, INFO_PROMPT, QUERY_WRITER_PROMPT, REFLECTION_PROMPT } from '../prompts/prompts'
 import { ConfigurableAnnotation, getConfig } from '../state/configuration'
-import { InputState, OverallState } from '../state/state'
+import { InputState, OverallState, WaitForResponseState } from '../state/state'
 import { deduplicateSources } from '../utils/deduplicateSources'
 import { formatAllNotes } from '../utils/formatNotes'
 import { formatSource } from '../utils/formatSources'
@@ -233,6 +232,7 @@ export default defineLazyEventHandler(async () => {
     .addNode('gatherNotesExtractSchema', gatherNotesExtractSchema)
     .addNode('reflection', reflection)
     .addNode('waitForResponse', waitForResponse, {
+      input: WaitForResponseState,
       ends: ['generateQueries', 'researchCompany', 'gatherNotesExtractSchema', 'reflection'],
     })
     .addEdge(START, 'generateQueries')
