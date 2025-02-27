@@ -76,7 +76,7 @@ const { data, input, handleSubmit } = useChat({
     console.log('onFinish', message)
     if (isLoading.value) {
       if (message.content !== EVENT_NAMES.END) {
-        input.value = `${message.content}-client-${timestamp()}`
+        input.value = `${message.content} ${timestamp()}`
         handleSubmit()
       }
     }
