@@ -3,9 +3,10 @@ import type { TavilySearchResponse } from '@tavily/core'
 import { ChatAnthropic } from '@langchain/anthropic'
 import { dispatchCustomEvent } from '@langchain/core/callbacks/dispatch'
 import { PromptTemplate } from '@langchain/core/prompts'
-import { END, START, StateGraph } from '@langchain/langgraph'
+import { Command, END, interrupt, START, StateGraph } from '@langchain/langgraph'
 import { PostgresSaver } from '@langchain/langgraph-checkpoint-postgres'
 import { tavily } from '@tavily/core'
+import { formatDataStreamPart } from 'ai'
 import { consola } from 'consola'
 import { LocalFileCache } from 'langchain/cache/file_system'
 import { v4 as uuidv4 } from 'uuid'
@@ -69,6 +70,8 @@ export default defineLazyEventHandler(async () => {
     ])
     const after = performance.now()
     consola.debug({ tag: 'generateQueries', message: `Took ${after - before} ms to generate ${results.queries.length} queries` })
+    dispatchCustomEvent(EVENT_NAMES.GENERATE_QUERIES, { queries: results.queries })
+    interrupt({ value: 'generateQueries' })
     return { searchQueries: results.queries }
   }
 
@@ -224,10 +227,77 @@ export default defineLazyEventHandler(async () => {
 
   const graph = builder.compile({ checkpointer })
 
+  const inputSchema = z.object({
+    sessionId: z.string().min(1, { message: 'Session ID is required' }),
+    company: z.string().min(1, { message: 'Company name is required' }),
+    maxSearchQueries: z.number().optional().default(3),
+    maxSearchResults: z.number().optional().default(3),
+    maxReflectionSteps: z.number().optional().default(0),
+    includeSearchResults: z.boolean().optional().default(false),
+    userNotes: z.string().optional().default(''),
+    extractionSchema: z.record(z.any()).optional().default(() => defaultExtractionSchema),
+  })
+
   return defineEventHandler(async (event) => {
     const body = await readBody(event)
-    consola.info('Received body:', body)
+    const { messages } = body
+    const parsedBody = inputSchema.safeParse(body)
+    if (!parsedBody.success) {
+      const formattedError = parsedBody.error.flatten()
+      consola.error({ tag: 'eventHandler', message: `Invalid input: ${JSON.stringify(formattedError)}` })
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Bad Request',
+        message: JSON.stringify(formattedError) || 'Invalid input',
+      })
+    }
+    const validatedBody = parsedBody.data
+    const message = messages[0]
+    const { sessionId, company, userNotes, extractionSchema, maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults } = validatedBody
+    const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults }) } }
+    const initialInput = { company, userNotes, extractionSchema }
+    const isInit = message.content === 'init'
+    const input = isInit ? initialInput : new Command({ resume: message.content })
+    const encoder = new TextEncoder()
+    return new ReadableStream({
+      async start(controller) {
+        const eventSet = new Set()
+        try {
+          const graphEvents = graph.streamEvents(input, config)
+          for await (const event of graphEvents) {
+            eventSet.add(event.event)
+            if (event.event === 'on_custom_event') {
+              const timestamp = new Date().toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                fractionalSecondDigits: 3,
+              })
 
-    return 'Hello from research-step.post.ts'
+              const data: ResearchEvent = {
+                event: event.name,
+                data: event.data,
+                timestamp: timestamp.toString(),
+              }
+              const id = uuidv4()
+              // format according data part of https://sdk.vercel.ai/docs/ai-sdk-ui/stream-protocol
+              const part = `2:[{"id":"${id}","name":"${event.name}","data":${JSON.stringify(data)}}]\n`
+              controller.enqueue(part)
+
+              const text = formatDataStreamPart('text', event.name)
+              controller.enqueue(encoder.encode(text))
+            }
+          }
+        }
+        catch (error) {
+          console.error('Error in graph events', error)
+        }
+        finally {
+          controller.close()
+          consola.debug({ tag: 'eventHandler', message: `Events: ${Array.from(eventSet)}` })
+        }
+      },
+    })
   })
 })

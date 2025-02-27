@@ -54,25 +54,34 @@ const state: ResearchParams = reactive({
 })
 
 const sessionId = uuidv4()
-const chatBody = computed(() => ({
-  sessionId,
-  ...state,
-  company: state.companyName,
-  extractionSchema: JSON.parse(state.extractionSchema),
-}))
 
-const { data, append } = useChat({
+const { data, append, messages } = useChat({
   api: runtimeConfig.public.endPoint,
-  body: chatBody,
+  body: computed(() => ({
+    sessionId,
+    ...state,
+    company: state.companyName,
+    extractionSchema: JSON.parse(state.extractionSchema),
+    messages: messages.value.length > 0 ? [messages.value[messages.value.length - 1]] : [],
+  })),
+  onResponse: (response) => {
+    // eslint-disable-next-line no-console
+    console.log('Response:', response)
+  },
+  onFinish: (message) => {
+    // eslint-disable-next-line no-console
+    console.log('onFinish', message)
+    if (message.content !== EVENT_NAMES.END) {
+      append({ role: 'user', content: 'continue' })
+    }
+  },
 })
 
 async function research() {
   isLoading.value = true
   try {
-    // use append to trigger call the research endpoint
-    // the message is ignored by the server
     await append(
-      { role: 'user', content: 'Hello' },
+      { role: 'user', content: 'init' },
     )
   }
   catch (error: any) {
