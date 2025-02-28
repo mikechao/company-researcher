@@ -64,6 +64,9 @@ const { data, input, handleSubmit } = useChat({
       message: messages[messages.length - 1],
     }
   },
+  onError(error: Error) {
+    handleError(error)
+  },
   onFinish: async (message) => {
     if (isLoading.value) {
       if (message.content !== EVENT_NAMES.END) {
@@ -74,6 +77,27 @@ const { data, input, handleSubmit } = useChat({
     }
   },
 })
+
+function handleError(error: Error) {
+  isLoading.value = false
+  console.error('Error:', error)
+  // error.message is a JSON string, not sure why
+
+  let errorObj: { statusCode?: number, message?: string } = {}
+
+  try {
+    errorObj = JSON.parse(error.message)
+  }
+  catch {
+    // If parsing fails, use empty object
+  }
+
+  const statusCode = errorObj?.statusCode ?? 500
+  const message = errorObj?.message ?? 'An error occurred while processing the request'
+
+  // Show error page
+  showError({ statusCode, message })
+}
 
 async function research() {
   isLoading.value = true
