@@ -4,7 +4,6 @@ import { ChatAnthropic } from '@langchain/anthropic'
 import { dispatchCustomEvent } from '@langchain/core/callbacks/dispatch'
 import { PromptTemplate } from '@langchain/core/prompts'
 import { Command, END, interrupt, START, StateGraph } from '@langchain/langgraph'
-import { PostgresSaver } from '@langchain/langgraph-checkpoint-postgres'
 import { tavily } from '@tavily/core'
 import { formatDataStreamPart } from 'ai'
 import { consola } from 'consola'
@@ -20,14 +19,12 @@ import { InputState, OverallState, WaitForResponseState } from '../state/state'
 import { deduplicateSources } from '../utils/deduplicateSources'
 import { formatAllNotes } from '../utils/formatNotes'
 import { formatSource } from '../utils/formatSources'
+import { postgresCheckpointer } from '../utils/postgresCheckpointer'
 
 export default defineLazyEventHandler(async () => {
   const runtimeConfig = useRuntimeConfig()
 
-  const checkpointer = PostgresSaver.fromConnString(
-    runtimeConfig.postgresURL,
-  )
-  await checkpointer.setup()
+  const checkpointer = await postgresCheckpointer()
 
   const cache = runtimeConfig.dev
     ? await LocalFileCache.create('langchain-cache-travel')
