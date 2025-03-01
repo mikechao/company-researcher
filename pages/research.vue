@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UFormField } from '#components'
+import { UFormField, USwitch } from '#components'
 import { useChat } from '@ai-sdk/vue'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
@@ -48,7 +48,7 @@ const defaultState = Object.freeze({
   extractionSchema: JSON.stringify(defaultExtractionSchema, null, 2),
 } satisfies ResearchParams)
 
-const state: ResearchParams = reactive({
+const state = reactive<ResearchParams>({
   ...defaultState,
 })
 
@@ -298,10 +298,11 @@ const schema = z.object({
                 @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.INCLUDE_SEARCH_RESULTS"
                 @mouseleave="hoveredField = null"
               >
-                <UCheckbox
+                <USwitch
                   v-model="state.includeSearchResults"
                   color="primary"
-                  icon="i-mdi-thumb-up-outline"
+                  checked-icon="i-mdi-thumb-up-outline"
+                  unchecked-icon="i-mdi-thumb-down-outline"
                   size="lg"
                   :disabled="!formEnabled"
                 />
