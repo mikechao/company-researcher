@@ -48,7 +48,7 @@ onMounted(() => {
 <template>
   <UButton
     :label="buttonState.text"
-    color="gray"
+    color="neutral"
     variant="ghost"
     :icon="buttonState.icon"
     @click="copyToClipboard"

@@ -28,7 +28,7 @@ function changeColorMode() {
 <template>
   <UButton
     :label="selectedMode.label"
-    color="gray"
+    color="neutral"
     variant="ghost"
     :icon="selectedMode.icon"
     @click="changeColorMode"
