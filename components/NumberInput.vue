@@ -38,15 +38,6 @@ function updateValue(value: string | number) {
       :disabled="disable"
       @update:model-value="updateValue"
     />
-    <URange
-      :model-value="modelValue"
-      color="primary"
-      :min="min"
-      :max="max"
-      class="mt-1"
-      :disabled="disable"
-      @update:model-value="updateValue"
-    />
     <UButton
       label="Default"
       color="primary"

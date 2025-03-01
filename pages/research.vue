@@ -297,11 +297,10 @@ const schema = z.object({
                 @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.INCLUDE_SEARCH_RESULTS"
                 @mouseleave="hoveredField = null"
               >
-                <UToggle
+                <UCheckbox
                   v-model="state.includeSearchResults"
                   color="primary"
-                  on-icon="i-mdi-thumb-up-outline"
-                  off-icon="i-mdi-thumb-down-outline"
+                  icon="i-mdi-thumb-up-outline"
                   size="lg"
                   :disabled="!formEnabled"
                 />
