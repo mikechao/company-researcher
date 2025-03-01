@@ -100,11 +100,12 @@ function formatJson(info: Record<string, any>): string {
 </script>
 
 <template>
-  <div class="flex h-full w-full">
+  <div class="flex w-full h-full">
     <div class="w-fit">
       <UNavigationMenu
         :items="items"
         orientation="vertical"
+        class="sticky top-20"
       />
     </div>
     <div class="flex-1 overflow-auto">
@@ -119,6 +120,7 @@ function formatJson(info: Record<string, any>): string {
         <SearchResults
           v-if="showSearchResults"
           :search-results="data.searchResults"
+          class="w-full"
         />
       </transition-fade>
     </div>
