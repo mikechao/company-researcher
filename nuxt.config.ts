@@ -12,7 +12,7 @@ export default defineNuxtConfig({
       endPoint: process.env.END_POINT ? process.env.END_POINT : '/api/research',
     },
   },
-  css: ['~/assets/css/app.css'],
+  css: ['~/assets/css/main.css'],
   modules: [
     '@nuxt/ui',
     '@vueuse/nuxt',
