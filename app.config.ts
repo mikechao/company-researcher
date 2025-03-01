@@ -7,5 +7,10 @@ export default defineAppConfig({
     icons: {
       chevronDown: 'i-mdi-chevron-down-box-outline',
     },
+    button: {
+      slots: {
+        base: 'rounded-full',
+      },
+    },
   },
 })
