@@ -223,6 +223,7 @@ const schema = z.object({
                   <UInput
                     v-model="state.companyName"
                     placeholder="Enter company name"
+                    class="w-full"
                     color="primary"
                     variant="outline"
                     :disabled="!formEnabled"
@@ -273,7 +274,7 @@ const schema = z.object({
               />
             </div>
 
-            <div class="min-wit">
+            <div class="min-w-fit">
               <UFormField
                 label="User Notes"
                 :name="RESEARCH_PARAM_NAMES.USER_NOTES"

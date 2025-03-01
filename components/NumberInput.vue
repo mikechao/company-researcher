@@ -27,24 +27,30 @@ function updateValue(value: string | number) {
 
 <template>
   <UFormField :label="label" :name="name">
-    <UInput
-      :model-value="modelValue"
-      type="number"
-      color="primary"
-      variant="outline"
-      :min="min"
-      :max="max"
-      :step="step ?? 1"
-      :disabled="disable"
-      @update:model-value="updateValue"
-    />
-    <UButton
-      label="Default"
-      color="primary"
-      class="mt-1"
-      size="xs"
-      :disabled="disable"
-      @click="updateValue(defaultValue)"
-    />
+    <div class="flex flex-col">
+      <UInput
+        :model-value="modelValue"
+        type="number"
+        color="primary"
+        variant="outline"
+        :min="min"
+        :max="max"
+        :step="step ?? 1"
+        :disabled="disable"
+        @update:model-value="updateValue"
+      />
+      <div class="flex justify-center mt-2">
+        <UButton
+          label="Default"
+          color="primary"
+          icon="i-mdi-restart"
+          :trailing="true"
+          class="w-fit"
+          size="xs"
+          :disabled="disable"
+          @click="updateValue(defaultValue)"
+        />
+      </div>
+    </div>
   </UFormField>
 </template>
