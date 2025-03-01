@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     'nuxt-codemirror',
     '@morev/vue-transitions/nuxt',
+    '@vueuse/motion/nuxt',
   ],
   colorMode: {
     preference: 'system',

@@ -26,6 +26,7 @@
     "@nuxtjs/color-mode": "3.5.2",
     "@tavily/core": "^0.3.1",
     "@uiw/codemirror-theme-okaidia": "^4.23.8",
+    "@vueuse/motion": "^2.2.6",
     "@vueuse/nuxt": "12.7.0",
     "ai": "^4.1.45",
     "consola": "^3.4.0",
