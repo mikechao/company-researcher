@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { UFormField } from '#components'
 import { useChat } from '@ai-sdk/vue'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
@@ -212,7 +213,7 @@ const schema = z.object({
             <!-- Company name section -->
             <div class="w-full flex justify-center mb-4">
               <div class="flex-1">
-                <UFormGroup
+                <UFormField
                   label="Company Name"
                   :name="RESEARCH_PARAM_NAMES.COMPANY_NAME"
                   required
@@ -226,7 +227,7 @@ const schema = z.object({
                     variant="outline"
                     :disabled="!formEnabled"
                   />
-                </UFormGroup>
+                </UFormField>
               </div>
             </div>
 
@@ -273,7 +274,7 @@ const schema = z.object({
             </div>
 
             <div class="min-wit">
-              <UFormGroup
+              <UFormField
                 label="User Notes"
                 :name="RESEARCH_PARAM_NAMES.USER_NOTES"
                 @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.USER_NOTES"
@@ -286,11 +287,11 @@ const schema = z.object({
                   variant="outline"
                   :disabled="!formEnabled"
                 />
-              </UFormGroup>
+              </UFormField>
             </div>
 
             <div class="min-w-fit">
-              <UFormGroup
+              <UFormField
                 label="Search Results"
                 :name="RESEARCH_PARAM_NAMES.INCLUDE_SEARCH_RESULTS"
                 @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.INCLUDE_SEARCH_RESULTS"
@@ -304,11 +305,11 @@ const schema = z.object({
                   size="lg"
                   :disabled="!formEnabled"
                 />
-              </UFormGroup>
+              </UFormField>
             </div>
 
             <div class="min-w-fit">
-              <UFormGroup
+              <UFormField
                 label="Report Schema"
                 :name="RESEARCH_PARAM_NAMES.REPORT_SCHEMA"
                 @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.REPORT_SCHEMA"
@@ -322,7 +323,7 @@ const schema = z.object({
                   :disabled="!formEnabled"
                   @click="isSchemaEditorOpen = true"
                 />
-              </UFormGroup>
+              </UFormField>
             </div>
 
             <div class="w-full flex justify-center">

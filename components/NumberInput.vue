@@ -26,7 +26,7 @@ function updateValue(value: string | number) {
 </script>
 
 <template>
-  <UFormGroup :label="label" :name="name">
+  <UFormField :label="label" :name="name">
     <UInput
       :model-value="modelValue"
       type="number"
@@ -51,9 +51,9 @@ function updateValue(value: string | number) {
       label="Default"
       color="primary"
       class="mt-1"
-      size="2xs"
+      size="xs"
       :disabled="disable"
       @click="updateValue(defaultValue)"
     />
-  </UFormGroup>
+  </UFormField>
 </template>
