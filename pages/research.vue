@@ -203,158 +203,156 @@ const schema = z.object({
 
     <transition-expand :duration="1000">
       <div v-show="!showResults" class="flex justify-center">
-        <div class="w-[800px]">
-          <UForm
-            :schema="schema"
-            :state="state"
-            class="flex flex-wrap gap-3 p-6 shadow-md rounded-md app-ring"
-            @submit="research"
-          >
-            <!-- Company name section -->
-            <div class="w-full flex justify-center mb-4">
-              <div class="flex-1">
-                <UFormField
-                  label="Company Name"
-                  :name="RESEARCH_PARAM_NAMES.COMPANY_NAME"
-                  required
-                  @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.COMPANY_NAME"
-                  @mouseleave="hoveredField = null"
-                >
-                  <UInput
-                    v-model="state.companyName"
-                    placeholder="Enter company name"
-                    class="w-full"
-                    color="primary"
-                    variant="outline"
-                    :disabled="!formEnabled"
-                  />
-                </UFormField>
-              </div>
-            </div>
-
-            <div class="min-w-fit">
-              <NumberInput
-                v-model="state.maxSearchQueries"
-                label="Search Queries"
-                :name="RESEARCH_PARAM_NAMES.MAX_SEARCH_QUERIES"
-                :min="1"
-                :max="5"
-                :default-value="defaultState.maxSearchQueries"
-                :disable="!formEnabled"
-                @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.MAX_SEARCH_QUERIES"
-                @mouseleave="hoveredField = null"
-              />
-            </div>
-
-            <div class="min-w-fit">
-              <NumberInput
-                v-model="state.maxSearchResults"
-                label="Search Results"
-                :name="RESEARCH_PARAM_NAMES.MAX_SEARCH_RESULTS"
-                :min="1"
-                :max="5"
-                :default-value="defaultState.maxSearchResults"
-                :disable="!formEnabled"
-                @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.MAX_SEARCH_RESULTS"
-                @mouseleave="hoveredField = null"
-              />
-            </div>
-
-            <div class="min-w-fit">
-              <NumberInput
-                v-model="state.maxReflectionSteps"
-                label="Reflection Steps"
-                :name="RESEARCH_PARAM_NAMES.MAX_REFLECTION_STEPS"
-                :min="0"
-                :max="3"
-                :default-value="defaultState.maxReflectionSteps"
-                :disable="!formEnabled"
-                @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.MAX_REFLECTION_STEPS"
-                @mouseleave="hoveredField = null"
-              />
-            </div>
-
-            <div class="min-w-fit">
+        <UForm
+          :schema="schema"
+          :state="state"
+          class="flex flex-wrap gap-3 p-6 shadow-md rounded-md app-ring"
+          @submit="research"
+        >
+          <!-- Company name section -->
+          <div class="w-full flex justify-center mb-4">
+            <div class="flex-1">
               <UFormField
-                label="User Notes"
-                :name="RESEARCH_PARAM_NAMES.USER_NOTES"
-                @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.USER_NOTES"
+                label="Company Name"
+                :name="RESEARCH_PARAM_NAMES.COMPANY_NAME"
+                required
+                @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.COMPANY_NAME"
                 @mouseleave="hoveredField = null"
               >
-                <UTextarea
-                  v-model="state.userNotes"
-                  placeholder="Enter notes"
+                <UInput
+                  v-model="state.companyName"
+                  placeholder="Enter company name"
+                  class="w-full"
                   color="primary"
                   variant="outline"
                   :disabled="!formEnabled"
                 />
               </UFormField>
             </div>
+          </div>
 
-            <div class="min-w-fit">
-              <UFormField
-                label="Search Results"
-                :name="RESEARCH_PARAM_NAMES.INCLUDE_SEARCH_RESULTS"
-                @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.INCLUDE_SEARCH_RESULTS"
-                @mouseleave="hoveredField = null"
-              >
-                <USwitch
-                  v-model="state.includeSearchResults"
-                  color="primary"
-                  checked-icon="i-mdi-thumb-up-outline"
-                  unchecked-icon="i-mdi-thumb-down-outline"
-                  size="lg"
-                  :disabled="!formEnabled"
-                />
-              </UFormField>
-            </div>
-
-            <div class="min-w-fit">
-              <UFormField
-                label="Report Schema"
-                :name="RESEARCH_PARAM_NAMES.REPORT_SCHEMA"
-                @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.REPORT_SCHEMA"
-                @mouseleave="hoveredField = null"
-              >
-                <UButton
-                  label="Edit"
-                  icon="i-mdi-application-edit"
-                  :trailing="true"
-                  color="primary"
-                  :disabled="!formEnabled"
-                  @click="isSchemaEditorOpen = true"
-                />
-              </UFormField>
-            </div>
-
-            <div class="w-full flex justify-center">
-              <UButton
-                label="Research"
-                icon="i-mdi-microscope"
-                loading-icon="i-mdi-loading"
-                :trailing="true"
-                color="primary"
-                class="mt-4"
-                :loading="isLoading"
-                type="submit"
-              />
-            </div>
-          </UForm>
-          <div class="flex justify-center">
-            <ProgressBar
-              :value="task"
-              :max="steps"
-              class="mt-4"
+          <div class="min-w-fit">
+            <NumberInput
+              v-model="state.maxSearchQueries"
+              label="Search Queries"
+              :name="RESEARCH_PARAM_NAMES.MAX_SEARCH_QUERIES"
+              :min="1"
+              :max="5"
+              :default-value="defaultState.maxSearchQueries"
+              :disable="!formEnabled"
+              @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.MAX_SEARCH_QUERIES"
+              @mouseleave="hoveredField = null"
             />
           </div>
-          <div class="h-[120px]">
-            <transition-fade>
-              <ResearchParamHelp
-                v-if="hoveredField"
-                :param-name="hoveredField"
-              />
-            </transition-fade>
+
+          <div class="min-w-fit">
+            <NumberInput
+              v-model="state.maxSearchResults"
+              label="Search Results"
+              :name="RESEARCH_PARAM_NAMES.MAX_SEARCH_RESULTS"
+              :min="1"
+              :max="5"
+              :default-value="defaultState.maxSearchResults"
+              :disable="!formEnabled"
+              @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.MAX_SEARCH_RESULTS"
+              @mouseleave="hoveredField = null"
+            />
           </div>
+
+          <div class="min-w-fit">
+            <NumberInput
+              v-model="state.maxReflectionSteps"
+              label="Reflection Steps"
+              :name="RESEARCH_PARAM_NAMES.MAX_REFLECTION_STEPS"
+              :min="0"
+              :max="3"
+              :default-value="defaultState.maxReflectionSteps"
+              :disable="!formEnabled"
+              @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.MAX_REFLECTION_STEPS"
+              @mouseleave="hoveredField = null"
+            />
+          </div>
+
+          <div class="min-w-fit">
+            <UFormField
+              label="User Notes"
+              :name="RESEARCH_PARAM_NAMES.USER_NOTES"
+              @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.USER_NOTES"
+              @mouseleave="hoveredField = null"
+            >
+              <UTextarea
+                v-model="state.userNotes"
+                placeholder="Enter notes"
+                color="primary"
+                variant="outline"
+                :disabled="!formEnabled"
+              />
+            </UFormField>
+          </div>
+
+          <div class="min-w-fit">
+            <UFormField
+              label="Search Results"
+              :name="RESEARCH_PARAM_NAMES.INCLUDE_SEARCH_RESULTS"
+              @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.INCLUDE_SEARCH_RESULTS"
+              @mouseleave="hoveredField = null"
+            >
+              <USwitch
+                v-model="state.includeSearchResults"
+                color="primary"
+                checked-icon="i-mdi-thumb-up-outline"
+                unchecked-icon="i-mdi-thumb-down-outline"
+                size="lg"
+                :disabled="!formEnabled"
+              />
+            </UFormField>
+          </div>
+
+          <div class="min-w-fit">
+            <UFormField
+              label="Report Schema"
+              :name="RESEARCH_PARAM_NAMES.REPORT_SCHEMA"
+              @mouseenter="hoveredField = RESEARCH_PARAM_NAMES.REPORT_SCHEMA"
+              @mouseleave="hoveredField = null"
+            >
+              <UButton
+                label="Edit"
+                icon="i-mdi-application-edit"
+                :trailing="true"
+                color="primary"
+                :disabled="!formEnabled"
+                @click="isSchemaEditorOpen = true"
+              />
+            </UFormField>
+          </div>
+
+          <div class="w-full flex justify-center">
+            <UButton
+              label="Research"
+              icon="i-mdi-microscope"
+              loading-icon="i-mdi-loading"
+              :trailing="true"
+              color="primary"
+              class="mt-4"
+              :loading="isLoading"
+              type="submit"
+            />
+          </div>
+        </UForm>
+        <div class="flex justify-center">
+          <ProgressBar
+            :value="task"
+            :max="steps"
+            class="mt-4"
+          />
+        </div>
+        <div class="h-[120px]">
+          <transition-fade>
+            <ResearchParamHelp
+              v-if="hoveredField"
+              :param-name="hoveredField"
+            />
+          </transition-fade>
         </div>
       </div>
     </transition-expand>
