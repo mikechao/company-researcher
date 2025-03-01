@@ -12,5 +12,10 @@ export default defineAppConfig({
         base: 'rounded-full',
       },
     },
+    modal: {
+      slots: {
+        footer: 'flex justify-end gap-2',
+      },
+    },
   },
 })
