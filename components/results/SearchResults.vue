@@ -21,7 +21,6 @@ defineProps({
       <div v-if="searchResults">
         <div v-for="searchResult in searchResults" :key="searchResult.title">
           <SearchResult :search-result="searchResult" />
-          <UDivider />
         </div>
       </div>
       <div v-else>

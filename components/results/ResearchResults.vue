@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { UNavigationMenu } from '#components'
 import ExtractedResult from './ExtractedResult.vue'
 import SearchResults from './SearchResults.vue'
 
@@ -27,7 +28,7 @@ const researchResultLink = {
   get active() {
     return activeLink.value === 'researchResult'
   },
-  click: () => {
+  onSelect: () => {
     showResearchResults.value = true
     showSearchResults.value = false
     activeLink.value = 'researchResult'
@@ -40,7 +41,7 @@ const searchResultLink = {
   get active() {
     return activeLink.value === 'searchResult'
   },
-  click: () => {
+  onSelect: () => {
     showResearchResults.value = false
     showSearchResults.value = true
     activeLink.value = 'searchResult'
@@ -50,10 +51,10 @@ const searchResultLink = {
 const restartLink = {
   label: 'Restart',
   icon: 'i-mdi-restart',
-  click: () => emit('restart'),
+  onSelect: () => emit('restart'),
 }
 
-const links = computed(() => [
+const items = computed(() => [
   [
     researchResultLink,
     searchResultLink,
@@ -101,8 +102,9 @@ function formatJson(info: Record<string, any>): string {
 <template>
   <div class="flex h-full w-full">
     <div class="w-fit">
-      <UVerticalNavigation
-        :links="links"
+      <UNavigationMenu
+        :items="items"
+        orientation="vertical"
       />
     </div>
     <div class="flex-1 overflow-auto">

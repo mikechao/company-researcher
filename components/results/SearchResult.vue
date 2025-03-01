@@ -33,7 +33,7 @@ if (props.searchResult.rawContent) {
         :to="searchResult.url"
         target="_blank"
         label="New Tab"
-        size="2xs"
+        size="xs"
         icon="i-mdi-open-in-new"
         :trailing="true"
       />
