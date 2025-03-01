@@ -1,4 +1,6 @@
 import process from 'node:process'
+import tailwindcss from '@tailwindcss/vite'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -10,6 +12,14 @@ export default defineNuxtConfig({
     postgresURL: process.env.NUXT_POSTGRES_URL,
     public: {
       endPoint: process.env.END_POINT ? process.env.END_POINT : '/api/research',
+    },
+  },
+  vite: {
+    plugins: [tailwindcss()],
+  },
+  postcss: {
+    plugins: {
+      '@tailwindcss/postcss': {},
     },
   },
   css: ['~/assets/css/main.css'],
