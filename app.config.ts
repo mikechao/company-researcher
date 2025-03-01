@@ -4,5 +4,8 @@ export default defineAppConfig({
       primary: 'green',
       neutral: 'zinc',
     },
+    icons: {
+      chevronDown: 'i-mdi-chevron-down-box-outline',
+    },
   },
 })
