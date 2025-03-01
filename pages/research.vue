@@ -190,7 +190,7 @@ const schema = z.object({
 </script>
 
 <template>
-  <div class="h-full p-4">
+  <div class="relative flex h-full min-h-dvh w-full items-center justify-center bg-dark-50 dark:bg-dark-950">
     <transition-expand :duration="1000">
       <div v-show="showResults" class="mb-2 flex justify-center">
         <ResearchResults
@@ -346,12 +346,14 @@ const schema = z.object({
               class="mt-4"
             />
           </div>
-          <transition-fade>
-            <ResearchParamHelp
-              v-if="hoveredField"
-              :param-name="hoveredField"
-            />
-          </transition-fade>
+          <div class="h-[120px]">
+            <transition-fade>
+              <ResearchParamHelp
+                v-if="hoveredField"
+                :param-name="hoveredField"
+              />
+            </transition-fade>
+          </div>
         </div>
       </div>
     </transition-expand>
