@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import LandingHero from '~/components/LandingHero.vue'
+import LandingHero from '~/components/Landing/Hero.vue'
 </script>
 
 <template>
