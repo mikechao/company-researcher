@@ -22,12 +22,23 @@
         <div
           class="mt-8 flex flex-col-reverse items-center justify-center gap-4 lg:flex-row"
         >
-          <UButton variant="ghost" to="#" size="lg">
-            More info
-          </UButton>
-          <UButton variant="solid" to="/research" size="lg">
-            Research
-          </UButton>
+          <UButton
+            variant="outline"
+            to="#how-it-works"
+            size="lg"
+            label="How it works"
+            icon="i-mdi-arrow-down"
+            :trailing="true"
+          />
+          <UButton
+            variant="solid"
+            to="/research"
+            size="lg"
+            label="Research"
+            icon="i-mdi-microscope"
+            :trailing="true"
+            color="primary"
+          />
         </div>
       </div>
     </div>

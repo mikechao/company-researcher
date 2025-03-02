@@ -32,7 +32,7 @@ const features = [
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-start gap-x-24 lg:flex-row">
+  <div id="how-it-works" class="flex flex-col items-center justify-start gap-x-24 lg:flex-row">
     <div class="flex w-full flex-col gap-y-24 lg:w-1/2">
       <div class="flex flex-col gap-y-2">
         <span
