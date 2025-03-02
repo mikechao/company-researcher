@@ -20,7 +20,7 @@
       </div>
       <div class="relative col-span-full mt-4 lg:col-span-1">
         <NuxtImg
-          class="max-h-[420px] w-full rounded-lg object-cover object-center lg:max-h-[720px]"
+          class="max-h-[420px] w-full rounded-lg object-contain object-center lg:max-h-[720px]"
           src="/graph.png"
           loading="lazy"
           alt="langgraph-node-graph"
