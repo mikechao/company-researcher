@@ -4,4 +4,5 @@ import LandingHero from '~/components/Landing/Hero.vue'
 
 <template>
   <LandingHero />
+  <LandingHowItWorks />
 </template>

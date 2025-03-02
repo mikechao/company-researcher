@@ -22,6 +22,10 @@ export default defineNuxtConfig({
       '@tailwindcss/postcss': {},
     },
   },
+  image: {
+    provider: 'ipx',
+    format: ['png'],
+  },
   css: ['~/assets/css/main.css'],
   modules: [
     '@nuxt/ui',
