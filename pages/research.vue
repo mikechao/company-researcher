@@ -192,7 +192,7 @@ const schema = z.object({
 <template>
   <div class="relative flex h-full min-h-dvh w-full items-center justify-center bg-dark-50 dark:bg-dark-950">
     <transition-expand :duration="1000">
-      <div v-show="showResults" class="mb-2 flex justify-center w-full">
+      <div v-show="showResults" class="mb-2 flex justify-center w-full mt-1">
         <ResearchResults
           v-if="results"
           :data="results"
@@ -202,7 +202,7 @@ const schema = z.object({
     </transition-expand>
 
     <transition-expand :duration="1000">
-      <div v-show="!showResults" class="flex justify-center">
+      <div v-show="!showResults" class="flex flex-col justify-center mt-1">
         <UForm
           :schema="schema"
           :state="state"
