@@ -1,74 +1,33 @@
 <template>
   <header
-    class="fixed left-0 top-0 z-20 flex w-full items-center justify-between px-4 py-2"
+    class="flex items-center justify-between fixed left-0 top-0 z-50 px-4 w-full bg-dark-50/70 dark:bg-dark-950/70 backdrop-blur-md py-4"
   >
-    <div class="size-8">
-      <NuxtLink to="/" class="flex items-center">
-        <img
-          src="/logo-dark.svg"
-          alt="Company Researcher Logo"
-          class="h-8 w-auto dark:hidden"
-        >
-        <img
-          src="/logo-light.svg"
-          alt="Company Researcher Logo"
-          class="h-8 w-auto hidden dark:block"
-        >
+    <div class="flex size-8 items-center justify-center">
+      <NuxtLink to="/">
+        <AppLogo />
       </NuxtLink>
     </div>
-    <div
-      class="border-dark-200/60 bg-dark-50/30 dark:border-dark-500/5 dark:bg-dark-900/90 hidden items-center justify-center rounded-full border px-24 py-1 backdrop-blur md:flex"
-    >
-      <nav class="flex w-full items-center justify-center gap-2">
-        <UButton
-          variant="ghost"
-          color="primary"
-          size="lg"
-          to="/"
-          class="rounded-full px-4"
-        >
-          Home
-        </UButton>
-        <UButton
-          variant="ghost"
-          color="primary"
-          size="lg"
-          to="/research"
-          class="rounded-full px-4"
-        >
-          Research
-        </UButton>
-      </nav>
-    </div>
-    <div class="flex w-auto gap-4">
+    <nav class="hidden center-center w-full flex-1 items-center justify-center gap-2 lg:flex">
+      <UButton variant="ghost" color="neutral" size="lg" to="/">
+        Home
+      </UButton>
+
+      <UButton variant="ghost" color="neutral" size="lg" to="/research">
+        Research
+      </UButton>
+    </nav>
+    <div class="flex flex-1 items-center justify-end gap-1 lg:flex-none">
       <ColorModeButton />
       <USlideover title="Menu" close-icon="i-mdi-alpha-x">
         <div class="inline-block md:hidden">
-          <UButton
-            icon="i-mdi-menu"
-            variant="link"
-            color="primary"
-            size="lg"
-          />
+          <UButton icon="i-mdi-menu" variant="link" color="primary" size="lg" />
         </div>
         <template #body>
-          <nav class="flex w-full flex-col gap-2">
-            <UButton
-              variant="ghost"
-              color="primary"
-              size="lg"
-              to="/"
-              class="rounded-full px-4"
-            >
+          <nav class="flex w-full flex-col">
+            <UButton block variant="link" color="primary" size="lg" to="#">
               Home
             </UButton>
-            <UButton
-              variant="ghost"
-              color="primary"
-              size="lg"
-              to="/research"
-              class="rounded-full px-4"
-            >
+            <UButton block variant="link" color="primary" size="lg" to="#">
               Research
             </UButton>
           </nav>
