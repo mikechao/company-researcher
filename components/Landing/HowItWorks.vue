@@ -5,28 +5,24 @@ const features = [
     title: 'Generate Queries',
     description:
       'The agent generates search queries based on the company name and report schema provided.',
-    link: '#',
   },
   {
     icon: 'i-mdi-numeric-2-circle-outline',
     title: 'Research Company',
     description:
       'The agent executes the generated queries. Then the agent generates notes based on the search results and report schema.',
-    link: '#',
   },
   {
     icon: 'i-mdi-numeric-3-circle-outline',
     title: 'Gather Notes and Extract Schema',
     description:
       'The agent gathers the notes and fills out the report schema from the notes.',
-    link: '#',
   },
   {
     icon: 'i-mdi-numeric-4-circle-outline',
     title: 'Reflection',
     description:
       'The agent evaluates the quality of the report schema for the following:\nAnalyzes completeness of required fields\nIdentifies any missing or incomplete information\nGenerates targeted follow-up search queries if needed\nContinues research until information is satisfactory or max reflection steps reached',
-    link: '#',
   },
 ]
 </script>
@@ -52,7 +48,7 @@ const features = [
           to scan the web for details about a company provided by the user.
         </p>
       </div>
-      <div class="grid w-full grid-cols-4 gap-24">
+      <div class="grid w-full grid-cols-4 gap-8">
         <template v-for="(feat, index) in features" :key="index">
           <div class="col-span-full flex flex-col gap-y-2 md:col-span-2">
             <div
@@ -78,7 +74,7 @@ const features = [
     <div class="relative mt-24 h-full w-full lg:mt-0 lg:w-1/2 xl:h-[620px]">
       <img
         src="/graph.png"
-        class="max-h-full max-w-full rounded-sm object-contain"
+        class="max-h-full max-w-full rounded-sm object-contain mx-auto"
         loading="lazy"
         alt="langgraph-graph"
         width="640"
