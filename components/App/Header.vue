@@ -21,7 +21,7 @@ const slideOverOpen = ref(false)
         Research
       </UButton>
     </nav>
-    <div class="flex flex-1 items-center justify-end gap-1 lg:flex-none">
+    <div class="flex flex-1 items-center justify-end gap-0 lg:flex-none">
       <UButton
         to="https://github.com/mikechao/company-researcher" target="_blank" icon="i-mdi-github" variant="link"
         color="primary" size="lg"
