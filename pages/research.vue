@@ -339,7 +339,6 @@ const schema = z.object({
       <div class="flex justify-center">
         <ProgressBar
           :value="task"
-          :max="steps"
           class="mt-4"
         />
       </div>
