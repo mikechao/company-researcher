@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ColorModeButton from './ColorModeButton.vue'
 import SwitchColors from './SwitchColors.vue'
 </script>
 
