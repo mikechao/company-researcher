@@ -13,13 +13,23 @@ const slideOverOpen = ref(false)
       </NuxtLink>
     </div>
     <nav class="hidden center-center w-full flex-1 items-center justify-center gap-2 lg:flex">
-      <UButton variant="ghost" color="neutral" size="lg" to="/">
-        Home
-      </UButton>
+      <UButton
+        variant="ghost"
+        color="neutral"
+        size="lg"
+        to="/"
+        label="Home"
+        active-class="border-b-2 border-primary-500 rounded-none"
+      />
 
-      <UButton variant="ghost" color="neutral" size="lg" to="/research">
-        Research
-      </UButton>
+      <UButton
+        variant="ghost"
+        color="neutral"
+        size="lg"
+        to="/research"
+        label="Research"
+        active-class="border-b-2 border-primary-500 rounded-none"
+      />
     </nav>
     <div class="flex flex-1 items-center justify-end gap-0 lg:flex-none">
       <UButton
