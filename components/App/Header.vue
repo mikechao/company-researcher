@@ -18,6 +18,10 @@
       </UButton>
     </nav>
     <div class="flex flex-1 items-center justify-end gap-1 lg:flex-none">
+      <UButton
+        to="https://github.com/mikechao/company-researcher" target="_blank" icon="i-mdi-github" variant="link"
+        color="primary" size="lg"
+      />
       <AppSwitchColors />
       <AppColorModeButton />
       <USlideover title="Menu" close-icon="i-mdi-alpha-x">
