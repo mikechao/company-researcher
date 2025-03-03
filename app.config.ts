@@ -1,5 +1,9 @@
 export default defineAppConfig({
   ui: {
+    colors: {
+      primary: 'green',
+      neutral: 'gray',
+    },
     icons: {
       chevronDown: 'i-mdi-chevron-down-box-outline',
     },
