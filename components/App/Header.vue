@@ -1,6 +1,7 @@
 <template>
   <header
-    class="flex items-center justify-between fixed left-0 top-0 z-50 px-4 w-full bg-dark-50/70 dark:bg-dark-950/70 backdrop-blur-md py-4"
+    class="flex items-center justify-between fixed left-0 top-0 z-50 px-4 w-full bg-dark-50/70 dark:bg-dark-950/70 backdrop-blur-md py-4 h-16"
+    style="--header-height: 64px"
   >
     <div class="flex size-8 items-center justify-center">
       <NuxtLink to="/">
