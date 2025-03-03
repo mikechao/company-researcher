@@ -17,7 +17,7 @@ const lightMode: ColorModeLabel = {
 }
 
 const selectedMode = computed<ColorModeLabel>(() =>
-  colorMode.value === 'dark' ? darkMode : lightMode,
+  colorMode.value === 'dark' ? lightMode : darkMode,
 )
 
 function changeColorMode() {
