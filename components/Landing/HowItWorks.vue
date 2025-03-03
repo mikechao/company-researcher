@@ -73,7 +73,7 @@ const features = [
     </div>
     <div class="relative mt-24 h-full w-full lg:mt-0 lg:w-1/2 xl:h-[620px]">
       <img
-        src="/graph.png"
+        src="/graph.webp"
         class="max-h-full max-w-full rounded-sm object-contain mx-auto"
         loading="lazy"
         alt="langgraph-graph"
