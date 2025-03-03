@@ -66,7 +66,16 @@ function formatJson(info: Record<string, any>): string {
 
 <template>
   <div class="flex flex-col w-full">
-    <UTabs v-model="activeTab" :items="tabItems" variant="pill" />
+    <div class="flex justify-between items-center mb-1">
+      <UTabs v-model="activeTab" :items="tabItems" variant="link" class="w-fit" />
+      <UButton
+        label="Restart"
+        icon="i-mdi-restart"
+        :trailing="true"
+        color="primary"
+        @click="emit('restart')"
+      />
+    </div>
     <div v-if="activeTab === '0'" class="w-full">
       <ExtractedResult
         :html="formattedHtml"
