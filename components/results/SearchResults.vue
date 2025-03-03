@@ -9,8 +9,8 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex flex-col h-[calc(100vh-6rem)] w-full">
-    <div class="flex-1 min-h-0 overflow-y-auto p-3 w-full">
+  <div class="flex flex-col ">
+    <div class="flex-1 min-h-0 overflow-y-auto p-3">
       <div v-if="searchResults">
         <div v-for="searchResult in searchResults" :key="searchResult.title">
           <SearchResult :search-result="searchResult" />

@@ -12,7 +12,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="flex flex-col h-[calc(100vh-6rem)]">
+  <div class="flex flex-col">
     <!-- Body -->
     <div class="flex-1 min-h-0 overflow-y-auto p-3">
       <div v-html="html" />
