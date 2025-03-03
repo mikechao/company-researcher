@@ -28,7 +28,7 @@ const slideOverOpen = ref(false)
       />
       <AppSwitchColors />
       <AppColorModeButton />
-      <USlideover v-model:open="slideOverOpen" title="Menu" close-icon="i-mdi-alpha-x">
+      <USlideover v-model:open="slideOverOpen" title="Menu" close-icon="i-mdi-window-close">
         <div class="inline-block md:hidden">
           <UButton icon="i-mdi-menu" variant="link" color="primary" size="lg" />
         </div>
