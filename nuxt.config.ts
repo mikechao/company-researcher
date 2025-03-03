@@ -22,10 +22,6 @@ export default defineNuxtConfig({
       '@tailwindcss/postcss': {},
     },
   },
-  image: {
-    provider: 'ipx',
-    format: ['png'],
-  },
   css: ['~/assets/css/main.css'],
   modules: [
     '@nuxt/ui',
@@ -33,7 +29,6 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     'nuxt-codemirror',
     '@vueuse/motion/nuxt',
-    '@nuxt/image',
   ],
   colorMode: {
     preference: 'system',
