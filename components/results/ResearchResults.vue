@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import CopyButton from './CopyButton.vue'
 import ExtractedResult from './ExtractedResult.vue'
 import SearchResults from './SearchResults.vue'
 
@@ -28,6 +29,13 @@ const tabItems = [
   },
 ]
 const activeTab = ref('0')
+
+const dataToCopy = computed(() => {
+  if (activeTab.value === '0') {
+    return props.data.info
+  }
+  return props.data.searchResults
+})
 
 /**
  * Check if a value is a non-null object (and not an array)
@@ -68,13 +76,16 @@ function formatJson(info: Record<string, any>): string {
   <div class="flex flex-col w-full">
     <div class="flex justify-between items-center mb-1">
       <UTabs v-model="activeTab" :items="tabItems" variant="link" class="w-fit" />
-      <UButton
-        label="Restart"
-        icon="i-mdi-restart"
-        :trailing="true"
-        color="primary"
-        @click="emit('restart')"
-      />
+      <div class="flex">
+        <CopyButton :data="dataToCopy" />
+        <UButton
+          label="Restart"
+          icon="i-mdi-restart"
+          :trailing="true"
+          color="primary"
+          @click="emit('restart')"
+        />
+      </div>
     </div>
     <div v-if="activeTab === '0'" class="w-full">
       <ExtractedResult
