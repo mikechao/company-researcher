@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const slideOverOpen = ref(false)
+</script>
+
 <template>
   <header
     class="flex items-center justify-between fixed left-0 top-0 z-50 px-4 w-full bg-dark-200/70 dark:bg-dark-900/70 backdrop-blur-md py-4 h-16"
@@ -24,18 +28,30 @@
       />
       <AppSwitchColors />
       <AppColorModeButton />
-      <USlideover title="Menu" close-icon="i-mdi-alpha-x">
+      <USlideover v-model:open="slideOverOpen" title="Menu" close-icon="i-mdi-alpha-x">
         <div class="inline-block md:hidden">
           <UButton icon="i-mdi-menu" variant="link" color="primary" size="lg" />
         </div>
         <template #body>
           <nav class="flex w-full flex-col">
-            <UButton block variant="link" color="primary" size="lg" to="/">
-              Home
-            </UButton>
-            <UButton block variant="link" color="primary" size="lg" to="/research">
-              Research
-            </UButton>
+            <UButton
+              block
+              variant="link"
+              color="primary"
+              size="lg"
+              to="/"
+              label="Home"
+              @click="slideOverOpen = false"
+            />
+            <UButton
+              block
+              variant="link"
+              color="primary"
+              size="lg"
+              to="/research"
+              label="Research"
+              @click="slideOverOpen = false"
+            />
           </nav>
         </template>
       </USlideover>
