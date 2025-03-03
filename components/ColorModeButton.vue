@@ -1,36 +1,18 @@
-<script setup lang="ts">
-const colorMode = useColorMode()
-
-interface ColorModeLabel {
-  label: string
-  icon: string
-}
-
-const darkMode: ColorModeLabel = {
-  label: 'Dark',
-  icon: 'i-mdi-weather-night',
-}
-
-const lightMode: ColorModeLabel = {
-  label: 'Light',
-  icon: 'i-mdi-weather-sunny',
-}
-
-const selectedMode = computed<ColorModeLabel>(() =>
-  colorMode.value === 'dark' ? lightMode : darkMode,
-)
-
-function changeColorMode() {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+<script setup>
+const color = useColorMode()
+function toggleDark() {
+  color.preference = color.value === 'dark' ? 'light' : 'dark'
 }
 </script>
 
 <template>
-  <UButton
-    :label="selectedMode.label"
-    color="neutral"
-    variant="ghost"
-    :icon="selectedMode.icon"
-    @click="changeColorMode"
-  />
+  <ClientOnly>
+    <UButton
+      aria-label="button to switch theme dark to light" variant="link" class="cursor-pointer" color="primary"
+      size="lg" :icon="color.preference === 'dark'
+        ? 'i-mdi-weather-sunny'
+        : 'i-mdi-weather-night'
+      " @click="toggleDark"
+    />
+  </ClientOnly>
 </template>

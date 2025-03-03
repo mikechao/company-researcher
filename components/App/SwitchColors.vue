@@ -45,7 +45,7 @@ async function setNeutralColor(color: string) {
 <template>
   <UDropdownMenu :items="items">
     <UButton
-      aria-label="button to switch theme dark to light" variant="link" color="primary" size="lg"
+      aria-label="button change primary and neutral colors" variant="link" color="primary" size="lg"
       icon="i-mdi-palette-outline" class="cursor-pointer"
     />
     <template #colors>
