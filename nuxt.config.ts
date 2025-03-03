@@ -32,7 +32,6 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxtjs/color-mode',
     'nuxt-codemirror',
-    '@morev/vue-transitions/nuxt',
     '@vueuse/motion/nuxt',
     '@nuxt/image',
   ],
