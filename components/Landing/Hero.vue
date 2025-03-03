@@ -15,7 +15,7 @@
           Company Researcher
         </h1>
         <p
-          class="text-primary-950/60 dark:text-primary-50/50 mt-4 w-full text-center text-lg leading-8 sm:w-1/2 2xl:w-1/3 2xl:text-xl"
+          class="text-gray-700 dark:text-gray-200 mt-4 w-full text-center text-lg leading-8 sm:w-1/2 2xl:w-1/3 2xl:text-xl"
         >
           An AI agent that scans the web for details about a company provided by the user
         </p>
