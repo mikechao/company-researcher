@@ -190,7 +190,7 @@ const schema = z.object({
 </script>
 
 <template>
-  <div class="relative flex h-full w-full justify-center bg-dark-50 dark:bg-dark-950">
+  <div class="relative flex h-full w-full justify-center bg-dark-50 dark:bg-dark-950 mt-4">
     <div v-show="showResults" class="mb-2 flex justify-center w-full">
       <ResearchResults
         v-if="results"
