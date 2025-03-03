@@ -5,14 +5,13 @@ import { fileURLToPath } from 'node:url'
 import consola from 'consola'
 
 export async function graphToImage(graph: any, outputPath?: string) {
-  const drawableGraph = await graph.getGraphAsync()
-  const image = await drawableGraph.drawMermaidPng()
-  const arrayBuffer = await image.arrayBuffer()
-  const buffer = Buffer.from(arrayBuffer)
-
-  const filePath = outputPath || path.join(defaultPath(), 'graph.png')
-
   try {
+    const drawableGraph = await graph.getGraphAsync()
+    const image = await drawableGraph.drawMermaidPng()
+    const arrayBuffer = await image.arrayBuffer()
+    const buffer = Buffer.from(arrayBuffer)
+
+    const filePath = outputPath || path.join(defaultPath(), 'graph.png')
     await fs.writeFile(filePath, buffer)
     consola.success({ tag: 'eventHandler', message: `Graph image saved to ${filePath}` })
   }
