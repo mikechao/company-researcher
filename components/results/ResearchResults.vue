@@ -74,7 +74,7 @@ function formatJson(info: Record<string, any>): string {
 
 <template>
   <div class="flex flex-col w-full">
-    <div class="flex justify-between items-center mb-1">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
       <UTabs v-model="activeTab" :items="tabItems" variant="link" class="w-fit" />
       <div class="flex">
         <CopyButton :data="dataToCopy" />
