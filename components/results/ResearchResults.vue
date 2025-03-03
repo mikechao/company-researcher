@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { UNavigationMenu } from '#components'
 import ExtractedResult from './ExtractedResult.vue'
 import SearchResults from './SearchResults.vue'
 
@@ -16,53 +15,19 @@ const emit = defineEmits<{
 
 const formattedHtml = formatJson(props.data.info)
 
-const showResearchResults = ref(true)
-const showSearchResults = ref(false)
-
-const activeLink = ref('researchResult')
-
-// VerticalNavigationLink
-const researchResultLink = {
-  label: 'Research Results',
-  icon: 'i-mdi-file-document-outline',
-  get active() {
-    return activeLink.value === 'researchResult'
+const tabItems = [
+  {
+    label: 'Research Results',
+    icon: 'i-mdi-file-document-outline',
+    slot: 'researchResult',
   },
-  onSelect: () => {
-    showResearchResults.value = true
-    showSearchResults.value = false
-    activeLink.value = 'researchResult'
+  {
+    label: 'Search Results',
+    icon: 'i-mdi-clipboard-text-search-outline',
+    slot: 'searchResult',
   },
-}
-
-const searchResultLink = {
-  label: 'Search Results',
-  icon: 'i-mdi-clipboard-text-search-outline',
-  get active() {
-    return activeLink.value === 'searchResult'
-  },
-  onSelect: () => {
-    showResearchResults.value = false
-    showSearchResults.value = true
-    activeLink.value = 'searchResult'
-  },
-}
-
-const restartLink = {
-  label: 'Restart',
-  icon: 'i-mdi-restart',
-  onSelect: () => emit('restart'),
-}
-
-const items = computed(() => [
-  [
-    researchResultLink,
-    searchResultLink,
-  ],
-  [
-    restartLink,
-  ],
-])
+]
+const activeTab = ref('0')
 
 /**
  * Check if a value is a non-null object (and not an array)
@@ -100,29 +65,19 @@ function formatJson(info: Record<string, any>): string {
 </script>
 
 <template>
-  <div class="flex w-full h-full">
-    <div class="w-fit">
-      <UNavigationMenu
-        :items="items"
-        orientation="vertical"
-        class="sticky top-20"
+  <div class="flex flex-col w-full">
+    <UTabs v-model="activeTab" :items="tabItems" variant="pill" />
+    <div v-if="activeTab === '0'" class="w-full">
+      <ExtractedResult
+        :html="formattedHtml"
+        :data="data"
       />
     </div>
-    <div class="flex-1 overflow-auto">
-      <transition-fade>
-        <ExtractedResult
-          v-if="showResearchResults"
-          :html="formattedHtml"
-          :data="data"
-        />
-      </transition-fade>
-      <transition-fade>
-        <SearchResults
-          v-if="showSearchResults"
-          :search-results="data.searchResults"
-          class="w-full"
-        />
-      </transition-fade>
+    <div v-if="activeTab === '1'" class="w-full">
+      <SearchResults
+        :search-results="data.searchResults"
+        class="w-full"
+      />
     </div>
   </div>
 </template>
