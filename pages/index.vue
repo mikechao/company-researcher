@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import LandingHero from '~/components/Landing/Hero.vue'
+useSeoMeta({
+  title: 'Company Researcher',
+  ogTitle: 'Company Researcher',
+  description: 'Company Researcher is an AI agent to help you find information about companies.',
+  ogDescription: 'Company Researcher is an AI agent to help you find information about companies.',
+})
 
 useHead({
   htmlAttrs: {
