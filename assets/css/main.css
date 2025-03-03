@@ -51,3 +51,7 @@
   --color-dark-900: var(--ui-color-neutral-900);
   --color-dark-950: var(--ui-color-neutral-950);
 }
+
+p {
+  @apply text-gray-700 dark:text-gray-200;
+}

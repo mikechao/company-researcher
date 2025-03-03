@@ -34,7 +34,7 @@ const features = [
         <span
           class="text-dark-950 dark:text-dark-50 inline-block text-3xl font-bold"
         >How it works</span>
-        <p class="text-dark-950/50 dark:text-dark-50/50 text-lg font-normal">
+        <p class="text-gray-700 dark:text-gray-200 text-lg font-normal">
           The Company Researcher Agent utilizes a graph created with
           <a
             href="https://langchain-ai.github.io/langgraph/"
@@ -61,10 +61,10 @@ const features = [
               />
             </div>
             <span
-              class="text-dark-950 dark:text-dark-50 inline-block text-lg font-bold"
+              class="text-gray-700 dark:text-gray-200 inline-block text-lg font-bold"
             >{{ feat.title }}</span>
             <p
-              class="text-dark-950/50 dark:text-dark-50 inline-block text-base font-normal whitespace-pre-line"
+              class="text-gray-700 dark:text-gray-200 inline-block text-base font-normal whitespace-pre-line"
             >
               {{ feat.description }}
             </p>
