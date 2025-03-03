@@ -30,10 +30,10 @@
         </div>
         <template #body>
           <nav class="flex w-full flex-col">
-            <UButton block variant="link" color="primary" size="lg" to="#">
+            <UButton block variant="link" color="primary" size="lg" to="/">
               Home
             </UButton>
-            <UButton block variant="link" color="primary" size="lg" to="#">
+            <UButton block variant="link" color="primary" size="lg" to="/research">
               Research
             </UButton>
           </nav>
