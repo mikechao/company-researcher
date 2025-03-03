@@ -34,13 +34,13 @@ const slideOverOpen = ref(false)
     <div class="flex flex-1 items-center justify-end gap-0 lg:flex-none">
       <UButton
         to="https://github.com/mikechao/company-researcher" target="_blank" icon="i-mdi-github" variant="link"
-        color="primary" size="lg"
+        color="primary" size="lg" aria-label="GitHub Repository"
       />
       <AppSwitchColors />
       <AppColorModeButton />
       <USlideover v-model:open="slideOverOpen" title="Menu" close-icon="i-mdi-window-close">
         <div class="inline-block md:hidden">
-          <UButton icon="i-mdi-menu" variant="link" color="primary" size="lg" />
+          <UButton icon="i-mdi-menu" variant="link" color="primary" size="lg" aria-label="Mobile Menu Button" />
         </div>
         <template #body>
           <nav class="flex w-full flex-col">
