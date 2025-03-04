@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import ResearchParamHelp from '~/components/ResearchParamHelp.vue'
 import { timestamp } from '~/composables/timestampString'
+import { useResearchResultsStore } from '~/stores/researchResultsStore'
 import { defaultExtractionSchema, EVENT_NAMES, RESEARCH_PARAM_NAMES } from '~/types/constants'
 
 const SchemaEditor = defineAsyncComponent(() => import('~/components/SchemaEditor.vue'))
@@ -12,21 +13,11 @@ const ResearchResults = defineAsyncComponent(() => import('~/components/results/
 
 const isLoading = ref(false)
 const isSchemaEditorOpen = ref(false)
-const task = ref(0)
 const hoveredField = ref<ResearchParamName | null>(null)
 const runtimeConfig = useRuntimeConfig()
+const researchResultsStore = useResearchResultsStore()
 
-// ProgressBar.vue depends on the order of steps
-// also needed here because of data, that is send from backend
-const steps = [
-  'Waiting to start...',
-  EVENT_NAMES.GENERATED_QUERIES,
-  EVENT_NAMES.EXECUTED_QUERIES,
-  EVENT_NAMES.GENERATED_NOTES,
-  EVENT_NAMES.NOTES_TO_SCHEMA,
-  EVENT_NAMES.REFLECTION,
-  EVENT_NAMES.END,
-]
+const { researchResult } = storeToRefs(researchResultsStore)
 
 interface ResearchParams {
   companyName: string
@@ -120,41 +111,21 @@ watch (data, (newData) => {
   }
 })
 
-const processedData = new Set()
-function processData(data: DataItem) {
-  if (!data || processedData.has(data.id)) {
-    return
-  }
-  processedData.add(data.id)
-  task.value = steps.indexOf(data.name)
-  if (data.name === EVENT_NAMES.END) {
-    finished(data)
-  }
-}
-
-const results = ref<ResearchResults>()
 const showResults = ref(false)
 const formEnabled = computed(() => !isLoading.value)
 
-function finished(dataItem: DataItem) {
-  results.value = extractData(dataItem.data)
-  showResults.value = true
-  isLoading.value = false
-}
-
-function extractData(data: any) {
-  if ('data' in data) {
-    return data.data as ResearchResults
+function processData(data: DataItem) {
+  researchResultsStore.processData(data)
+  if (data.name === EVENT_NAMES.END) {
+    showResults.value = true
+    isLoading.value = false
   }
-  console.warn('No info found in data:', data)
 }
 
 function restart() {
   showResults.value = false
   Object.assign(state, defaultState)
-  results.value = undefined
-  processedData.clear()
-  task.value = 0
+  researchResultsStore.reset()
 }
 
 const schema = z.object({
@@ -193,8 +164,8 @@ const schema = z.object({
   <div class="relative flex h-full w-full justify-center bg-dark-50 dark:bg-dark-950 mt-4">
     <div v-show="showResults" class="mb-2 flex justify-center w-full">
       <ResearchResults
-        v-if="results"
-        :data="results"
+        v-if="researchResult"
+        :data="researchResult"
         @restart="restart"
       />
     </div>
@@ -339,7 +310,7 @@ const schema = z.object({
       </UForm>
       <div class="flex justify-center">
         <ProgressBar
-          :value="task"
+          :value="researchResultsStore.task"
           class="mt-4"
         />
       </div>
