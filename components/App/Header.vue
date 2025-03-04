@@ -38,21 +38,21 @@ const slideOverOpen = ref(false)
       />
       <AppSwitchColors />
       <AppColorModeButton />
+      <UButton
+        class="inline-block md:hidden"
+        icon="i-mdi-menu"
+        variant="link"
+        color="primary"
+        size="lg"
+        aria-label="Mobile Menu Button"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-haspopup="false"
+        @click="slideOverOpen = !slideOverOpen"
+      />
       <USlideover v-model:open="slideOverOpen" title="Menu" close-icon="i-mdi-window-close">
-        <div class="inline-block md:hidden">
-          <UButton
-            icon="i-mdi-menu"
-            variant="link"
-            color="primary"
-            size="lg"
-            aria-label="Mobile Menu Button"
-            aria-expanded="slideOverOpen"
-            role="button"
-            aria-controls="mobile-menu"
-          />
-        </div>
         <template #body>
-          <nav class="flex w-full flex-col">
+          <nav id="mobile-menu" class="flex w-full flex-col" role="navigation" aria-label="Mobile navigation">
             <UButton
               block
               variant="link"
