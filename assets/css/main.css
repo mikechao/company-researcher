@@ -27,6 +27,18 @@
 @theme static {
   /* See config: https://ui3.nuxt.dev/getting-started/theme#colors */
 
+  --color-green-50: #effdf5;
+  --color-green-100: #d9fbe8;
+  --color-green-200: #b3f5d1;
+  --color-green-300: #75edae;
+  --color-green-400: #00dc82;
+  --color-green-500: #006127;
+  --color-green-600: #00a155;
+  --color-green-700: #007f45;
+  --color-green-800: #016538;
+  --color-green-900: #0a5331;
+  --color-green-950: #052e16;
+
   --color-primary-50: var(--ui-color-primary-50);
   --color-primary-100: var(--ui-color-primary-100);
   --color-primary-200: var(--ui-color-primary-200);
