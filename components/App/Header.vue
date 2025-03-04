@@ -21,13 +21,20 @@ const slideOverOpen = ref(false)
         label="Home"
         active-class="border-b-2 border-primary-500 rounded-none"
       />
-
       <UButton
         variant="ghost"
         color="neutral"
         size="lg"
         to="/research"
         label="Research"
+        active-class="border-b-2 border-primary-500 rounded-none"
+      />
+      <UButton
+        variant="ghost"
+        color="neutral"
+        size="lg"
+        to="/complex"
+        label="Complex"
         active-class="border-b-2 border-primary-500 rounded-none"
       />
     </nav>
@@ -69,6 +76,15 @@ const slideOverOpen = ref(false)
               size="lg"
               to="/research"
               label="Research"
+              @click="slideOverOpen = false"
+            />
+            <UButton
+              block
+              variant="link"
+              color="primary"
+              size="lg"
+              to="/complex"
+              label="Complex"
               @click="slideOverOpen = false"
             />
           </nav>
