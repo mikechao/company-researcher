@@ -45,7 +45,7 @@ function updateValue(value: string | number) {
           color="primary"
           icon="i-mdi-restart"
           :trailing="true"
-          class="w-fit"
+          class="w-fit cursor-pointer"
           size="xs"
           :disabled="disable"
           @click="updateValue(defaultValue)"

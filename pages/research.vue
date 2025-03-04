@@ -318,6 +318,7 @@ const schema = z.object({
               :trailing="true"
               color="primary"
               :disabled="!formEnabled"
+              class="cursor-pointer"
               @click="isSchemaEditorOpen = true"
             />
           </UFormField>
@@ -330,7 +331,7 @@ const schema = z.object({
             loading-icon="i-mdi-loading"
             :trailing="true"
             color="primary"
-            class="mt-4"
+            class="mt-4 cursor-pointer"
             :loading="isLoading"
             type="submit"
           />
