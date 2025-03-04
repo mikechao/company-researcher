@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import CopyButton from './CopyButton.vue'
 import ExtractedResult from './ExtractedResult.vue'
+import ResearchNotes from './ResearchNotes.vue'
 import SearchResults from './SearchResults.vue'
 
 const props = defineProps({
@@ -14,19 +15,30 @@ const emit = defineEmits<{
   (e: 'restart', value: void): void
 }>()
 
+const researchResultsStore = useResearchResultsStore()
+const { researchNotes } = researchResultsStore
+
 const formattedHtml = formatJson(props.data.info)
 
 const tabItems = [
   {
     label: 'Research Results',
     icon: 'i-mdi-file-document-outline',
-    slot: 'researchResult',
   },
   {
     label: 'Search Results',
     icon: 'i-mdi-clipboard-text-search-outline',
-    slot: 'searchResult',
   },
+  {
+    label: 'Research Notes',
+    icon: 'i-mdi-invoice-text-clock-outline',
+  },
+]
+
+const dropDownItems = [
+  { label: 'Research Results', id: '0' },
+  { label: 'Search Results', id: '1' },
+  { label: 'Research Notes', id: '2' },
 ]
 const activeTab = ref('0')
 
@@ -34,7 +46,10 @@ const dataToCopy = computed(() => {
   if (activeTab.value === '0') {
     return props.data.info
   }
-  return props.data.searchResults
+  else if (activeTab.value === '1') {
+    return props.data.searchResults
+  }
+  return researchNotes
 })
 
 /**
@@ -81,10 +96,7 @@ function formatJson(info: Record<string, any>): string {
       <USelect
         v-model="activeTab"
         value-key="id"
-        :items="[
-          { label: 'Research Results', id: '0' },
-          { label: 'Search Results', id: '1' },
-        ]"
+        :items="dropDownItems"
         icon="i-mdi-check"
         placeholder="Select tab"
         class="w-fit sm:hidden mb-2"
@@ -112,6 +124,9 @@ function formatJson(info: Record<string, any>): string {
         :search-results="data.searchResults"
         class="w-full"
       />
+    </div>
+    <div v-if="activeTab === '2'" class="w-full">
+      <ResearchNotes :notes="researchNotes" />
     </div>
   </div>
 </template>
