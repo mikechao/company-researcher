@@ -59,9 +59,38 @@ export default defineLazyEventHandler(async () => {
         }
         controller.enqueue(encode(EVENT_NAMES.EXECUTED_QUERIES, executeQueries))
         await delay(100)
+        const notes = [
+          'COMPANY NAME & FOUNDING:',
+          '- Official name: Apple Inc. (formerly Apple Computer, Inc. until 2007)',
+          '- Founded: April 1, 1976',
+          '- Location: Founded in Cupertino, California (current headquarters remains there)',
+          'FOUNDERS:',
+          '- Steve Jobs and Steve Wozniak were the primary founders',
+          '- Steve Jobs was 21 and Wozniak was 16 when they first met in 1971',
+          '- Initial funding came from Jobs selling his Volkswagen Type 2 minibus ($1,500) and Wozniak selling his HP-65 calculator ($500)',
+          'EARLY PRODUCT HISTORY:',
+          '- First product was the Apple I computer, designed by Wozniak',
+          '- Wozniak originally wanted to share computer schematics for free, but Jobs saw commercial potential',
+          '- Wozniak initially offered the design to HP (his employer) but was rejected five times',
+          'PRODUCT EVOLUTION:',
+          '- Started as primarily a computer manufacturer with products like Apple II and Macintosh',
+          '- Expanded beyond computers in 2001 with the introduction of the iPod',
+          '- Major product lines now include iPhone (smartphones), iPad (tablets), Mac (computers), Apple Watch, and AirPods',
+          '- Also offers various services including Apple Arcade, Apple TV+, Apple Music, and Apple Pay',
+          'BUSINESS GROWTH:',
+          '- Became publicly traded company (exact IPO date not specified in sources)',
+          '- Reached $1 trillion market value milestone in August 2018',
+          '- As of 2025, market capitalization is approximately $3.419 trillion',
+          '- Currently the world\'s most valuable company by market capitalization',
+          'NOTABLE DEVELOPMENTS:',
+          '- Jobs left company in 1985 but returned in 1997 after Apple acquired his company NeXT',
+          '- Company dropped \'Computer\' from name in 2007 to reflect broader technology focus',
+          '- Current CEO is Timothy Cook',
+          '- Employs approximately 164,000 people as of recent data',
+        ]
         const generateNotes: ResearchEvent = {
           event: EVENT_NAMES.GENERATED_NOTES,
-          data: { notesSize: 42 },
+          data: { notes },
           timestamp: timestamp(),
         }
         controller.enqueue(encode(EVENT_NAMES.GENERATED_NOTES, generateNotes))

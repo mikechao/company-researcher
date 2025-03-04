@@ -38,6 +38,14 @@ declare global {
   }
 
   /**
+   * Represents the research notes that are generated during the
+   * research process. Emitted from the researchCompany node in the graph.
+   */
+  interface ResearchNotes {
+    notes: string[]
+  }
+
+  /**
    * Represents a search result that is returned from the
    * researchCompany node in the research process. Is part of
    * the response from the Tavily search API.
