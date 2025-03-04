@@ -29,6 +29,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     'nuxt-codemirror',
     '@vueuse/motion/nuxt',
+    '@pinia/nuxt',
   ],
   colorMode: {
     preference: 'system',
