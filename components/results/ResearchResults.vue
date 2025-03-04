@@ -75,7 +75,21 @@ function formatJson(info: Record<string, any>): string {
 <template>
   <div class="flex flex-col w-full">
     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
-      <UTabs v-model="activeTab" :items="tabItems" variant="link" class="w-fit" />
+      <!-- Hide on mobile (screens smaller than sm breakpoint), show on sm and larger -->
+      <UTabs v-model="activeTab" :items="tabItems" variant="link" class="hidden sm:block w-fit lg:flex" />
+      <!-- Show a simple dropdown/select on mobile only -->
+      <USelect
+        v-model="activeTab"
+        value-key="id"
+        :items="[
+          { label: 'Research Results', id: '0' },
+          { label: 'Search Results', id: '1' },
+        ]"
+        icon="i-mdi-check"
+        placeholder="Select tab"
+        class="w-fit sm:hidden mb-2"
+      />
+
       <div class="flex">
         <CopyButton :data="dataToCopy" />
         <UButton
