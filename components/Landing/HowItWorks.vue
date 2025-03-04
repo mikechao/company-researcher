@@ -40,7 +40,7 @@ const features = [
             href="https://langchain-ai.github.io/langgraph/"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-primary-600 hover:text-primary-800 dark:text-primary-300 dark:hover:text-primary-200 font-medium underline underline-offset-2 transition-colors"
+            class="text-primary-500 hover:text-primary-800 dark:text-primary-300 dark:hover:text-primary-200 font-medium underline underline-offset-2 transition-colors"
             aria-label="LangGraph external link"
           >
             LangGraph
