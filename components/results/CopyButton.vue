@@ -4,6 +4,10 @@ const props = defineProps({
     type: Object as PropType<Record<string, any> | undefined>,
     required: true,
   },
+  label: {
+    type: String,
+    default: 'Copy Raw Data',
+  },
 })
 
 interface ButtonState {
@@ -12,7 +16,7 @@ interface ButtonState {
 }
 
 const defaultState: ButtonState = {
-  text: 'Copy Raw Data',
+  text: props.label,
   icon: 'i-mdi-content-copy',
 }
 

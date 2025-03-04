@@ -15,7 +15,7 @@ const complexSchemaJSON = JSON.stringify(complexSchema, null, 2)
         Complex Report Schema
       </h1>
 
-      <CopyButton :data="complexSchema" />
+      <CopyButton :data="complexSchema" label="Copy" />
     </div>
     <p>Below is an example of a more complex report schema which will result in longer execution times, but provide more information.</p>
     <div class="w-full mt-1 flex-1 overflow-auto">
