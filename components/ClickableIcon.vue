@@ -8,6 +8,10 @@ defineProps({
     type: String,
     required: true,
   },
+  label: {
+    type: String,
+    required: true,
+  },
 })
 </script>
 
@@ -18,6 +22,7 @@ defineProps({
       target="_blank"
       rel="noopener noreferrer"
       class="border-dark-950/20 bg-dark-200/20 dark:border-dark-700 dark:bg-dark-800 flex size-16 items-center justify-center rounded-md border p-1"
+      :aria-label="label"
     >
       <UIcon :name="icon" class="size-16 text-dark-500/50 dark:text-dark-50/20" />
     </a>

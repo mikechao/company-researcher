@@ -5,38 +5,47 @@ const icons = [
   {
     icon: 'i-simple-icons-nuxt',
     href: 'https://nuxtjs.org/',
+    label: 'link to Nuxt.js website',
   },
   {
     icon: 'i-simple-icons-tailwindcss',
     href: 'https://tailwindcss.com/',
+    label: 'link to Tailwind CSS website',
   },
   {
     icon: 'i-simple-icons-langgraph',
     href: 'https://langchain-ai.github.io/langgraph/',
+    label: 'link to LangGraph website',
   },
   {
     icon: 'i-simple-icons-typescript',
     href: 'https://www.typescriptlang.org/',
+    label: 'link to TypeScript website',
   },
   {
     icon: 'i-simple-icons-vite',
     href: 'https://vitejs.dev/',
+    label: 'link to Vite website',
   },
   {
     icon: 'i-simple-icons-vercel',
     href: 'https://vercel.com/',
+    label: 'link to Vercel website',
   },
   {
     icon: 'i-simple-icons-postgresql',
     href: 'https://www.postgresql.org/',
+    label: 'link to PostgreSQL website',
   },
   {
     icon: 'i-simple-icons-github',
     href: 'https://github.com/',
+    label: 'link to GitHub website',
   },
   {
     icon: 'i-simple-icons-zod',
     href: 'https://zod.dev/',
+    label: 'link to Zod website',
   },
 ]
 </script>
@@ -64,7 +73,7 @@ const icons = [
       <NuxtMarquee :pause-on-hover="true" :speed="25">
         <div class="flex w-full items-center justify-center gap-12">
           <template v-for="(icon, index) in icons" :key="index">
-            <ClickableIcon :icon="icon.icon" :href="icon.href" />
+            <ClickableIcon :icon="icon.icon" :href="icon.href" :label="icon.label" />
           </template>
         </div>
       </NuxtMarquee>
