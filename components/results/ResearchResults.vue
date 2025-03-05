@@ -16,7 +16,7 @@ const emit = defineEmits<{
 }>()
 
 const researchResultsStore = useResearchResultsStore()
-const { researchNotes } = researchResultsStore
+const { researchNotes, researchQueries } = researchResultsStore
 
 const formattedHtml = formatJson(props.data.info)
 
@@ -24,6 +24,10 @@ const tabItems = [
   {
     label: 'Research Results',
     icon: 'i-mdi-file-document-outline',
+  },
+  {
+    label: 'Search Queries',
+    icon: 'i-mdi-text-box-search-outline',
   },
   {
     label: 'Search Results',
@@ -37,8 +41,9 @@ const tabItems = [
 
 const dropDownItems = [
   { label: 'Research Results', id: '0' },
-  { label: 'Search Results', id: '1' },
-  { label: 'Research Notes', id: '2' },
+  { label: 'Search Queries', id: '1' },
+  { label: 'Search Results', id: '2' },
+  { label: 'Research Notes', id: '3' },
 ]
 const activeTab = ref('0')
 
@@ -47,6 +52,9 @@ const dataToCopy = computed(() => {
     return props.data.info
   }
   else if (activeTab.value === '1') {
+    return researchQueries
+  }
+  else if (activeTab.value === '2') {
     return props.data.searchResults
   }
   return researchNotes
@@ -120,12 +128,15 @@ function formatJson(info: Record<string, any>): string {
       />
     </div>
     <div v-if="activeTab === '1'" class="w-full">
+      <ResearchQueries :queries="researchQueries" />
+    </div>
+    <div v-if="activeTab === '2'" class="w-full">
       <SearchResults
         :search-results="data.searchResults"
         class="w-full"
       />
     </div>
-    <div v-if="activeTab === '2'" class="w-full">
+    <div v-if="activeTab === '3'" class="w-full">
       <ResearchNotes :notes="researchNotes" />
     </div>
   </div>
