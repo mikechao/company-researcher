@@ -291,8 +291,9 @@ export default defineLazyEventHandler(async () => {
     }
     const validatedBody = parsedBody.data
     const { message } = body
-    consola.debug({ tag: 'research-step', message: `Received message: ${message.content}` })
+    consola.info({ tag: 'research-step', message: `Received message: ${message.content}` })
     const { sessionId, company, userNotes, extractionSchema, maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults } = validatedBody
+    consola.info({ tag: 'research-step', message: `Session ID: ${sessionId}, Company: ${company}, User Notes: ${userNotes}, Max Search Queries: ${maxSearchQueries}. Max Search Results: ${maxSearchResults}` })
     const config = { version: 'v2' as const, configurable: { thread_id: sessionId, ...getConfig({ maxSearchQueries, maxSearchResults, maxReflectionSteps, includeSearchResults }) } }
     const initialInput = { company, userNotes, extractionSchema }
     const isInit = message.content === 'init'
