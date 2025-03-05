@@ -1,32 +1,8 @@
 <script setup lang="ts">
 const icons = [
-  'i-simple-icons-adobeillustrator',
-  'i-simple-icons-amazon',
-  'i-simple-icons-akaunting',
-  'i-simple-icons-alchemy',
-  'i-simple-icons-amp',
-  'i-simple-icons-google',
-  'i-simple-icons-facebook',
-  'i-simple-icons-vite',
-  'i-simple-icons-nike',
-  'i-simple-icons-apple',
-  'i-simple-icons-microsoft',
-  'i-simple-icons-twitter',
-  'i-simple-icons-linkedin',
-  'i-simple-icons-instagram',
-  'i-simple-icons-youtube',
-  'i-simple-icons-whatsapp',
-  'i-simple-icons-telegram',
-  'i-simple-icons-tiktok',
-  'i-simple-icons-snapchat',
-  'i-simple-icons-pinterest',
-  'i-simple-icons-twitch',
-  'i-simple-icons-discord',
-  'i-simple-icons-reddit',
-  'i-simple-icons-medium',
-  'i-simple-icons-spotify',
-  'i-simple-icons-netflix',
-  'i-simple-icons-hulu',
+  'i-simple-icons-nuxt',
+  'i-simple-icons-tailwindcss',
+  'i-simple-icons-langgraph',
 ]
 </script>
 
@@ -49,9 +25,8 @@ const icons = [
       </div>
     </div>
 
-    <!-- Fixed tech grid - simplified and more explicit -->
     <div class="relative z-20 w-full py-2">
-      <NuxtMarquee :pause-on-hover="true">
+      <NuxtMarquee :pause-on-hover="true" :speed="25">
         <div class="flex w-full items-center justify-center gap-12">
           <template v-for="(icon, index) in icons" :key="index">
             <div class="size-auto items-center justify-center p-2">
