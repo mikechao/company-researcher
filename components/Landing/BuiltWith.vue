@@ -3,12 +3,12 @@ import ClickableIcon from '../ClickableIcon.vue'
 
 const icons = [
   {
-    icon: 'i-simple-icons-nuxt',
+    icon: 'i-logos-nuxt-icon',
     href: 'https://nuxtjs.org/',
     label: 'link to Nuxt.js website',
   },
   {
-    icon: 'i-simple-icons-tailwindcss',
+    icon: 'i-logos-tailwindcss-icon',
     href: 'https://tailwindcss.com/',
     label: 'link to Tailwind CSS website',
   },
@@ -18,32 +18,37 @@ const icons = [
     label: 'link to LangGraph website',
   },
   {
-    icon: 'i-simple-icons-typescript',
+    icon: 'i-logos-typescript-icon',
     href: 'https://www.typescriptlang.org/',
     label: 'link to TypeScript website',
   },
   {
-    icon: 'i-simple-icons-vite',
+    icon: 'i-logos-vitejs',
     href: 'https://vitejs.dev/',
     label: 'link to Vite website',
   },
   {
-    icon: 'i-simple-icons-vercel',
+    icon: 'i-logos-vercel-icon',
     href: 'https://vercel.com/',
     label: 'link to Vercel website',
   },
   {
-    icon: 'i-simple-icons-postgresql',
+    icon: 'i-logos-postgresql',
     href: 'https://www.postgresql.org/',
     label: 'link to PostgreSQL website',
   },
   {
-    icon: 'i-simple-icons-github',
+    icon: 'i-logos-pnpm',
+    href: 'https://pnpm.io/',
+    label: 'link to pnpm website',
+  },
+  {
+    icon: 'i-logos-github-icon',
     href: 'https://github.com/',
     label: 'link to GitHub website',
   },
   {
-    icon: 'i-simple-icons-zod',
+    icon: 'i-logos-zod',
     href: 'https://zod.dev/',
     label: 'link to Zod website',
   },
