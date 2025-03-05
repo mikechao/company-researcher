@@ -1,8 +1,43 @@
 <script setup lang="ts">
+import ClickableIcon from '../ClickableIcon.vue'
+
 const icons = [
-  'i-simple-icons-nuxt',
-  'i-simple-icons-tailwindcss',
-  'i-simple-icons-langgraph',
+  {
+    icon: 'i-simple-icons-nuxt',
+    href: 'https://nuxtjs.org/',
+  },
+  {
+    icon: 'i-simple-icons-tailwindcss',
+    href: 'https://tailwindcss.com/',
+  },
+  {
+    icon: 'i-simple-icons-langgraph',
+    href: 'https://langchain-ai.github.io/langgraph/',
+  },
+  {
+    icon: 'i-simple-icons-typescript',
+    href: 'https://www.typescriptlang.org/',
+  },
+  {
+    icon: 'i-simple-icons-vite',
+    href: 'https://vitejs.dev/',
+  },
+  {
+    icon: 'i-simple-icons-vercel',
+    href: 'https://vercel.com/',
+  },
+  {
+    icon: 'i-simple-icons-postgresql',
+    href: 'https://www.postgresql.org/',
+  },
+  {
+    icon: 'i-simple-icons-github',
+    href: 'https://github.com/',
+  },
+  {
+    icon: 'i-simple-icons-zod',
+    href: 'https://zod.dev/',
+  },
 ]
 </script>
 
@@ -29,12 +64,7 @@ const icons = [
       <NuxtMarquee :pause-on-hover="true" :speed="25">
         <div class="flex w-full items-center justify-center gap-12">
           <template v-for="(icon, index) in icons" :key="index">
-            <div class="size-auto items-center justify-center p-2">
-              <UIcon
-                :name="icon"
-                class="size-16 text-dark-500/50 dark:text-dark-50/20"
-              />
-            </div>
+            <ClickableIcon :icon="icon.icon" :href="icon.href" />
           </template>
         </div>
       </NuxtMarquee>
