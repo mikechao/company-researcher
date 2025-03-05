@@ -23,4 +23,5 @@ useHead({
 <template>
   <LandingHero />
   <LandingHowItWorks />
+  <LandingBuiltWith />
 </template>

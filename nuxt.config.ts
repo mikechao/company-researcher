@@ -30,6 +30,7 @@ export default defineNuxtConfig({
     'nuxt-codemirror',
     '@vueuse/motion/nuxt',
     '@pinia/nuxt',
+    'nuxt-marquee',
   ],
   colorMode: {
     preference: 'system',
