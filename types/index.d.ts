@@ -46,6 +46,14 @@ declare global {
   }
 
   /**
+   * Represents the research queries that are generated during the
+   * research process. Emitted from the generateQueries node in the graph.
+   */
+  interface ResearchQueries {
+    queries: string[]
+  }
+
+  /**
    * Represents a search result that is returned from the
    * researchCompany node in the research process. Is part of
    * the response from the Tavily search API.

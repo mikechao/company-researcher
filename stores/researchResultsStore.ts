@@ -16,6 +16,7 @@ export const useResearchResultsStore = defineStore('researchResult', () => {
   const task = ref(0)
   const researchResult = ref<ResearchResults>()
   const researchNotes = ref<ResearchNotes>()
+  const researchQueries = ref<ResearchQueries>()
 
   const processedData = new Set()
 
@@ -25,6 +26,9 @@ export const useResearchResultsStore = defineStore('researchResult', () => {
     }
     processedData.add(data.id)
     task.value = steps.indexOf(data.name)
+    if (data.name === EVENT_NAMES.GENERATED_QUERIES) {
+      researchQueries.value = executeSearchQueries(data.data)
+    }
     if (data.name === EVENT_NAMES.GENERATED_NOTES) {
       researchNotes.value = extractResearchNotes(data.data)
     }
@@ -49,10 +53,19 @@ export const useResearchResultsStore = defineStore('researchResult', () => {
     return undefined
   }
 
+  function executeSearchQueries(data: any) {
+    if ('data' in data && data.data) {
+      researchQueries.value = data.data as unknown as ResearchQueries
+    }
+    console.warn('No search queries found in data:', data)
+    return undefined
+  }
+
   function reset() {
     task.value = 0
     researchResult.value = undefined
     researchNotes.value = undefined
+    researchQueries.value = undefined
     processedData.clear()
   }
 
@@ -60,6 +73,7 @@ export const useResearchResultsStore = defineStore('researchResult', () => {
     task,
     researchResult,
     researchNotes,
+    researchQueries,
     processData,
     reset,
   }
