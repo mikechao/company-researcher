@@ -322,6 +322,10 @@ export default defineLazyEventHandler(async () => {
         }
         catch (error) {
           console.error('Error in graph events', error)
+          throw createError({
+            statusCode: 500,
+            statusMessage: `Something went wrong ${error}`,
+          })
         }
         finally {
           controller.close()
