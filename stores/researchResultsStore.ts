@@ -55,7 +55,7 @@ export const useResearchResultsStore = defineStore('researchResult', () => {
 
   function executeSearchQueries(data: any) {
     if ('data' in data && data.data) {
-      researchQueries.value = data.data as unknown as ResearchQueries
+      return researchQueries.value = data.data as unknown as ResearchQueries
     }
     console.warn('No search queries found in data:', data)
     return undefined

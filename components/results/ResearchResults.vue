@@ -2,6 +2,7 @@
 import CopyButton from './CopyButton.vue'
 import ExtractedResult from './ExtractedResult.vue'
 import ResearchNotes from './ResearchNotes.vue'
+import ResearchQueries from './ResearchQueries.vue'
 import SearchResults from './SearchResults.vue'
 
 const props = defineProps({

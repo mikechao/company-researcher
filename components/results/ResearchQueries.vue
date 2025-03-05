@@ -12,7 +12,7 @@ defineProps({
     <div class="flex items-center space-x-2">
       <UIcon name="i-mdi-text-box-search-outline" />
       <h1 class="text-xl font-bold">
-        Research Queries
+        Search Queries
       </h1>
     </div>
     <div v-if="queries">
