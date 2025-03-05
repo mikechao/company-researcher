@@ -2,6 +2,12 @@
   <div
     class="relative flex h-full min-h-dvh w-full items-center justify-center bg-dark-50 dark:bg-dark-950"
   >
+    <div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none" aria-hidden="true">
+      <UIcon
+        name="i-mdi-microscope"
+        class="text-dark-900/[0.03] dark:text-dark-100/[0.04] text-[25rem] md:text-[35rem]"
+      />
+    </div>
     <div class="relative z-20 w-11/12 md:w-10/12">
       <div class="flex flex-col items-center justify-center">
         <h1
