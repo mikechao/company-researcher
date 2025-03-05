@@ -75,12 +75,10 @@ const icons = [
     </div>
 
     <div class="relative z-20 w-full py-2">
-      <NuxtMarquee :pause-on-hover="true" :speed="25">
-        <div class="flex w-full items-center justify-center gap-12">
-          <template v-for="(icon, index) in icons" :key="index">
-            <ClickableIcon :icon="icon.icon" :href="icon.href" :label="icon.label" />
-          </template>
-        </div>
+      <NuxtMarquee :pause-on-hover="true" :speed="25" :auto-fill="true">
+        <template v-for="(icon, index) in icons" :key="index">
+          <ClickableIcon :icon="icon.icon" :href="icon.href" :label="icon.label" />
+        </template>
       </NuxtMarquee>
     </div>
   </div>
