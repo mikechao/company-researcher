@@ -4,5 +4,6 @@
     <UContainer class="max-w-[1680px]" style="padding-top: var(--header-height, 64px);">
       <slot />
     </UContainer>
+    <AppFooter />
   </div>
 </template>
