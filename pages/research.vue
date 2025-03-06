@@ -128,6 +128,10 @@ function restart() {
   researchResultsStore.reset()
 }
 
+onBeforeRouteLeave(() => {
+  restart()
+})
+
 const schema = z.object({
   companyName: z.string()
     .nonempty({ message: 'Company name cannot be empty' })
