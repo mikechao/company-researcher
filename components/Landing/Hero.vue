@@ -15,7 +15,7 @@
           :initial="{ opacity: 0, filter: 'blur(10px)' }"
           :enter="{ opacity: 1, filter: 'blur(0px)' }"
           :delay="100"
-          :duration="1250"
+          :duration="625"
           class="mt-8 text-center text-5xl font-semibold text-dark-900 sm:text-6xl md:text-7xl dark:text-dark-100"
         >
           Company Researcher
