@@ -21,7 +21,7 @@
     "@langchain/langgraph": "^0.2.46",
     "@langchain/langgraph-checkpoint-postgres": "^0.0.4",
     "@nuxt/icon": "1.10.3",
-    "@nuxt/ui": "3.0.0-beta.2",
+    "@nuxt/ui": "3.0.0-beta.3",
     "@nuxtjs/color-mode": "3.5.2",
     "@pinia/nuxt": "0.10.1",
     "@tailwindcss/postcss": "^4.0.9",
@@ -33,7 +33,7 @@
     "ai": "^4.1.45",
     "consola": "^3.4.0",
     "langchain": "^0.3.19",
-    "nuxt": "^3.15.4",
+    "nuxt": "^3.16.0",
     "nuxt-codemirror": "0.0.12",
     "nuxt-marquee": "1.0.4",
     "pinia": "^3.0.1",
@@ -55,5 +55,11 @@
     "eslint-plugin-format": "^1.0.1",
     "langsmith": "^0.3.10",
     "nuxi": "^3.22.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "@unhead/vue": "2.0.0-rc.9",
+      "unhead": "2.0.0-rc.9"
+    }
   }
 }

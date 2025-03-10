@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useHead, useSeoMeta } from '#app/composables/head'
+
 useSeoMeta({
   title: 'Company Researcher',
   ogTitle: 'Company Researcher',
