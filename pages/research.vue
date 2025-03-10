@@ -3,13 +3,15 @@ import { UFormField, USwitch } from '#components'
 import { useChat } from '@ai-sdk/vue'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
-import ResearchParamHelp from '~/components/ResearchParamHelp.vue'
 import { timestamp } from '~/composables/timestampString'
 import { useResearchResultsStore } from '~/stores/researchResultsStore'
 import { defaultExtractionSchema, EVENT_NAMES, RESEARCH_PARAM_NAMES } from '~/types/constants'
 
+const ResearchParamHelp = defineAsyncComponent(() => import('~/components/ResearchParamHelp.vue'))
 const SchemaEditor = defineAsyncComponent(() => import('~/components/SchemaEditor.vue'))
 const ResearchResults = defineAsyncComponent(() => import('~/components/results/ResearchResults.vue'))
+const NumberInput = defineAsyncComponent(() => import('~/components/NumberInput.vue'))
+const ProgressBar = defineAsyncComponent(() => import('~/components/ProgressBar.vue'))
 
 const isLoading = ref(false)
 const isSchemaEditorOpen = ref(false)
