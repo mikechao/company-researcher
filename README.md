@@ -37,3 +37,25 @@ Because of these limits on execution I introduced a new node in the graph where 
 The resulting graph
 
 ![Lang Graph Step](https://github.com/mikechao/company-researcher/blob/main/public/step-graph.png)
+
+## Sending progress and intermediate results
+
+I used a combination of LangChain/LangGraph's stream events api and custom events to display progress to the user. [LangGraph Stream Events](https://langchain-ai.github.io/langgraphjs/how-tos/streaming-events-from-within-tools/#stream-events-from-the-graph) When a custom event is surfaced as part of the ReadableStream returned from the backend I used [Vercel AI SDK stream protocol](https://sdk.vercel.ai/docs/ai-sdk-ui/stream-protocol) to send the data to be processed/handled by the front end.
+
+## 🛠️ Installation Steps
+
+1. Get an Anthropic API Key
+2. Get a Tavily API Key
+3. Get a Postgres URL
+4. Create a .env by following [env example](./.env-example)
+5. Install project dependencies
+
+```bash
+pnpm install
+```
+
+6. Start the development server on `http://localhost:3000`
+
+```bash
+pnpm dev
+```
