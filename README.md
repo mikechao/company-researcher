@@ -67,11 +67,12 @@ pnpm dev
 | NuxtJS       |       [![My Skills](https://skillicons.dev/icons?i=nuxtjs)](https://nuxt.com/)       | Building pages, interactions and server apis              |
 | TypeScript   |  [![My Skills](https://skillicons.dev/icons?i=ts)](https://www.typescriptlang.org/)  | Static typing, better autocompletion                      |
 | Pinia        |    [![My Skills](https://skillicons.dev/icons?i=pinia)](https://pinia.vuejs.org/)    | Management of intermediate research results |
-|Langchain|<a href="https://js.langchain.com/docs/introduction/"><img src="https://github.com/onemarc/tech-icons/blob/main/icons/langchain.svg" width="50"></a> | Integration with LLM managing memory and prompts |
+|Langchain|<a href="https://js.langchain.com/docs/introduction/"><img src="https://js.langchain.com/img/brand/favicon.png" width="50"></a> | Integration with LLM managing memory and prompts |
 |LangGraph|<a href="https://langchain-ai.github.io/langgraphjs/"><img src="https://langchain-ai.github.io/langgraphjs/static/favicon.png" width="50"></a>|Orchestrating the research workflow|
 | Pnpm         |        [![My Skills](https://skillicons.dev/icons?i=pnpm)](https://pnpm.io/)         | Manage JavaScript packages                                |
 | Postgres     | [![My Skills](https://skillicons.dev/icons?i=postgres)](https://www.postgresql.org/) | Persistence of chat messages                              |
 | Tailwind Css |  [![My Skills](https://skillicons.dev/icons?i=tailwind)](https://tailwindcss.com/)   | CSS Styling                                               |
 | Vite         |        [![My Skills](https://skillicons.dev/icons?i=vite)](https://vite.dev)         | Build tool                                             |
 |Visual Studio Code|[![My Skills](https://skillicons.dev/icons?i=vscode)](https://code.visualstudio.com/)| Code Editor |
-|Vercel|[![My Skills](https://skillicons.dev/icons?i=vercel)](https://vercel.com/)| App hosting and useChat composable |  
+|Vercel|[![My Skills](https://skillicons.dev/icons?i=vercel)](https://vercel.com/)| App hosting and useChat composable |
+|Zod|<a href="https://zod.dev/"><img src="https://zod.dev/static/favicon.ico" width="50"></a>|Defining structured output for LLMs, form validation|
