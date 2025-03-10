@@ -31,3 +31,9 @@ The graph constructed with LangGraph
 ## Making it work in a serverless environment
 
 When deploying to [Vercel](https://vercel.com/) we need to take into account the time limit that is placed on the execution of HTTP endpoint calls. Vercel puts in these limits to prevent run away consumption of resources. There is a good chance that executing the LangGraph graph as construed above would run into these limits. (Default 10 seconds, configurable up to 60s)
+
+Because of these limits on execution I introduced a new node in the graph where I used interrupt to wait for feedback from the "user". [LangGraph Interrupt](https://langchain-ai.github.io/langgraphjs/how-tos/wait-user-input/#simple-usage) The "user" in this case is just the frontend where I programmatically send a message to continue execution of the graph. Each node in the previous graph is now route to the waitForResponse node where interrupt is used.
+
+The resulting graph
+
+![Lang Graph Step](https://github.com/mikechao/company-researcher/blob/main/public/step-graph.png)
