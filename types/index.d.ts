@@ -4,6 +4,16 @@ export {}
 
 declare global {
 
+  interface ResearchParams {
+    companyName: string
+    includeSearchResults: boolean
+    maxSearchQueries: number
+    maxSearchResults: number
+    maxReflectionSteps: number
+    userNotes: string
+    extractionSchema: string
+  }
+
   /**
    * Event sent when researching a company sent from the
    * research post endpoint indicating progress through the
