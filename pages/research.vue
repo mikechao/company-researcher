@@ -27,23 +27,48 @@ const extractionSchema = computed({
   },
 })
 
-const company = computed(() => formRef.value?.state.companyName)
-
 const { researchResult } = storeToRefs(researchResultsStore)
 
-const sessionId = uuidv4()
+interface FormState {
+  companyName: string
+  includeSearchResults: boolean
+  maxSearchQueries: number
+  maxSearchResults: number
+  maxReflectionSteps: number
+  userNotes: string
+  extractionSchema: string
+}
 
+const sessionId = uuidv4()
 const { data, input, handleSubmit } = useChat({
   api: runtimeConfig.public.endPoint,
   experimental_prepareRequestBody: ({ messages }) => {
-    const state = formRef.value?.state || {}
-    return {
+    const formState = formRef.value?.state || {} as FormState
+
+    // Create a sanitized version of the state
+    const sanitizedState = {
       sessionId,
-      ...state,
-      company,
-      extractionSchema: JSON.parse(extractionSchema.value),
+      companyName: formState.companyName,
+      includeSearchResults: formState.includeSearchResults,
+      maxSearchQueries: formState.maxSearchQueries,
+      maxSearchResults: formState.maxSearchResults,
+      maxReflectionSteps: formState.maxReflectionSteps,
+      userNotes: formState.userNotes,
+      company: formState.companyName, // Duplicate for compatibility
       message: messages[messages.length - 1],
+      extractionSchema: {}, // Initialize with empty object
     }
+
+    // Parse extraction schema separately to avoid circular references
+    try {
+      sanitizedState.extractionSchema = JSON.parse(formState.extractionSchema || '{}')
+    }
+    catch (error) {
+      console.error('Error parsing extraction schema:', error)
+      sanitizedState.extractionSchema = {}
+    }
+
+    return sanitizedState
   },
   onError(error: Error) {
     handleError(error)
