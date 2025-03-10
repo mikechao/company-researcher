@@ -75,4 +75,8 @@ pnpm dev
 | Vite         |        [![My Skills](https://skillicons.dev/icons?i=vite)](https://vite.dev)         | Build tool                                             |
 |Visual Studio Code|[![My Skills](https://skillicons.dev/icons?i=vscode)](https://code.visualstudio.com/)| Code Editor |
 |Vercel|[![My Skills](https://skillicons.dev/icons?i=vercel)](https://vercel.com/)| App hosting and useChat composable |
-|Zod|<a href="https://zod.dev/"><img src="https://zod.dev/static/favicon.ico" width="50"></a>|Defining structured output for LLMs, form validation|
+|Zod|<a href="https://zod.dev/"><img src="https://zod.dev/static/favicon.ico" width="50"></a>|Defining structured output for LLMs, form validation, REST Endpoint input validation|
+
+## 🚧 Issues
+
+- In the Python version from LangChain they are able to specify an Input, Overall and Output State for the graph. However in the JavaScript/TypeScript version of LangGraph this causes a type mismatch error. The same type mismatch error is exist in their [multi-schema example](https://langchain-ai.github.io/langgraphjs/concepts/low_level/#multiple-schemas) The type mismatch error is also shown in [multi.post.ts](./server/api/multi.post.ts) The following [Github issue](https://github.com/langchain-ai/langgraphjs/issues/737) is tracking this, but there doesn't seem to be much activity.
