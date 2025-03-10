@@ -229,9 +229,9 @@ export default defineLazyEventHandler(async () => {
     const maxReflectionSteps = (config.configurable?.maxReflectionSteps ?? 0)
     if (state.reflectionStepsTaken <= maxReflectionSteps) {
       consola.debug({ tag: 'routeFromReflection', message: `reflection is not satisfactory and reflection steps taken ${state.reflectionStepsTaken} 
-        is less than or equal to configured max reflection steps of ${maxReflectionSteps}, going to researchCompany` })
-      dispatchCustomEvent(EVENT_NAMES.REROUTE, { reroute: 'researchCompany' })
-      return 'researchCompany'
+        is less than or equal to configured max reflection steps of ${maxReflectionSteps}, going to executeSearchQueries` })
+      dispatchCustomEvent(EVENT_NAMES.REROUTE, { reroute: 'executeSearchQueries' })
+      return 'executeSearchQueries'
     }
     const endData = {
       info: state.info,
